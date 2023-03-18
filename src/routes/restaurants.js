@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./../controllers/users');
+const controller = require('./../controllers/restaurants');
 
 /**
  * @swagger
- * /users:
+ * /restaurants:
  *  post:
- *    desription: create user
+ *    desription: create restaurant
  *    parameters:
  *      - in: body
  *        name: create
- *        description: JSON => email, password, name and type
+ *        description: JSON => name, description, type and location
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      201:
- *        description: post create user
+ *        description: post create restaurant
  *      400:
  *        description: bad request
  */
@@ -24,25 +24,25 @@ router.post('/', express.json(), controller.create);
 
 /**
  * @swagger
- * /users/{id}:
+ * /restaurants/{id}:
  *  put:
- *    desription: update user
+ *    desription: update restaurant
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: restaurant id 
  *        required: true
  *        schema:
  *          type: string
  *      - in: body
  *        name: update
- *        description: JSON => password, name, history, status and image
+ *        description: JSON => update any value
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      200:
- *        description: put update user
+ *        description: put update restaurant
  *      400:
  *        description: bad request
  */
@@ -50,12 +50,12 @@ router.put('/:id', express.json(), controller.update);
 
 /**
  * @swagger
- * /users:
+ * /restaurants:
  *  get:
- *    desription: list users
+ *    desription: list restaurants
  *    responses:
  *      200:
- *        description: get users
+ *        description: get restaurants
  *      400:
  *        description: bad request
  */
@@ -63,19 +63,19 @@ router.get('/', controller.list);
 
 /**
  * @swagger
- * /users/{id}:
+ * /restaurants/{id}:
  *  get:
- *    description: search user
+ *    description: search restaurant
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: restaurant id 
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: get user
+ *        description: get restaurant
  *      400:
  *        description: bad request
  */
@@ -83,19 +83,19 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
- * /users/{id}:
+ * /restaurants/{id}:
  *  delete:
- *    desription: delete user
+ *    desription: delete restaurant
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id
+ *        description: restaurant id
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: delete user
+ *        description: delete restaurant
  *      400:
  *        description: bad request
  */

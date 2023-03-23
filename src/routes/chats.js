@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./../controllers/users');
+const controller = require('./../controllers/chats');
 
 /**
  * @swagger
- * /users:
+ * /chats:
  *  post:
- *    desription: create user
+ *    desription: create chat
  *    parameters:
  *      - in: body
  *        name: create
- *        description: JSON => email, password, name and type
+ *        description: JSON => customerId and restaurantId
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      201:
- *        description: post create user
+ *        description: post create chat
  *      400:
  *        description: bad request
  */
@@ -24,25 +24,25 @@ router.post('/', express.json(), controller.create);
 
 /**
  * @swagger
- * /users/{id}:
+ * /chats/{id}:
  *  put:
- *    desription: update user
+ *    desription: update chat
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: chat id 
  *        required: true
  *        schema:
  *          type: string
  *      - in: body
  *        name: update
- *        description: JSON => password, name, history, status and image
+ *        description: JSON => any value
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      200:
- *        description: put update user
+ *        description: put update chat
  *      400:
  *        description: bad request
  */
@@ -50,12 +50,12 @@ router.put('/:id', express.json(), controller.update);
 
 /**
  * @swagger
- * /users:
+ * /chats:
  *  get:
- *    desription: list users
+ *    desription: list chats
  *    responses:
  *      200:
- *        description: get users
+ *        description: get chats
  *      400:
  *        description: bad request
  */
@@ -63,19 +63,19 @@ router.get('/', controller.list);
 
 /**
  * @swagger
- * /users/{id}:
+ * /chats/{id}:
  *  get:
- *    description: search user
+ *    description: search chat
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: chat id 
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: get user
+ *        description: get chat
  *      400:
  *        description: bad request
  */
@@ -83,19 +83,19 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
- * /users/{id}:
+ * /chats/{id}:
  *  delete:
- *    desription: delete user
+ *    desription: delete chat
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id
+ *        description: chat id
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: delete user
+ *        description: delete chat
  *      400:
  *        description: bad request
  */

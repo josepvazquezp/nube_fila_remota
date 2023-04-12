@@ -1,3 +1,44 @@
 node_modules
 .env
 fila_remota
+
+# Compiled output
+proyecto-ui/dist
+proyecto-ui/tmp
+proyecto-ui/out-tsc
+proyecto-ui/bazel-out
+
+# Node
+proyecto-ui/node_modules
+proyecto-ui/npm-debug.log
+proyecto-ui/yarn-error.log
+
+# IDEs and editors
+proyecto-ui/.idea/
+proyecto-ui/.project
+proyecto-ui/.classpath
+proyecto-ui/.c9/
+proyecto-ui/*.launch
+proyecto-ui/.settings/
+proyecto-ui/*.sublime-workspace
+
+# Visual Studio Code
+proyecto-ui/.vscode/*
+proyecto-ui/!.vscode/settings.json
+proyecto-ui/!.vscode/tasks.json
+proyecto-ui/!.vscode/launch.json
+proyecto-ui/!.vscode/extensions.json
+proyecto-ui/.history/*
+
+# Miscellaneous
+proyecto-ui/.angular/cache
+proyecto-ui/.sass-cache/
+proyecto-ui/connect.lock
+proyecto-ui/coverage
+proyecto-ui/libpeerconnection.log
+proyecto-ui/testem.log
+proyecto-ui/typings
+
+# System files
+proyecto-ui/.DS_Store
+proyecto-ui/Thumbs.db

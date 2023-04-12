@@ -1,0 +1,78 @@
+<mat-toolbar color="">
+    <img src="../../../assets/images/logo.png">
+    <span>&nbsp;Fila Remota</span>
+    <span class="spacer"></span>
+    <div *ngIf="!flagLogin">
+        <button  mat-fab extended color="primary" (click)="displayLogin()">
+            <mat-icon>login</mat-icon>Iniciar sesión
+        </button>
+        &nbsp;
+        <button  mat-fab extended color="primary">
+            <mat-icon>person_add</mat-icon>Crear cuenta
+        </button>
+    </div>
+
+    <div *ngIf="flagLogin">
+        <button mat-fab extended color="primary" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <table>
+                <tr>
+                    <td>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                        &nbsp;
+                        <img id="user_image" src={{image}}> 
+                    </td>
+                    <td>
+                        <label>&nbsp;{{user}}</label>
+                    </td>
+                </tr>
+            </table>
+        </button>
+        <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+            <mat-icon>edit</mat-icon>
+            <span>Actualizar</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>credit_cardl</mat-icon>
+            <span>Formas de pago</span>
+        </button>
+        <button mat-menu-item *ngIf="type">
+            <mat-icon>lunch_dining</mat-icon>
+            <span>Productos</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>delete_forever</mat-icon>
+            <span>Borrar cuenta</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar sesión</span>
+        </button>
+        </mat-menu>
+    </div>
+</mat-toolbar>
+
+<form *ngIf="flagModalLogin" [formGroup]="formLogin">
+    <mat-form-field>
+        <mat-label>Correo</mat-label>
+        <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
+        <mat-error>Este campo es requerido</mat-error>
+    </mat-form-field>
+    <br>
+    <br>
+    <mat-form-field>
+        <mat-label>Contraseña</mat-label>
+        <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="password">
+        <mat-error>Este campo es requerido</mat-error>
+    </mat-form-field>
+
+    <p>No tienes una cuenta? <a href="#">Creala aquí</a></p>
+
+    <button mat-flat-button color="primary" (click)="readLogin()">
+        Iniciar sesión
+    </button>
+    &nbsp;
+    <button mat-flat-button color="warn" (click)="quitLogin()">
+        Cerrar
+    </button>
+</form>

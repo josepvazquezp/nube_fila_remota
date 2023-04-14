@@ -9,12 +9,16 @@ import { NavComponent } from './layouts/nav/nav.component';
 import { HomeComponent } from './pages/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material/material.module';
+import { PayMenuComponent } from './pages/pay-menu/pay-menu.component';
+import { CreateUserComponent } from './pages/create-user/create-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    HomeComponent
+    HomeComponent,
+    PayMenuComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

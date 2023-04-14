@@ -10,7 +10,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 export class NavComponent {
   flagModalLogin: Boolean = false;
   formLogin: FormGroup;
-  flagLogin: Boolean = false;
+  flagLogin: Boolean = false; //Si esta ya iniciada la sesión o no
   image: String = "";
   user: String = "";
   type: Boolean = false;

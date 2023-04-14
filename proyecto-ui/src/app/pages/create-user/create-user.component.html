@@ -1,0 +1,61 @@
+<h1>Crea tu cuenta</h1>
+
+<div>
+    <form [formGroup]="userForm">
+        <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput name="name" type="text" placeholder="Escriba su Nombre" formControlName="name">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Correo</mat-label>
+            <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Contraseña</mat-label>
+            <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="pass1">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Repita su Contraseña</mat-label>
+            <input matInput name="passwordR" type="password" placeholder="Repita su contraseña" formControlName="pass2">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <h3>Eliga un tipo de cuenta:</h3>
+    
+        <mat-selection-list #type [multiple]="false">
+            <mat-list-option >
+                Cliente
+            </mat-list-option>
+            <mat-list-option >
+                Restaurante
+            </mat-list-option>
+          </mat-selection-list>
+    
+        <br>
+    
+        &nbsp;
+        <button mat-flat-button color="primary" (click)="checkUsers()">
+            Crear Cuenta
+        </button>
+        &nbsp;
+        <a routerLink="/">
+        <button mat-flat-button color="warn" >
+            Volver
+        </button>
+        </a>
+    </form>
+</div>
+
+<button mat-flat-button color="primary" (click)="checkUsers()">
+    Probar
+</button>

@@ -1,0 +1,44 @@
+<div>
+    <h1>Añadir producto</h1>
+    <form [formGroup]="productForm">
+        <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput name="name" type="text" placeholder="Nombre del producto" formControlName="name">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput name="description" type="text" placeholder="Descripción del producto" formControlName="description">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Precio</mat-label>
+            <input matInput name="price" type="number" placeholder="Precio del producto" formControlName="price">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <h2>Imagen</h2>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/png,image/jpeg">
+        <span class="file-name">{{selectedFile?.name}}</span>
+        <br>
+        <br>
+        <br>
+        <a routerLink="/restaurant_products">
+            <button mat-fab extended class="b-green" (click)="createProduct()">
+                <mat-icon>add</mat-icon>Agregar producto
+            </button>
+        </a>
+        &nbsp;
+        <a routerLink="/restaurant_products">
+            <button mat-fab extended color="warn" >
+                <mat-icon>chevron_left</mat-icon>Volver
+            </button>
+        </a>
+    </form>
+</div>

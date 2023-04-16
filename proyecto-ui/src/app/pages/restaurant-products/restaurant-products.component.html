@@ -1,0 +1,46 @@
+<h1>Productos de: {{name}}</h1>
+
+<a routerLink="/create_product">
+    <button mat-fab extended extended class="b-green">
+        <mat-icon>add</mat-icon>Agregar producto
+    </button>
+</a>
+
+<div *ngFor="let item of products">
+    <mat-card  class="example-card container">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"><img src={{image}} width="50px"></div>
+            <mat-card-title>{{item.Name}}</mat-card-title>
+            <mat-card-subtitle>{{name}}</mat-card-subtitle>
+        </mat-card-header>
+    
+        <img mat-card-image class="banner" src={{item.Image}}>
+        
+        <mat-card-content>
+            <br>
+            <p>
+                {{item.Description}}
+            </p>
+        </mat-card-content>
+    
+        <br> 
+            
+        <mat-card-actions>
+            <h3>Precio: ${{item.Price}}</h3>
+            <span class="spacer"></span>
+            <a routerLink="/update_product" class="margins">
+                <button mat-fab id={{item._id}} class="b-blue">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </a>
+            <a routerLink="/delete_product" class="margins">
+                <button mat-fab color="warn">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </a>
+        </mat-card-actions>
+    </mat-card>
+
+    <br>
+    <br>
+</div>

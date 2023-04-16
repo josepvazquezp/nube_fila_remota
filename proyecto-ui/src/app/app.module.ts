@@ -11,6 +11,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material/material.module';
 import { PayMenuComponent } from './pages/pay-menu/pay-menu.component';
 import { CreateUserComponent } from './pages/create-user/create-user.component';
+import { DisplayRestaurantComponent } from './pages/display-restaurant/display-restaurant.component';
+import { UpdateUserComponent } from './pages/update-user/update-user.component';
+import { RestaurantProductsComponent } from './pages/restaurant-products/restaurant-products.component';
+import { UpdateProductComponent } from './pages/update-product/update-product.component';
+import { DeleteProductComponent } from './pages/delete-product/delete-product.component';
+import { CreateProductComponent } from './pages/create-product/create-product.component';
+import { DisplayOrderComponent } from './pages/display-order/display-order.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +25,14 @@ import { CreateUserComponent } from './pages/create-user/create-user.component';
     NavComponent,
     HomeComponent,
     PayMenuComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    DisplayRestaurantComponent,
+    UpdateUserComponent,
+    RestaurantProductsComponent,
+    UpdateProductComponent,
+    DeleteProductComponent,
+    CreateProductComponent,
+    DisplayOrderComponent
   ],
   imports: [
     BrowserModule,

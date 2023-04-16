@@ -18,6 +18,13 @@ const port = process.env.PORT || 3000;
 
 const swaggerDocs = swaggerJsDoc(swaggerConf);
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use('/', extraRoutes);

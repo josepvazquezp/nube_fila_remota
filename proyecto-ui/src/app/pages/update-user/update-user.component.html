@@ -1,0 +1,31 @@
+<div>
+    <h1>Actualizar tu cuenta</h1>
+    <form [formGroup]="updateForm">
+        <h2>Imagen</h2>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/png,image/jpeg">
+        <span class="file-name">{{selectedFile?.name}}</span>
+        <br>
+        <br>
+        <br>
+        <mat-form-field *ngIf="type">
+            <mat-label>Descripción</mat-label>
+            <input matInput name="description" type="text" placeholder="Escriba su nueva descripción" formControlName="description">
+        </mat-form-field>
+
+        <br>
+    
+        &nbsp;
+        <a routerLink="/">
+            <button mat-flat-button color="primary" (click)="updateUser()">
+                Actualizar
+            </button>
+        </a>
+        &nbsp;
+        <a routerLink="/">
+            <button mat-flat-button color="warn" >
+                Cancelar
+            </button>
+        </a>
+    </form>
+</div>

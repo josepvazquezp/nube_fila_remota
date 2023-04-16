@@ -30,20 +30,24 @@
             </table>
         </button>
         <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-            <mat-icon>edit</mat-icon>
-            <span>Actualizar</span>
-        </button>
+        <a routerLink="/update_user">
+            <button mat-menu-item>
+                <mat-icon>edit</mat-icon>
+                <span>Actualizar</span>
+            </button>
+        </a>
         <a routerLink="/paymenu">
         <button mat-menu-item>
             <mat-icon>credit_cardl</mat-icon>
             <span>Formas de pago</span>
         </button>
         </a>
-        <button mat-menu-item *ngIf="type">
-            <mat-icon>lunch_dining</mat-icon>
-            <span>Productos</span>
-        </button>
+        <a routerLink="/restaurant_products">
+            <button mat-menu-item *ngIf="type">
+                <mat-icon>lunch_dining</mat-icon>
+                <span>Productos</span>
+            </button>
+        </a>
         <button mat-menu-item>
             <mat-icon>delete_forever</mat-icon>
             <span>Borrar cuenta</span>

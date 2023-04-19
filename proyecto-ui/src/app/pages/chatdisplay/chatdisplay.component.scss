@@ -1,0 +1,80 @@
+table, th, td {
+    border: 5px solid black;
+    border-collapse: collapse;
+  }
+
+table{
+    width: 100%;
+    height: 100%;
+}
+
+
+
+#chat{
+    width: 80%;
+    height: 80%;
+    background-color: #bd9ef6;
+    
+}
+
+#scrollDiv{
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    
+}
+
+#menu{
+    background-color: #7d4dd4;
+}
+
+#message{
+    background-color: #7d4dd4;
+}
+
+mat-form-field{
+    margin-left: 5%;
+    justify-content: center;
+    width: 70%;
+    
+}
+
+#send{
+    margin-left: 5%;
+    width: 15%;
+}
+
+#back{
+    width: 50%;
+    margin: 25%;
+    margin-bottom: 600px;
+}
+
+.messageDisplay{
+    border-radius: 15px;
+    background-color: #ffc814;
+    width: 35%;
+}
+
+p{
+    margin-left: 3%;
+    font-size: 18px;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.container{
+    width: 100%;
+    > .positionUser{
+        float: right;
+    }
+}
+
+.container::after{
+    content: "";
+    display: table;
+    clear: both;
+}

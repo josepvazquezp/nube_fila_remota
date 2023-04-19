@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./../controllers/users');
+const controller = require('./../controllers/mastercards');
 
 /**
  * @swagger
- * /users:
+ * /cards:
  *  post:
- *    desription: create user
+ *    desription: add a new card to an user
  *    parameters:
  *      - in: body
  *        name: create
- *        description: JSON => email, password, name and type
+ *        description: JSON => User ID, Type, Number, Date
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      201:
- *        description: post create user
+ *        description: post create card
  *      400:
  *        description: bad request
  */
@@ -24,25 +24,25 @@ router.post('/', express.json(), controller.create);
 
 /**
  * @swagger
- * /users/{id}:
+ * /cards/{id}:
  *  put:
- *    desription: update user
+ *    desription: update a card data
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: card id 
  *        required: true
  *        schema:
  *          type: string
  *      - in: body
  *        name: update
- *        description: JSON => password, name, history, status and image
+ *        description: JSON => update numerical data
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      200:
- *        description: put update user
+ *        description: put update a card
  *      400:
  *        description: bad request
  */
@@ -50,12 +50,12 @@ router.put('/:id', express.json(), controller.update);
 
 /**
  * @swagger
- * /users:
+ * /cards:
  *  get:
- *    desription: list users
+ *    desription: list of all cards in DB
  *    responses:
  *      200:
- *        description: get users
+ *        description: get cards
  *      400:
  *        description: bad request
  */
@@ -63,19 +63,19 @@ router.get('/', controller.list);
 
 /**
  * @swagger
- * /users/{id}:
+ * /cards/{id}:
  *  get:
- *    description: search user
+ *    description: search for a specific card
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id 
+ *        description: card id 
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: get user
+ *        description: get an specific card
  *      400:
  *        description: bad request
  */
@@ -83,22 +83,26 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
- * /users/{id}:
+ * /cards/{id}:
  *  delete:
- *    desription: delete user
+ *    desription: delete a card
  *    parameters:
  *      - in: path
  *        name: id
- *        description: user id
+ *        description: card id
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: delete user
+ *        description: delete the card
  *      400:
  *        description: bad request
  */
 router.delete('/:id', controller.delete);
+
+router.get('/lookc/:number', controller.searchCreate);
+
+router.get('/looku/:user', controller.listUserCards);
 
 module.exports = router;

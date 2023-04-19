@@ -1,0 +1,25 @@
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div *ngIf="isLogged">
+    <h1>Modificando Cuenta</h1>
+    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
+    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+
+    <form [formGroup]="formUpdate">
+        <h2>Coloque el link a su imagen de perfil</h2>
+        <mat-form-field>
+        <input matInput name="link" type="text" placeholder="Link aquí" formControlName="link">
+        <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="checkUpdate()">
+            Actualizar
+        </button>
+        &nbsp;
+        <a routerLink="/">
+            <button mat-flat-button color="warn" >
+                Volver
+            </button>
+        </a>
+
+    </form>
+</div>

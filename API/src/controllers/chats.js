@@ -20,7 +20,16 @@ const ChatsController = {
     update: (req, res) => {
         const id = req.params.id;
 
-        Chat.findByIdAndUpdate(id, req.body, {new:true})
+        const newMessage = {
+            sender: req.body.sender,
+            message: req.body.message
+        }
+
+        console.log("ID: " + id);
+        console.log("Cuerpo: " + newMessage)
+
+
+        Chat.findByIdAndUpdate(id, {$push: {messages: newMessage}},  { new: true })
                         .then(chat => {
                             res.status(200).send(chat);
                         })
@@ -59,6 +68,21 @@ const ChatsController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro el chat: ' + id);
                                 });
+    },
+    findMyChat: (req, res) => {
+        const MyID = req.body.MyID
+        //const ItID = req.body.ItID;
+        console.log(req.body);
+
+        Chat.find({customerId: MyID}) //Falta poner la del restauran
+                .then(chat => {
+                    console.log("Chat encontrado")
+                    console.log(chat);
+                    res.status(200).send(chat);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro el chat: ');
+                });
     }
 }
 

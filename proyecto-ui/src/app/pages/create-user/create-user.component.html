@@ -1,6 +1,5 @@
-<h1>Crea tu cuenta</h1>
-
 <div>
+    <h1>Crea tu cuenta</h1>
     <form [formGroup]="userForm">
         <mat-form-field>
             <mat-label>Nombre</mat-label>
@@ -33,18 +32,18 @@
         <h3>Eliga un tipo de cuenta:</h3>
     
         <mat-selection-list #type [multiple]="false">
-            <mat-list-option >
+            <mat-list-option selected (click) = "typeCliente()">
                 Cliente
             </mat-list-option>
-            <mat-list-option >
+            <mat-list-option    (click) = "typeRestaurant()">
                 Restaurante
             </mat-list-option>
           </mat-selection-list>
     
         <br>
-    
+
         &nbsp;
-        <button mat-flat-button color="primary" (click)="checkUsers()">
+        <button mat-flat-button color="primary" (click)="checkForm()">
             Crear Cuenta
         </button>
         &nbsp;
@@ -55,7 +54,3 @@
         </a>
     </form>
 </div>
-
-<button mat-flat-button color="primary" (click)="checkUsers()">
-    Probar
-</button>

@@ -1,5 +1,5 @@
 <mat-toolbar color="">
-    <img src="../../../assets/images/logo.png">
+    <a routerLink="/"><img src="../../../assets/images/logo.png"></a>
     <span>&nbsp;Fila Remota</span>
     <span class="spacer"></span>
     <div *ngIf="!flagLogin">
@@ -21,19 +21,21 @@
                     <td>
                         <mat-icon>arrow_drop_down</mat-icon>
                         &nbsp;
-                        <img id="user_image" src={{image}}> 
+                        <img id="user_image" src="{{image}}"> 
                     </td>
                     <td>
-                        <label>&nbsp;{{user}}</label>
+                        <label>&nbsp;{{email}}</label>
                     </td>
                 </tr>
             </table>
         </button>
         <mat-menu #menu="matMenu">
+        <a routerLink="/updateuser">
         <button mat-menu-item>
             <mat-icon>edit</mat-icon>
             <span>Actualizar</span>
         </button>
+        </a>
         <a routerLink="/paymenu">
         <button mat-menu-item>
             <mat-icon>credit_cardl</mat-icon>
@@ -44,10 +46,12 @@
             <mat-icon>lunch_dining</mat-icon>
             <span>Productos</span>
         </button>
+        <a routerLink="/deleteuser">
         <button mat-menu-item>
             <mat-icon>delete_forever</mat-icon>
             <span>Borrar cuenta</span>
         </button>
+         </a>
         <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Cerrar sesión</span>

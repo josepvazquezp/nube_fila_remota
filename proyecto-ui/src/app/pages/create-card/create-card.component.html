@@ -1,0 +1,61 @@
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div *ngIf="isLogged">
+    <h1>Nueva Tarjeta</h1>
+    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
+    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+    <form [formGroup]="cardForm">
+
+        <h3>Eliga un tipo de tarjeta:</h3>
+    
+        <mat-selection-list #type [multiple]="false">
+            <mat-list-option selected (click) = "typeDebito()">
+                Debito
+            </mat-list-option>
+            <mat-list-option    (click) = "typeCredito()">
+                Credito
+            </mat-list-option>
+        </mat-selection-list>
+
+        <br><br>
+
+
+        <mat-form-field>
+            <mat-label>Número de Tarjeta</mat-label>
+            <input matInput name="number" type="text" minlength="16" maxlength="16" formControlName="number">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Mes de Vencimiento</mat-label>
+            <input matInput name="month" type="number" min="1" max="12" formControlName="month">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        &nbsp;
+        <mat-form-field>
+            <mat-label>Año de Vencimiento</mat-label>
+            <input matInput name="year" type="number" min="24" max="99" formControlName="year">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+
+
+        
+    
+        
+
+
+        <button mat-flat-button color="primary" (click)="checkForm()">
+            Añadir Tarjeta
+        </button>
+        &nbsp;
+    </form>
+
+    <br><br>
+    <a routerLink="/paymenu">
+        <button mat-flat-button color="warn" >
+            Volver
+        </button>
+    </a>
+</div>

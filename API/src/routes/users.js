@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./../controllers/mastercards');
+const controller = require('./../controllers/users');
 
 /**
  * @swagger
- * /cards:
+ * /users:
  *  post:
- *    desription: add a new card to an user
+ *    desription: create user
  *    parameters:
  *      - in: body
  *        name: create
- *        description: JSON => User ID, Type, Number, Date
+ *        description: JSON => email, password, name and type
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      201:
- *        description: post create card
+ *        description: post create user
  *      400:
  *        description: bad request
  */
@@ -24,25 +24,25 @@ router.post('/', express.json(), controller.create);
 
 /**
  * @swagger
- * /cards/{id}:
+ * /users/{id}:
  *  put:
- *    desription: update a card data
+ *    desription: update user
  *    parameters:
  *      - in: path
  *        name: id
- *        description: card id 
+ *        description: user id 
  *        required: true
  *        schema:
  *          type: string
  *      - in: body
  *        name: update
- *        description: JSON => update numerical data
+ *        description: JSON => password, name, history, status and image
  *        required: true
  *        schema: 
  *          type: string
  *    responses:
  *      200:
- *        description: put update a card
+ *        description: put update user
  *      400:
  *        description: bad request
  */
@@ -50,12 +50,12 @@ router.put('/:id', express.json(), controller.update);
 
 /**
  * @swagger
- * /cards:
+ * /users:
  *  get:
- *    desription: list of all cards in DB
+ *    desription: list users
  *    responses:
  *      200:
- *        description: get cards
+ *        description: get users
  *      400:
  *        description: bad request
  */
@@ -63,19 +63,19 @@ router.get('/', controller.list);
 
 /**
  * @swagger
- * /cards/{id}:
+ * /users/{id}:
  *  get:
- *    description: search for a specific card
+ *    description: search user
  *    parameters:
  *      - in: path
  *        name: id
- *        description: card id 
+ *        description: user id 
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: get an specific card
+ *        description: get user
  *      400:
  *        description: bad request
  */
@@ -83,22 +83,27 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
- * /cards/{id}:
+ * /users/{id}:
  *  delete:
- *    desription: delete a card
+ *    desription: delete user
  *    parameters:
  *      - in: path
  *        name: id
- *        description: card id
+ *        description: user id
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: delete the card
+ *        description: delete user
  *      400:
  *        description: bad request
  */
 router.delete('/:id', controller.delete);
+
+router.get('/look/:email', controller.searchCreate);
+
+router.post('/login', express.json(), controller.searchLogin);
+
 
 module.exports = router;

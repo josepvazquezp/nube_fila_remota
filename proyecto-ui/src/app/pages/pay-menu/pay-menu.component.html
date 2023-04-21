@@ -1,1 +1,36 @@
-<h1>Menú de Tarjetas</h1>
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div *ngIf="isLogged">
+    <h1>Menú de tarjetas</h1>
+    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
+    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+
+
+    <h2 *ngIf="!areCards">No hay Tarjetas aún</h2>
+    <ul *ngIf="areCards" >
+        <li *ngFor="let item of cardList">
+            Número: {{item.Number}}<br>
+            Tipo: {{item.Type}}<br>
+            Fecha de Vencimiento: {{item.Date}}<br>
+            <button mat-flat-button color="primary" [(ngModel)]="item._id"  (click)="redirectUpdate(item._id)">
+                Modificar Tarjeta
+            </button>
+            &nbsp;&nbsp;
+            <button mat-flat-button color="warn" [(ngModel)]="item._id"  (click)="redirectDelete(item._id)">
+                Elimnar Tarjeta
+            </button>
+            <br><br><br>
+        </li>
+    </ul>
+
+    <a routerLink="/createcard">
+        <button mat-flat-button color="warn" >
+            Añadir Tarjeta
+        </button>
+    </a>
+    <br><br>
+    <a routerLink="/">
+        <button mat-flat-button color="warn" >
+            Volver
+        </button>
+    </a>
+</div>

@@ -3,13 +3,13 @@
 <div class="general">
     <h1>Deja una Reseña!!</h1>
 
-    <h2>Evaluando a -Aquí va el nombre del evaluado-</h2>
+    <h2>Evaluando a {{nameR}}</h2>
     <br><br><br>
 
     <h2>Puntuación</h2>
 
-    <button *ngFor="let index of ratingArr;index as i" mat-fab matTooltip="Primary" color="primary" (click)="rate(i+1)">
-        <mat-icon>
+    <button *ngFor="let index of ratingArr;index as i" mat-icon-button matTooltip="Primary" (click)="rate(i+1)">
+        <mat-icon color="accent">
             {{showIcon(i)}}
         </mat-icon>
     </button>

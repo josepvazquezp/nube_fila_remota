@@ -6,6 +6,8 @@ import { Product } from 'src/app/shared/interfaces/product';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { ChatService } from 'src/app/shared/services/chat.service';
+import { User } from 'src/app/shared/interfaces/user';
 
 @Component({
   selector: 'app-display-restaurant',
@@ -19,15 +21,17 @@ export class DisplayRestaurantComponent {
   location: String = "";
   image: String = "";
   products: Array<Product> = [];
+  user: Array<User> = [];
 
   idRestaurant: String = "";
   idCustomer: String = "";
   idOrder: String = "";
 
-  constructor(private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private orderService: OrderService) {
+  constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private orderService: OrderService) {
       this.idRestaurant = this.sharedDataService.getRestaurant();
       this.idCustomer = this.sharedDataService.getCustomer();
       this.idOrder = this.sharedDataService.getOrder();
+      this.user[0] = sharedDataService.getUser();
 
       this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
         this.name = response.name;
@@ -96,4 +100,28 @@ export class DisplayRestaurantComponent {
     }
     
   }
-}
+
+
+
+  prepareChat(){
+    let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.idRestaurant + '"}');
+    this.chatS.getChat(body).subscribe((response: any) => {
+      if(response.length == 0){ //No hay chat aun
+        
+        let bodytrue = JSON.parse('{"customerId": "' + this.user[0]._id +'", "restaurantId": "' + this.idRestaurant + '"}');
+
+        this.chatS.createChat(bodytrue).subscribe((response: any) => {
+          this.router.navigate(['/chat']);
+            });
+
+      }else{ //ya hay chat
+        this.router.navigate(['/chat']);
+      }
+    });
+
+
+
+  }
+
+
+  }

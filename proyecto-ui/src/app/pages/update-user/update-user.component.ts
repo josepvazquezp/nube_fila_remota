@@ -30,7 +30,19 @@ export class UpdateUserComponent {
     console.log(this.selectedFile);
 
     if(this.updateForm.value.description != '' || this.selectedFile != null) {
-      this.restaurantService.updateRestaurant(this.idRestaurant, this.selectedFile, this.updateForm.value.description).subscribe((response: any) => {
+      let body = {};
+
+      if(this.selectedFile == null && this.updateForm.value.description != '') {
+        body = {description: this.updateForm.value.description};
+      }
+      else if(this.selectedFile != null && this.updateForm.value.description == '') {
+        body = {image: this.updateForm.value.description};
+      }
+      else {
+        body = {description: this.updateForm.value.description, image: this.selectedFile}
+      }
+      
+      this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
       });
     }
   }

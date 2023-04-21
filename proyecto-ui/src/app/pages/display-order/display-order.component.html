@@ -1,1 +1,84 @@
-<p>display-order works!</p>
+<div class="container">
+    <h1 id="margin">Orden</h1>
+    <div *ngFor="let item of hashmap | keyvalue; let i = index">
+        <mat-card  *ngIf="keys.includes(item.key)" class="example-card container">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"><img src={{restaurant.image}} width="50px"></div>
+                <mat-card-title>{{item.value.productName}}</mat-card-title>
+                <mat-card-subtitle>{{restaurant.name}}</mat-card-subtitle>
+            </mat-card-header>
+        
+            <img mat-card-image class="banner" src={{item.value.productImage}}>
+            
+            <mat-card-content>
+                <br>
+                <table width="100%">
+                    <tr>
+                        <td class="center">
+                            <h3>Cantidad de productos:</h3>
+                        </td>
+                        <td class="center">
+                            <h3>Precio por producto:</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="center">
+                            <h2>{{item.value.quantity}}</h2>
+                        </td>
+                        <td class="center">
+                            <h2>${{item.value.productPrice}}</h2>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        
+            <br> 
+             
+            <mat-card-actions>
+                <table>
+                    <tr>
+                        <td class="center">
+                            <h3>&nbsp;&nbsp;Subtotal: </h3>
+                        </td>
+                        
+                        <td class="center">
+                            <h2>&nbsp;&nbsp;${{item.value.subtotal}}</h2>
+                        </td>
+                    </tr>
+                </table>
+                <span class="spacer"></span>
+                
+                    <button mat-fab color="accent" class="b-green margins" (ngModel)="item.key" (click)="addProduct(item.key)"><mat-icon>add</mat-icon></button>
+                    <button mat-fab color="accent" class="b-accent" (ngModel)="item.key" (click)="decreaseProduct(item.key)"><mat-icon>remove</mat-icon></button>
+                    <button mat-fab color="warn" class="margins" (ngModel)="item.key" (click)="removeProduct(item.key)"><mat-icon>delete</mat-icon></button>
+                
+            </mat-card-actions>
+        </mat-card>
+
+        <br>
+        <br>
+    </div>
+
+    <br>
+    <br>
+    <h1>Total: ${{total}}</h1>
+    <h1>Cantidad: {{quantity}}</h1>
+    <br>
+    <br>
+    
+    <div class="align-b">
+        <button mat-fab extended class="b-green" (click)="uploadOrder()">
+            <mat-icon>done</mat-icon>Generar orden
+        </button>
+        <a routerLink="/">
+            <button mat-fab extended color="warn"  (click)="deleteOrder()">
+                <mat-icon>delete</mat-icon>Eliminar orden
+            </button>
+        </a>
+        <a routerLink="/display_restaurant">
+            <button mat-fab extended color="accent" class="b-down-accent">
+                <mat-icon>arrow_back_ios_new</mat-icon>Volver
+            </button>
+        </a>
+    </div>
+</div>

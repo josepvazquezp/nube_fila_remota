@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 
-import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 import { Product } from 'src/app/shared/interfaces/product';
+
+import { RestaurantService } from 'src/app/shared/services/restaurant.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-restaurant-products',
@@ -13,14 +15,22 @@ export class RestaurantProductsComponent {
   image: String = "";
   products: Array<Product> = [];
 
-  idRestaurant: String = "6438b2f687c92dd913c334c8";
+  idRestaurant: String = "";
 
-  constructor(private restaurantService: RestaurantService) {
-      this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
+  constructor(private sharedDataService: SharedDataService, private restaurantService: RestaurantService) {
+    this.idRestaurant = this.sharedDataService.getUserRestaurant();  
+    
+    this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
       this.name = response.name;
       this.image = response.image;
 
       this.products = response.products;
     });
   }
+
+  sendIdProduct(id: String) {
+    this.sharedDataService.setProduct(id);
+  }
+
+
 }

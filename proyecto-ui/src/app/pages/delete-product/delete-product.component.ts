@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ProductService } from 'src/app/shared/services/product.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-delete-product',
@@ -17,10 +18,12 @@ export class DeleteProductComponent {
   rImage: String = '';
 
   delete: String = '';
-  idProduct: String = "643c448985154b19a05d33bb";
+  idProduct: String = "";
 
-  constructor(private productService: ProductService) {
-      this.productService.getProduct(this.idProduct).subscribe((response: any) => {
+  constructor(private sharedDataService: SharedDataService, private productService: ProductService) {
+    this.idProduct = this.sharedDataService.getProduct();   
+
+    this.productService.getProduct(this.idProduct).subscribe((response: any) => {
       this.name = response.Name;
       this.image = response.Image;
       this.description = response.Description;
@@ -33,7 +36,7 @@ export class DeleteProductComponent {
 
   deleteProduct() {
     if(this.delete == '1') {
-      this.productService.deleteProduct(this.idProduct).subscribe((response: any) => {
+        this.productService.deleteProduct(this.idProduct).subscribe((response: any) => {
       });
     }
   }

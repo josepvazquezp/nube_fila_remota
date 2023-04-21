@@ -3,7 +3,7 @@ export interface Product {
     Name: String,
     Description: String,
     Image: String,
-    Price: String,
+    Price: number,
     Available: Boolean,
     RestaurantId: Object
 }

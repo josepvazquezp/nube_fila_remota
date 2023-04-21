@@ -102,9 +102,9 @@
             <mat-card-actions>
                 <h3>Precio: ${{item.Price}}</h3>
                 <span class="spacer"></span>
-                <a routerLink="/display_order">
-                    <button mat-raised-button color="accent" id="b-green" (click)="addOrder('643c444485154b19a05d33b4')"><mat-icon>add</mat-icon>Añadir a orden</button>
-                </a>
+                <button mat-raised-button color="accent" id="b-green" (ngModel)="item._id" (click)="addOrder(item._id)">
+                    <mat-icon>add</mat-icon>Añadir a orden
+                </button>
             </mat-card-actions>
         </mat-card>
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { ProductService } from 'src/app/shared/services/product.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-update-product',
@@ -11,9 +12,11 @@ import { ProductService } from 'src/app/shared/services/product.service';
 export class UpdateProductComponent {
   productForm: FormGroup;
   selectedFile: any = null;
-  idProduct: String = "643b9618e59b2289b49f5400";
+  idProduct: String = "";
 
-  constructor(private productService: ProductService, formBuilder: FormBuilder) {
+  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder) {
+    this.idProduct = this.sharedDataService.getProduct();
+
     this.productForm = formBuilder.group({
       name: [''],
       description: [''],

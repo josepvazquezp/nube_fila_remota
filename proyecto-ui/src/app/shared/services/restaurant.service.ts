@@ -23,19 +23,8 @@ export class RestaurantService {
     return this.http.get('http://localhost:3000/restaurants'); 
   }
 
-  updateRestaurant(id: String, image: String, description: String) {
-    let body = {};
-
-    if(image == null && description != '') {
-      body = {description: description};
-    }
-    else if(image != null && description == '') {
-      body = {image: image};
-    }
-    else {
-      body = {description: description, image: image}
-    }
-
+  updateRestaurant(id: String, body: Object) {
+    
     body = JSON.parse(JSON.stringify(body));
 
     return this.http.put('http://localhost:3000/restaurants/' + id, body); 

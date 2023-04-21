@@ -29,12 +29,12 @@
             <h3>Precio: ${{item.Price}}</h3>
             <span class="spacer"></span>
             <a routerLink="/update_product" class="margins">
-                <button mat-fab id={{item._id}} class="b-blue">
+                <button mat-fab class="b-blue" (ngModel)="item._id" (click)="sendIdProduct(item._id)">
                     <mat-icon>edit</mat-icon>
                 </button>
             </a>
             <a routerLink="/delete_product" class="margins">
-                <button mat-fab color="warn">
+                <button mat-fab color="warn" (ngModel)="item._id" (click)="sendIdProduct(item._id)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </a>

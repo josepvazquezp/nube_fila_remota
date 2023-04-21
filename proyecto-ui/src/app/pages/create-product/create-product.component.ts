@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ProductService } from 'src/app/shared/services/product.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-create-product',
@@ -11,9 +12,11 @@ import { ProductService } from 'src/app/shared/services/product.service';
 export class CreateProductComponent {
   productForm: FormGroup;
   selectedFile: any = null;
-  idRestaurant: String = "6438b2f687c92dd913c334c8";
+  idRestaurant: String = "";
 
-  constructor(private productService: ProductService, formBuilder: FormBuilder) {
+  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder) {
+    this.idRestaurant = this.sharedDataService.getUserRestaurant();
+    
     this.productForm = formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],

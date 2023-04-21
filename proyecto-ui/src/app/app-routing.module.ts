@@ -11,18 +11,20 @@ import { CreateProductComponent } from './pages/create-product/create-product.co
 import { UpdateProductComponent } from './pages/update-product/update-product.component';
 import { DeleteProductComponent } from './pages/delete-product/delete-product.component';
 import { DisplayOrderComponent } from './pages/display-order/display-order.component';
+import { OrderInProgressComponent } from './pages/order-in-progress/order-in-progress.component';
 
 const routes: Routes = [
-  {path: "", component: HomeComponent},
-  {path: "createuser", component: CreateUserComponent},
-  {path: "paymenu", component: PayMenuComponent},
-  {path: "display_restaurant", component: DisplayRestaurantComponent},
-  {path: "update_user", component: UpdateUserComponent},
-  {path: "restaurant_products", component: RestaurantProductsComponent},
-  {path: "create_product", component: CreateProductComponent},
-  {path: "update_product", component: UpdateProductComponent},
-  {path: "delete_product", component: DeleteProductComponent},
-  {path: "display_order", component: DisplayOrderComponent}
+  { path: "", component: HomeComponent },
+  { path: "createuser", component: CreateUserComponent },
+  { path: "paymenu", component: PayMenuComponent },
+  { path: "display_restaurant", component: DisplayRestaurantComponent },
+  { path: "update_user", component: UpdateUserComponent },
+  { path: "restaurant_products", component: RestaurantProductsComponent },
+  { path: "create_product", component: CreateProductComponent },
+  { path: "update_product", component: UpdateProductComponent },
+  { path: "delete_product", component: DeleteProductComponent },
+  { path: "display_order", component: DisplayOrderComponent },
+  { path: "order_in_progress", component: OrderInProgressComponent }
 ];
 
 @NgModule({

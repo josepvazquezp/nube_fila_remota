@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Product } from 'src/app/shared/interfaces/product';
 
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
-import { Product } from 'src/app/shared/interfaces/product';
 import { OrderService } from 'src/app/shared/services/order.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-display-restaurant',
@@ -17,70 +20,79 @@ export class DisplayRestaurantComponent {
   image: String = "";
   products: Array<Product> = [];
 
-  idRestaurant: String = "6438b2f687c92dd913c334c8";
-  idCustomer: String = "64399dacddc3bcf1989b709b";
-  idOrder: String = "643c5fafbc06c4deb2916f9a";
+  idRestaurant: String = "";
+  idCustomer: String = "";
+  idOrder: String = "";
 
-  constructor(private restaurantService: RestaurantService, private orderService: OrderService) {
+  constructor(private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private orderService: OrderService) {
+      this.idRestaurant = this.sharedDataService.getRestaurant();
+      this.idCustomer = this.sharedDataService.getCustomer();
+      this.idOrder = this.sharedDataService.getOrder();
+
       this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
-      this.name = response.name;
-      this.description = response.description;
-      this.type = response.type;
-      this.location = response.location;
-      this.image = response.image;
+        this.name = response.name;
+        this.description = response.description;
+        this.type = response.type;
+        this.location = response.location;
+        this.image = response.image;
 
-      this.products = response.products;
+        this.products = response.products;
     });
   }
 
-  addOrder(id: String) {    //id esta hardcodeado en el html
-    console.log(id);
+  addOrder(id: String) {    
+    if(this.idCustomer != "") {
+      let index = this.products.findIndex(item => item._id == id);
+      let product = this.products[index];
 
-    let index = this.products.findIndex(item => item._id == id);
-    let product = this.products[index];
+      if(this.idOrder == '') {
+        let body = {
+          customerId: this.idCustomer, 
+          restaurantId: this.idRestaurant, 
+          total: product.Price,
+          product: product._id,
+          quantity: 1
+        };
 
-    console.log(product);
-
-    if(this.idOrder == '') {
-      let body = {
-        customerId: this.idCustomer, 
-        restaurantId: this.idRestaurant, 
-        total: product.Price,
-        product: product._id,
-        quantity: 1
-      };
-
-      console.log(body);
-
-      this.orderService.createOrder(body).subscribe((response: any) => {
-      });
-    }
-    else {
-      this.orderService.getOrder(this.idOrder).subscribe((response: any) => {
-        if(response) {
-          let products = response.products;
-          let index;
-          
-          for(let i = 0 ; i < products.length ; i++) {
-            if(products[i].product._id == id) {
-              index = i;
-              break;
+        this.orderService.createOrder(body).subscribe((response: any) => {
+          this.sharedDataService.setOrder(response.order._id);
+          this.router.navigate(['/display_order']);
+        });
+      }
+      else {
+        this.orderService.getOrder(this.idOrder).subscribe((response: any) => {
+          if(response.restaurantId == this.idRestaurant) {
+            let products = response.products;
+            let index = undefined;
+            
+            for(let i = 0 ; i < products.length ; i++) {
+              if(products[i].product._id == id) {
+                index = i;
+                break;
+              }
             }
-          }
 
-          if(index == undefined) {
-            products.push({product: id, quantity: 1});
+            if(index == undefined) {
+              products.push({product: id, quantity: 1});
+            }
+            else {
+              products[index].quantity++;
+            }
+
+            let body = {products: products, quantity: ++response.quantity, total: response.total + product.Price};
+
+            this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
+              this.router.navigate(['/display_order']);
+            });
           }
           else {
-            products[index].quantity++;
+            alert("Ya tienes una orden activa.\nNOTA: solo se pueden ingresar productos del mismo restaurante")
           }
-
-          let body = {products: products, quantity: ++response.quantity, total: response.total + product.Price};
-
-          this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
-          });
-        }
-      });
+        });
+      }
+    }
+    else {
+      alert("Es necesario iniciar sesión");
     }
     
   }

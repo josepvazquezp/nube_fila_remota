@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-nav',
@@ -16,7 +18,7 @@ export class NavComponent {
   type: Boolean = false;
 
 
-  constructor(formBuilder: FormBuilder) { 
+  constructor(private sharedDataService: SharedDataService, formBuilder: FormBuilder) { 
     this.formLogin = formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -39,6 +41,12 @@ export class NavComponent {
     this.image = "../../../assets/images/logo.png";
     this.user = this.formLogin.value.email;
     this.type = true;
+
+    //ya con verificación token y todo y ser tipo restaurant
+    this.sharedDataService.setUserRestaurant("6438b2f687c92dd913c334c8");
+
+    //ya con verificación token y todo y ser tipo usuario
+    this.sharedDataService.setCustomer("64399dacddc3bcf1989b709b");
   }
 
   logout() {

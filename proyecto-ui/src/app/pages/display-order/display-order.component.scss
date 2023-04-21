@@ -1,0 +1,54 @@
+h1 {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: monospace;
+    color:rgb(3, 3, 104);
+    margin-left: 37.5%;
+}
+
+p, h4 {
+    text-align: justify;
+}
+
+h3 {
+    margin-left: 10%;
+}
+
+mat-card {
+    width: 25%;
+    margin: auto;
+}
+
+.margins {
+    margin-right: 6%;
+}
+
+.banner {
+    background-color: rgba(156, 195, 225, 0.45);
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.center {
+    text-align: center;
+}
+
+.b-green {
+    background-color: rgb(0, 183, 74);
+    color:white;
+    margin-right: 3%;
+}
+
+.b-accent {
+    margin-right: 12%;
+}
+
+.align-b {
+    margin-left: 37.5%;
+}
+
+.b-down-accent {
+    margin-left: 10%;
+}

@@ -71,10 +71,10 @@ const ChatsController = {
     },
     findMyChat: (req, res) => {
         const MyID = req.body.MyID
-        //const ItID = req.body.ItID;
+        const ItID = req.body.ItID;
         console.log(req.body);
 
-        Chat.find({customerId: MyID}) //Falta poner la del restauran
+        Chat.find({customerId: MyID, restaurantId: ItID})
                 .then(chat => {
                     console.log("Chat encontrado")
                     console.log(chat);

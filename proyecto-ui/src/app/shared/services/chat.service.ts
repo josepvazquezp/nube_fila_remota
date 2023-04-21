@@ -8,6 +8,12 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
+  createChat(body: String) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/chats/', body,  {headers} );
+  }
+
+
   getChat(body: String) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/chats/mine', body,  {headers} );

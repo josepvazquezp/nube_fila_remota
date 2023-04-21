@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 
 import { UserService } from 'src/app/shared/services/user.service';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+import { User } from 'src/app/shared/interfaces/user';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-update-user',
@@ -12,11 +15,18 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 export class UpdateUserComponent {
   updateForm: FormGroup;
   selectedFile: any = null;
-  type: Boolean = true;
+  type: Boolean = false;
   idRestaurant: String = "6438b2f687c92dd913c334c8";
+  isLogged: boolean = false;
+  user: Array<User> = [];
   
-  constructor(private usersService: UserService, private restaurantService: RestaurantService, formBuilder: FormBuilder) {
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router, private restaurantService: RestaurantService){
+    this.isLogged = sharedData.getLog();
+    this.user[0] = sharedData.getUser();
+    this.type = this.user[0].type == "Cliente"? false:true;
+    
     this.updateForm = formBuilder.group({
+      link: [''],
       description: ['']
     });
   }

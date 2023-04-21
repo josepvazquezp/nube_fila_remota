@@ -101,4 +101,8 @@ router.get('/:id', controller.search);
  */
 router.delete('/:id', controller.delete);
 
+router.get('/lookc/:number', controller.searchCreate);
+
+router.get('/looku/:user', controller.listUserCards);
+
 module.exports = router;

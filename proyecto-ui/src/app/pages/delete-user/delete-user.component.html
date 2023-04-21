@@ -1,0 +1,27 @@
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div *ngIf="isLogged">
+    <h1>Borrando Cuenta</h1>
+    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
+    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+
+    <form [formGroup]="formDelete">
+        <h2>Escriba su contraseña para borrar la Cuenta</h2>
+        <mat-form-field>
+        <input matInput name="pass" type="password" placeholder="Escriba su contraseña" formControlName="pass">
+        <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+
+        <p><input id="ver" name="check" type="checkbox" formControlName="check">Entiendo que mi Cuenta sera eliminada PARA SIEMPRE</p>
+
+        <button mat-flat-button color="primary" (click)="checkDelete()">
+            Borrar Cuenta
+        </button>
+        &nbsp;
+        <a routerLink="/">
+            <button mat-flat-button color="warn" >
+                Volver
+            </button>
+        </a>
+
+    </form>
+</div>

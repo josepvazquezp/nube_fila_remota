@@ -1,5 +1,9 @@
-<div>
-    <h1>Actualizar tu cuenta</h1>
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div *ngIf="isLogged">
+    <h1>Modificando Cuenta</h1>
+    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
+    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+    
     <form [formGroup]="updateForm">
         <h2>Imagen</h2>
         <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>

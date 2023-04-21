@@ -20,6 +20,13 @@ import { CreateProductComponent } from './pages/create-product/create-product.co
 import { DisplayOrderComponent } from './pages/display-order/display-order.component';
 import { OrderInProgressComponent } from './pages/order-in-progress/order-in-progress.component';
 import { RetaurantOrdersComponent } from './pages/retaurant-orders/retaurant-orders.component';
+import { DeleteUserComponent } from './pages/delete-user/delete-user.component';
+import { CreateCardComponent } from './pages/create-card/create-card.component';
+import { DeleteCardComponent } from './pages/delete-card/delete-card.component';
+import { UpdateCardComponent } from './pages/update-card/update-card.component';
+import { SetreviewComponent } from './pages/setreview/setreview.component';
+import { ChatdisplayComponent } from './pages/chatdisplay/chatdisplay.component';
+import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +43,15 @@ import { RetaurantOrdersComponent } from './pages/retaurant-orders/retaurant-ord
     CreateProductComponent,
     DisplayOrderComponent,
     OrderInProgressComponent,
-    RetaurantOrdersComponent
+    RetaurantOrdersComponent,
+    DeleteUserComponent,
+    UpdateUserComponent,
+    CreateCardComponent,
+    DeleteCardComponent,
+    UpdateCardComponent,
+    SetreviewComponent,
+    ChatdisplayComponent,
+    ViewRestaurantsComponent
   ],
   imports: [
     BrowserModule,

@@ -13,6 +13,13 @@ import { DeleteProductComponent } from './pages/delete-product/delete-product.co
 import { DisplayOrderComponent } from './pages/display-order/display-order.component';
 import { OrderInProgressComponent } from './pages/order-in-progress/order-in-progress.component';
 import { RetaurantOrdersComponent } from './pages/retaurant-orders/retaurant-orders.component';
+import { DeleteUserComponent } from './pages/delete-user/delete-user.component';
+import { CreateCardComponent } from './pages/create-card/create-card.component';
+import { DeleteCardComponent } from './pages/delete-card/delete-card.component';
+import { UpdateCardComponent } from './pages/update-card/update-card.component';
+import { ChatdisplayComponent } from './pages/chatdisplay/chatdisplay.component';
+import { SetreviewComponent } from './pages/setreview/setreview.component';
+import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -26,7 +33,16 @@ const routes: Routes = [
   { path: "delete_product", component: DeleteProductComponent },
   { path: "display_order", component: DisplayOrderComponent },
   { path: "order_in_progress", component: OrderInProgressComponent },
-  { path: "restaurant_orders", component: RetaurantOrdersComponent }
+  { path: "restaurant_orders", component: RetaurantOrdersComponent },
+  { path: "createuser", component: CreateUserComponent },
+  { path: "deleteuser", component: DeleteUserComponent },
+  { path: "paymenu", component: PayMenuComponent },
+  { path: "createcard", component: CreateCardComponent },
+  { path: "deletecard", component: DeleteCardComponent },
+  { path: "updatecard", component: UpdateCardComponent },
+  { path: "chat", component: ChatdisplayComponent },
+  { path: "review", component: SetreviewComponent },
+  { path: "view_restaurants", component: ViewRestaurantsComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,47 @@
+<table>
+      <tr>
+        <td id="chat">
+            <div id="scrollDiv">
+            <ul *ngIf="chatready">
+                <li *ngFor="let item of thisChat[0].messages">
+                    <div class="container">
+                        <div class="messageDisplay" [ngClass]="{'positionUser': item.sender == user[0].name }">
+                        <p><b>{{item.sender}} dice:</b><br> 
+                            {{item.message}}</p> 
+                        </div>
+                    </div>
+                    <br><br>
+                </li>
+            </ul>
+        </div>
+        
+        
+        </td>
+        <td id="menu">
+            
+            <button id="back" mat-raised-button color="accent">Volver</button>
+        
+        
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" id="message">
+            <form [formGroup]="message">
+                <mat-form-field>
+                    <input id="messageField" matInput type="text" placeholder="Escribe un mensaje..." formControlName="message">
+                    <mat-error>Este campo es requerido</mat-error>
+                </mat-form-field>
+                
+                
+            </form>
+            
+            <button id="send" mat-raised-button color="accent" (click)="checkMessage()">Envíar</button>
+
+
+
+        </td>
+      </tr>
+    
+
+
+</table>

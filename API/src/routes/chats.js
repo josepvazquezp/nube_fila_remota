@@ -101,4 +101,6 @@ router.get('/:id', controller.search);
  */
 router.delete('/:id', controller.delete);
 
+router.post("/mine", express.json(), controller.findMyChat);
+
 module.exports = router;

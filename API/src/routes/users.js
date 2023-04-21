@@ -101,4 +101,9 @@ router.get('/:id', controller.search);
  */
 router.delete('/:id', controller.delete);
 
+router.get('/look/:email', controller.searchCreate);
+
+router.post('/login', express.json(), controller.searchLogin);
+
+
 module.exports = router;

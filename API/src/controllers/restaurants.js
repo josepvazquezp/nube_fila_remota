@@ -63,6 +63,18 @@ const RestaurantsController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro el restaurant: ' + id);
                                 });
+    },
+    category: (req, res) => {
+        const type = req.body.type;
+
+        Restaurant.find({type: type})
+                .then(restaurants => {
+                    res.status(200).send(restaurants);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro el restaurant con type: ' + type);
+                });
+
     }
 }
 

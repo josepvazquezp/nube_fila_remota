@@ -24,6 +24,26 @@ router.post('/', express.json(), controller.create);
 
 /**
  * @swagger
+ * /restaurants/category:
+ *  put:
+ *    desription: get restaurants with category x
+ *    parameters:
+ *      - in: body
+ *        name: get
+ *        description: JSON => type
+ *        required: true
+ *        schema: 
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get restaurants type x
+ *      400:
+ *        description: bad request
+ */
+router.put('/category', express.json(), controller.category);
+
+/**
+ * @swagger
  * /restaurants/{id}:
  *  put:
  *    desription: update restaurant

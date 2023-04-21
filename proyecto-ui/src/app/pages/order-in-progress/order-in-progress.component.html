@@ -1,0 +1,26 @@
+<table width="100%">
+    <tr>
+        <td>
+            <mat-stepper orientation="vertical">
+                <mat-step>
+                  <ng-template matStepLabel>Orden Recibida</ng-template>
+                </mat-step>
+                <mat-step>
+                  <ng-template matStepLabel>Preparando</ng-template>
+                </mat-step>
+                <mat-step>
+                  <ng-template matStepLabel>Lista para recoger</ng-template>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Orden finalizada</ng-template>
+                    <br>
+                    <button mat-flat-button color="primary" routerLink="/review">Calificar servicio</button>
+                  </mat-step>
+            </mat-stepper>
+        </td>
+        <td class="edit">
+            <h1>Su pedido: </h1>
+            <h1>[{{actualOrder}}]</h1>
+        </td>
+    </tr>
+</table>

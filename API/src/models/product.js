@@ -5,7 +5,11 @@ const productSchema = new Schema({
     Description: {type: String},
     Price: {type: Number},
     Available: {type: Boolean},
-    Image: {type: String}
+    Image: {type: String},
+    RestaurantId: {
+        type: Schema.ObjectId,
+        ref: "restaurants"
+    },
 });
 
 module.exports = model('products', productSchema);

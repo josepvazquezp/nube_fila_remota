@@ -10,7 +10,7 @@ const controller = require('./../controllers/products');
  *    parameters:
  *      - in: body
  *        name: create
- *        description: JSON => Name, Description, Price
+ *        description: JSON => Name, Description, Price, RestaurantId
  *        required: true
  *        schema: 
  *          type: string

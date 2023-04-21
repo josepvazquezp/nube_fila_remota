@@ -3,23 +3,33 @@
     <h1>Modificando Cuenta</h1>
     <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
     <h2>Correo de la Cuenta: {{user[0].email}}</h2>
-
-    <form [formGroup]="formUpdate">
-        <h2>Coloque el link a su imagen de perfil</h2>
-        <mat-form-field>
-        <input matInput name="link" type="text" placeholder="Link aquí" formControlName="link">
-        <mat-error>Este campo es requerido</mat-error>
+    
+    <form [formGroup]="updateForm">
+        <h2>Imagen</h2>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/png,image/jpeg">
+        <span class="file-name">{{selectedFile?.name}}</span>
+        <br>
+        <br>
+        <br>
+        <mat-form-field *ngIf="type">
+            <mat-label>Descripción</mat-label>
+            <input matInput name="description" type="text" placeholder="Escriba su nueva descripción" formControlName="description">
         </mat-form-field>
 
-        <button mat-flat-button color="primary" (click)="checkUpdate()">
-            Actualizar
-        </button>
+        <br>
+    
+        &nbsp;
+        <a routerLink="/">
+            <button mat-flat-button color="primary" (click)="updateUser()">
+                Actualizar
+            </button>
+        </a>
         &nbsp;
         <a routerLink="/">
             <button mat-flat-button color="warn" >
-                Volver
+                Cancelar
             </button>
         </a>
-
     </form>
 </div>

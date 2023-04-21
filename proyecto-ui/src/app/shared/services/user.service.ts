@@ -41,5 +41,8 @@ export class UserService {
     return this.http.post('http://localhost:3000/users/login', body, {headers});
   }
 
+  getUser(id: String) {
+    return this.http.get('http://localhost:3000/users/' + id); 
+  }
 
 }

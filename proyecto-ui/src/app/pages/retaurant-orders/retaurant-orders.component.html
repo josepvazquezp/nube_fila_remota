@@ -1,0 +1,53 @@
+<div *ngFor="let item of hashmap | keyvalue; let i = index">
+    <h1>Orden: [{{i + 1}}]</h1>
+    <h2>Estado: {{item.value.status}}</h2>
+    <h2 class="products">Productos:</h2>
+    <div class="container">
+        <div *ngFor="let p of item.value.products">
+            <mat-card  class="example-card container">
+                <mat-card-header>
+                    <mat-card-title>{{p.product.Name}}</mat-card-title>
+                    <mat-card-subtitle>{{rName}}</mat-card-subtitle>
+                </mat-card-header>
+                <br>
+            
+                <img mat-card-image class="banner" src={{p.product.Image}}>
+            
+                <br> 
+                    
+                <mat-card-actions>
+                    <h3 class="price">Cantidad: {{p.quantity}}</h3>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <mat-stepper *ngIf="item.value.status != 'finalizada' && item.value.status !='rechazada'" labelPosition="bottom" #stepper>
+        <mat-step>
+            <ng-template matStepLabel>Aceptar orden</ng-template>
+            <button mat-button id="b-green" matStepperNext (ngModel)="item.key" (click)="aceptOrder(item.key)">Aceptar</button>
+            <button mat-button id="b-warn" (ngModel)="item.key" (click)="refuseOrder(item.key)">Rechazar</button>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Preparar orden</ng-template>
+            <button id="b-orden-2" mat-button matStepperNext (ngModel)="item.key" (click)="readyOrder(item.key)">Orden lista</button>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Entregar orden</ng-template>
+            <button id="b-orden-3" mat-button matStepperNext (ngModel)="item.key" (click)="finishOrder(item.key)">Orden finalizada</button>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Orden finalizada</ng-template>
+        </mat-step>
+    </mat-stepper>
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+</div>

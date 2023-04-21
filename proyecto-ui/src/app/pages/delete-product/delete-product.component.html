@@ -1,0 +1,53 @@
+<div>
+    <h1>Borrar producto</h1>
+    <br>
+    <h3>¿De verdad quieres borrar este producto?</h3>
+    <br>
+    <mat-card  class="example-card container">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"><img src={{rImage}} width="50px"></div>
+            <mat-card-title>{{name}}</mat-card-title>
+            <mat-card-subtitle>{{rName}}</mat-card-subtitle>
+        </mat-card-header>
+        <br>
+    
+        <img mat-card-image class="banner" src={{image}}>
+        
+        <mat-card-content>
+            <br>
+            <p>
+                {{description}}
+            </p>
+        </mat-card-content>
+    
+        <br> 
+            
+        <mat-card-actions>
+            <h3 class="price">Precio: ${{price}}</h3>
+        </mat-card-actions>
+    </mat-card>
+    <br>
+    <h3>Sí, lo deseo borrar</h3>
+
+    <mat-radio-group [(ngModel)]="delete">
+        <mat-radio-button value="1">Sí</mat-radio-button>
+        <mat-radio-button value="2">No</mat-radio-button>
+    </mat-radio-group>
+        
+    <br>
+    <br>
+    <br>
+
+    &nbsp;
+    <a routerLink="/restaurant_products">
+        <button mat-fab extended color="warn" (click)="deleteProduct()">
+            <mat-icon>delete</mat-icon>Borrar producto
+        </button>
+    </a>
+    &nbsp;
+    <a routerLink="/restaurant_products">
+        <button mat-fab extended>
+            <mat-icon>chevron_left</mat-icon>Volver
+        </button>
+    </a>
+</div>

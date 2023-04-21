@@ -8,7 +8,8 @@ const RestaurantsController = {
             description: req.body.description,
             type: req.body.type,
             location: req.body.location,
-            image: "default icon"
+            image: "default icon",
+            orders: []
         };
 
         Restaurant(newRestaurant).save()
@@ -44,7 +45,7 @@ const RestaurantsController = {
     
     search: (req, res) => {
         const id = req.params.id;
-        Restaurant.findById(id)
+        Restaurant.findById(id).populate('products').populate('orders')
                 .then(restaurants => {
                     res.status(200).send(restaurants);
                 })
@@ -62,6 +63,18 @@ const RestaurantsController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro el restaurant: ' + id);
                                 });
+    },
+    category: (req, res) => {
+        const type = req.body.type;
+
+        Restaurant.find({type: type})
+                .then(restaurants => {
+                    res.status(200).send(restaurants);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro el restaurant con type: ' + type);
+                });
+
     }
 }
 

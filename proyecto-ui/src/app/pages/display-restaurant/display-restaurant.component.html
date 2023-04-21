@@ -1,0 +1,114 @@
+<br>
+<br>
+
+<table>
+    <tr>
+        <td width="99%"></td>
+        <td>
+            <a routerLink="/">
+                <button   mat-raised-button color="accent">
+                    Volver
+                </button>
+            </a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<br>
+<br>
+
+
+<table class="banner">
+    <tr>
+        <td>
+            <img src={{image}} id="restaurantImg">
+        </td>
+        <td valign="top">
+            <table>
+                <tr>
+                    <td>
+                        <h1>
+                            {{name}}
+                        </h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>
+                            {{description}}
+                        </h4>
+                    </td>
+                </tr>
+
+                <br>
+                <br>
+                <br>
+
+                <tr>
+                    <table>
+                        <tr>
+                            <td>
+                                <h2>Categoría: {{type}}</h2>
+                            </td>
+                            <td width="20%"></td>
+                            <td>
+                                <a href={{location}} target="_blank">
+                                    <button  mat-fab extended color="primary">
+                                        <mat-icon>pin_drop</mat-icon>Ubicación
+                                    </button>
+                                </a>
+                            </td>
+                            <td width="20%"></td>
+                            <td>
+                                <button mat-fab extended color="primary" id="buttonChat" routerLink="/chat">
+                                    <mat-icon>chat</mat-icon>Chat
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<br>
+<br>
+<br>
+
+<h1 id="margin">Productos</h1>
+
+<div class="container">
+    <div *ngFor="let item of products">
+        <mat-card  class="example-card container">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"><img src={{image}} width="50px"></div>
+                <mat-card-title>{{item.Name}}</mat-card-title>
+                <mat-card-subtitle>{{name}}</mat-card-subtitle>
+            </mat-card-header>
+        
+            <img mat-card-image class="banner" src={{item.Image}}>
+            
+            <mat-card-content>
+                <br>
+                <p>
+                    {{item.Description}}
+                </p>
+            </mat-card-content>
+        
+            <br> 
+             
+            <mat-card-actions>
+                <h3>Precio: ${{item.Price}}</h3>
+                <span class="spacer"></span>
+                <button mat-raised-button color="accent" id="b-green" (ngModel)="item._id" (click)="addOrder(item._id)">
+                    <mat-icon>add</mat-icon>Añadir a orden
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <br>
+        <br>
+    </div>
+</div>

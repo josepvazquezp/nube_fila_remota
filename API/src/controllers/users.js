@@ -64,7 +64,7 @@ const UsersController = {
     
     search: (req, res) => {
         const id = req.params.id;
-        User.findById(id)
+        User.findById(id).populate('history')
                 .then(user => {
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(200).send(user);

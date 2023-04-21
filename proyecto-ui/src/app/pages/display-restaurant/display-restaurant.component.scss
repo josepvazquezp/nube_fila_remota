@@ -1,0 +1,71 @@
+table {
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: monospace;
+    color:rgb(3, 3, 104);
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+p, h4 {
+    text-align: justify;
+}
+
+h3 {
+    margin-left: 10%;
+}
+
+.banner {
+    background-color: rgba(156, 195, 225, 0.45);
+}
+
+.container {
+    margin-left: 6%;
+    margin-right: 6%;
+    width: 100%;
+}
+
+.container > div {
+    width: 25%;
+    margin-right: 6%;
+    float: left;
+    box-sizing: border-box;
+}
+
+.container::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+#restaurantImg {
+    width: 350px;
+}
+
+#buttonChat {
+    width: 150px;
+    background-color: rgb(3, 3, 104);
+}
+
+#b-green {
+    background-color: rgb(0, 183, 74);
+    color:white;
+}
+
+#margin {
+    margin-left: 6%;
+}

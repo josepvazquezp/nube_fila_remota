@@ -15,9 +15,7 @@ import { share } from 'rxjs';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-
-
-  
+  user: String = "";
   flagModalLogin: Boolean = false;
   formLogin: FormGroup;
   flagLogin: boolean = false; //Si esta ya iniciada la sesión o no
@@ -57,6 +55,17 @@ export class NavComponent {
    
     //Verificar formulario
     console.log(this.formLogin.value);
+    // en el caso que los datos esten en la base de datos
+    this.flagLogin = true;
+    this.image = "../../../assets/images/logo.png";
+    this.user = this.formLogin.value.email;
+    this.type = true;
+
+    //ya con verificación token y todo y ser tipo restaurant
+    this.sharedData.setUserRestaurant("6438b2f687c92dd913c334c8");
+
+    //ya con verificación token y todo y ser tipo usuario
+    this.sharedData.setCustomer("64399dacddc3bcf1989b709b");
     this.checkLoginData()
       
   }

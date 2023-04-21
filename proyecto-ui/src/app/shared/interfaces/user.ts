@@ -4,7 +4,7 @@ export interface User {
     password:String,
     name: String,
     type:String,
-    //history: Array,
+    history: Array<Object>,
     status: String,
     image:  String;
 

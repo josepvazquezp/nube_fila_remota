@@ -5,8 +5,14 @@ const orderSchema = new Schema({
     restaurantId: {type: String},
     total: {type: Number},
     status: {type: String},
-    products: {type: Array},
-    quantity: {type: String}
+    products: {type: [{
+        product: {
+            type: Schema.ObjectId,
+            ref: "products"
+        },
+        quantity: {type: Number}
+    }]},
+    quantity: {type: Number}
 });
 
 module.exports = model('orders', orderSchema);

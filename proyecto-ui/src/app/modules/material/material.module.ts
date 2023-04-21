@@ -6,7 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatListModule} from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [],
@@ -19,7 +22,10 @@ import {MatListModule} from '@angular/material/list';
     MatButtonModule,
     MatInputModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatCardModule,
+    MatRadioModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

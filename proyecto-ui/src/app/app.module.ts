@@ -19,6 +19,7 @@ import { DeleteProductComponent } from './pages/delete-product/delete-product.co
 import { CreateProductComponent } from './pages/create-product/create-product.component';
 import { DisplayOrderComponent } from './pages/display-order/display-order.component';
 import { OrderInProgressComponent } from './pages/order-in-progress/order-in-progress.component';
+import { RetaurantOrdersComponent } from './pages/retaurant-orders/retaurant-orders.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { OrderInProgressComponent } from './pages/order-in-progress/order-in-pro
     DeleteProductComponent,
     CreateProductComponent,
     DisplayOrderComponent,
-    OrderInProgressComponent
+    OrderInProgressComponent,
+    RetaurantOrdersComponent
   ],
   imports: [
     BrowserModule,

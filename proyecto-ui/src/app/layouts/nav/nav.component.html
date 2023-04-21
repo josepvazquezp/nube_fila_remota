@@ -48,6 +48,12 @@
                 <span>Productos</span>
             </button>
         </a>
+        <a routerLink="/restaurant_orders">
+            <button mat-menu-item *ngIf="type">
+                <mat-icon>receipt_long</mat-icon>
+                <span>Ordenes</span>
+            </button>
+        </a>
         <button mat-menu-item>
             <mat-icon>delete_forever</mat-icon>
             <span>Borrar cuenta</span>

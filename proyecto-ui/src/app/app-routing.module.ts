@@ -12,6 +12,7 @@ import { UpdateProductComponent } from './pages/update-product/update-product.co
 import { DeleteProductComponent } from './pages/delete-product/delete-product.component';
 import { DisplayOrderComponent } from './pages/display-order/display-order.component';
 import { OrderInProgressComponent } from './pages/order-in-progress/order-in-progress.component';
+import { RetaurantOrdersComponent } from './pages/retaurant-orders/retaurant-orders.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: "update_product", component: UpdateProductComponent },
   { path: "delete_product", component: DeleteProductComponent },
   { path: "display_order", component: DisplayOrderComponent },
-  { path: "order_in_progress", component: OrderInProgressComponent }
+  { path: "order_in_progress", component: OrderInProgressComponent },
+  { path: "restaurant_orders", component: RetaurantOrdersComponent }
 ];
 
 @NgModule({

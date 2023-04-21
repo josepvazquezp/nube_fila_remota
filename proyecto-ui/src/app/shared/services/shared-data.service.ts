@@ -10,6 +10,9 @@ export class SharedDataService {
   private productID: String = "";
   private customerID: String = "";
   private userRestaurantID: String = "";
+
+  private typeRestaurant: String = "";
+
   private log: boolean = false;
   private name: String = "";
 
@@ -91,5 +94,11 @@ export class SharedDataService {
     return this.user[0];
   }
 
+  setTypeRestaurant(type: String) {
+    this.typeRestaurant = type;
+  }
 
+  getTypeRestaurant() {
+    return this.typeRestaurant;
+  }
 }

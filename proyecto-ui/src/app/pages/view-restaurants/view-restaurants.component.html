@@ -1,1 +1,10 @@
-<p>view-restaurants works!</p>
+<h1>{{type}}</h1>
+
+<div class="container">
+    <div *ngFor="let item of restaurants">
+            <h2>{{item.name}}</h2>
+        <a routerLink="/display_restaurant" (ngModel)="item._id" (click)="setRestaurant(item._id)">
+            <img src="{{item.image}}" width="80%">
+        </a>
+    </div>
+</div>

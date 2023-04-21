@@ -13,8 +13,11 @@ export class HomeComponent {
   name: String = "";
   
   constructor(private sharedDataService: SharedDataService) {
-    this.name = sharedDataService.getUser().name; 
-    // esto se setea en un futuro al darle clic al botón del restaurant
-    this.sharedDataService.setRestaurant("6438b2f687c92dd913c334c8");
+    this.isLogged = sharedDataService.getLog();
+    this.name = sharedDataService.getUser() == undefined? "":sharedDataService.getUser() .name; 
+  }
+
+  setType(type: String) {
+    this.sharedDataService.setTypeRestaurant(type);
   }
 }

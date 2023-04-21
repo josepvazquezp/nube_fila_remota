@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { UserService } from 'src/app/shared/services/user.service';
-import { User } from 'src/app/shared/interfaces/user';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { UserService } from 'src/app/shared/services/user.service';
+import { RestaurantService } from 'src/app/shared/services/restaurant.service';
+
+import { User } from 'src/app/shared/interfaces/user';
 
 @Component({
   selector: 'app-create-user',
@@ -15,15 +17,27 @@ export class CreateUserComponent {
 
   userList: Array<User> = [];
   userForm: FormGroup;
+  restaurantForm: FormGroup;
 
   type: string = "Cliente";
 
-  constructor(private usersService: UserService, formBuilder: FormBuilder, private router: Router) {
+  constructor(private usersService: UserService, private restaurantService: RestaurantService, formBuilder: FormBuilder, private router: Router) {
     this.userForm = formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       pass1: ['', Validators.required],
       pass2: ['', Validators.required]
+    });
+
+    this.restaurantForm = formBuilder.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      pass1: ['', Validators.required],
+      pass2: ['', Validators.required],
+      restaurantName: ['', Validators.required],
+      description: ['', Validators.required], 
+      category: ['', Validators.required],
+      location: ['', Validators.required]
     });
   }
 
@@ -37,26 +51,33 @@ export class CreateUserComponent {
   }
 
 
-  checkForm(){
-    if(!this.userForm.valid){
+  checkForm(form: FormGroup){
+    if(!form.valid){
       alert("Por favor, llene todos los campos");
-    }else{
-      if(this.userForm.value.pass1 != this.userForm.value.pass2){
+    }
+    else{
+      if(form.value.pass1 != form.value.pass2){
         alert("Las contraseñas ingresadas no coinciden");
-      }else{
-        this.checkUsers();
+      }
+      else{
+        this.checkUsers(form.value.email);
       }
     }
     
   }
 
-  checkUsers() {
+  checkUsers(email: string) {
 
-    this.usersService.getUserCreate(this.userForm.value.email).subscribe((response: any) => {
+    this.usersService.getUserCreate(email).subscribe((response: any) => {
       this.userList = response;
     
-      if(this.userList.length == 0){
-        this.createUser();  
+      if(this.userList.length == 0) {
+        if(this.restaurantForm.value.category == "") {
+          this.createUser();
+        }
+        else {
+          this.createRestaurant();
+        }
       }else{
         alert("Ya existe un usuario con el correo ingresado!!");
       }    
@@ -80,6 +101,27 @@ export class CreateUserComponent {
        });
   }
 
+  createRestaurant() {
+    let body = JSON.parse(JSON.stringify({
+      name: this.restaurantForm.value.name,
+      email: this.restaurantForm.value.email,
+      password: this.restaurantForm.value.pass1,
+      type: "Restaurante"
+    }));
 
+    let bRes = JSON.parse(JSON.stringify({
+      name: this.restaurantForm.value.nameRestaurant,
+      description: this.restaurantForm.value.description,
+      type: this.restaurantForm.value.category,
+      location: this.restaurantForm.value.location
+    }));
+    
+    this.usersService.postUsers(body).subscribe((response: any) => {
+        this.restaurantService.createRestaurant(bRes).subscribe((response: any) => {
+          alert("Usuario Restaurant Creado con Éxito!");
+          this.router.navigate(['/']);
+        });
+    });
+  }
 
 }

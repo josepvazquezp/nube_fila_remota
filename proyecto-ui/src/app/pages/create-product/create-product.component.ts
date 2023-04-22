@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ProductService } from 'src/app/shared/services/product.service';
@@ -14,7 +16,7 @@ export class CreateProductComponent {
   selectedFile: any = null;
   idRestaurant: String = "";
 
-  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder) {
+  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder, private router: Router) {
     this.idRestaurant = this.sharedDataService.getUserRestaurant();
     
     this.productForm = formBuilder.group({
@@ -38,6 +40,7 @@ export class CreateProductComponent {
 
     if(this.productForm.value != '' || this.selectedFile != null) {
       this.productService.createProduct(body).subscribe((response: any) => {
+        this.router.navigate(['/restaurant_products']);
       });
     }
   }

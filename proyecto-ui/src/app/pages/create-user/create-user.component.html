@@ -1,6 +1,6 @@
 <div>
     <h1>Crea tu cuenta</h1>
-    <form [formGroup]="userForm">
+    <form *ngIf="type == 'Cliente'" [formGroup]="userForm">
         <mat-form-field>
             <mat-label>Nombre</mat-label>
             <input matInput name="name" type="text" placeholder="Escriba su Nombre" formControlName="name">
@@ -43,7 +43,102 @@
         <br>
 
         &nbsp;
-        <button mat-flat-button color="primary" (click)="checkForm()">
+        <button mat-flat-button color="primary" (click)="checkForm(userForm)">
+            Crear Cuenta
+        </button>
+        &nbsp;
+        <a routerLink="/">
+        <button mat-flat-button color="warn" >
+            Volver
+        </button>
+        </a>
+    </form>
+
+    <form *ngIf="type == 'Restaurante'" [formGroup]="restaurantForm">
+        <mat-form-field>
+            <mat-label>Nombre de usuario</mat-label>
+            <input matInput name="name" type="text" placeholder="Escriba su Nombre" formControlName="name">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Correo</mat-label>
+            <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Contraseña</mat-label>
+            <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="pass1">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Repita su Contraseña</mat-label>
+            <input matInput name="passwordR" type="password" placeholder="Repita su contraseña" formControlName="pass2">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <h3>Eliga un tipo de cuenta:</h3>
+    
+        <mat-selection-list #type [multiple]="false">
+            <mat-list-option (click) = "typeCliente()">
+                Cliente
+            </mat-list-option>
+            <mat-list-option  selected (click) = "typeRestaurant()">
+                Restaurante
+            </mat-list-option>
+        </mat-selection-list>
+        <br>
+        <br>
+
+        <mat-form-field>
+            <mat-label>Nombre del Restaurante</mat-label>
+            <input matInput name="rName" type="text" placeholder="Escriba el nombre del restaurante" formControlName="restaurantName">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+
+        <mat-form-field>
+            <mat-label>Descripción del restaurante</mat-label>
+            <input matInput name="descripcion" type="text" placeholder="Escriba el nombre del restaurante" formControlName="description">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+              <mat-option value="Mexicana">Mexicana</mat-option>
+              <mat-option value="Italiana">Italiana</mat-option>
+              <mat-option value="Oriental">Oriental</mat-option>
+              <mat-option value="Mariscos">Mariscos</mat-option>
+              <mat-option value="Fit">Fit</mat-option>
+              <mat-option value="Rapida">Comida Rápida</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <br>
+        <br>
+          
+        <mat-form-field>
+            <mat-label>Ubicación</mat-label>
+            <input matInput name="location" type="text" placeholder="Link de Google Maps" formControlName="location">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+
+        <br>
+
+        &nbsp;
+        <button mat-flat-button color="primary" (click)="checkForm(restaurantForm)">
             Crear Cuenta
         </button>
         &nbsp;

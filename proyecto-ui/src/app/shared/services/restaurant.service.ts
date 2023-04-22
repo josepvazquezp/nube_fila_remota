@@ -33,4 +33,11 @@ export class RestaurantService {
   deleteRestaurant(id: String) {
     return this.http.delete('http://localhost:3000/restaurants/' + id); 
   }
+
+  filterRestaurants(type: String) {
+    let body = JSON.parse(JSON.stringify({type: type}));
+
+    return this.http.put('http://localhost:3000/restaurants/category', body);
+  }
+
 }

@@ -1,4 +1,35 @@
-<h1 *ngIf="!isLogged">Hola, {{name}}</h1>
+<h1 *ngIf="isLogged">Hola, {{name}}</h1>
+<h1 *ngIf="!isLogged">Bienvenido a Fila Remota</h1>
 
-<a routerLink="/view_restaurants">Mexicana</a>
+<table width="80%">
+    <tr>
+        <td>
+            <h2>Mexicana</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Mexicana')"><img src="../../../assets/images/mexicana.jpg" width="80%"></a>
+        </td>
+        <td>
+            <h2>Italiana</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Italiana')"><img src="../../../assets/images/italiana.jpg" width="80%"></a>
+        </td>
+        <td>
+            <h2>Oriental</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Oriental')"><img src="../../../assets/images/oriental.jpg" width="80%"></a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h2>Mariscos</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Mariscos')"><img src="../../../assets/images/mariscos.jpg" width="80%"></a>
+        </td>
+        <td>
+            <h2>Fit</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Fit')"><img src="../../../assets/images/fit.jpg" width="80%"></a>
+        </td>
+        <td>
+            <h2>Comida Rápida</h2>
+            <a routerLink="/view_restaurants" (click)="setType('Rapida')"><img src="../../../assets/images/rapida.jpg" width="80%"></a>
+        </td>
+    </tr>
+</table>
+
 <a routerLink="/display_restaurant">Restaurant</a>

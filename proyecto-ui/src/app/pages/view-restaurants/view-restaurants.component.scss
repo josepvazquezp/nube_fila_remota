@@ -1,0 +1,33 @@
+h1 {
+    font-size: 70px;
+    text-align: center;
+    margin-top: 10%;
+}
+
+
+h2 {
+    font-size: 35px;
+    font-family: monospace;
+    color:rgb(3, 3, 104);
+}
+
+.container {
+    margin-left: 6%;
+    margin-right: 6%;
+    width: 100%;
+    margin-top: 10%;
+}
+
+.container > div {
+    width: 25%;
+    margin-right: 6%;
+    float: left;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.container::after {
+    content: "";
+    display: table;
+    clear: both;
+}

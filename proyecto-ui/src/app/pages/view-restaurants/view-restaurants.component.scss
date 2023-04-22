@@ -1,7 +1,6 @@
 h1 {
     font-size: 70px;
     text-align: center;
-    margin-top: 10%;
 }
 
 
@@ -11,11 +10,15 @@ h2 {
     color:rgb(3, 3, 104);
 }
 
+.back {
+    margin-left: 90%; 
+}
+
 .container {
     margin-left: 6%;
     margin-right: 6%;
     width: 100%;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .container > div {
@@ -30,4 +33,23 @@ h2 {
     content: "";
     display: table;
     clear: both;
+}
+
+.img-container {
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.img-container > img {
+    opacity: 0.5;
+    height: 400px;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

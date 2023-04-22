@@ -1,21 +1,21 @@
 <h1 *ngIf="!isLogged">SIN PERMISOS</h1>
-<div *ngIf="isLogged">
-    <h1>Borrar Tarjeta Número: {{card[0].Number}}</h1>
+<div id="box" *ngIf="isLogged">
+    <h1>Borrar Tarjeta Número:<br><br>[{{card[0].Number}}]</h1>
 
     <form [formGroup]="formDelete">
 
-        <p><input id="ver" name="check" type="checkbox" formControlName="check">Entiendo que esta tarjeta se borarrá de mi perfil</p>
+        <h3>Entiendo que mi Cuenta sera eliminada PARA SIEMPRE</h3>
+        <mat-checkbox id="ver"  formControlName="check">Entiendo</mat-checkbox>
         <br><br>
-        <button mat-flat-button color="primary" (click)="checkDelete()">
-            Borrar Tarjeta
-        </button>
     </form>
 
-    <br><br>
-
+    <button mat-fab extended id="buttonDelete" color="warn" (click)="checkDelete()">
+        <mat-icon>delete</mat-icon>Borrar Tarjeta
+    </button>
+    &nbsp;
     <a routerLink="/paymenu">
-        <button mat-flat-button color="warn" >
-            Volver
+        <button mat-fab extended color="accent" >
+            <mat-icon>chevron_left</mat-icon>Cancelar
         </button>
     </a>
 </div>

@@ -1,20 +1,23 @@
 <h1 *ngIf="!isLogged">SIN PERMISOS</h1>
-<div *ngIf="isLogged">
-    <h1>Modificar Tarjeta Número: {{card[0].Number}}</h1>
+<div id="general" *ngIf="isLogged">
+    <h1>Modificando la Tarjeta<br><br>[{{card[0].Number}}]</h1>
     <form [formGroup]="updateForm">
 
         <h3>Elija un tipo de tarjeta:</h3>
-    
-        <mat-selection-list #type [multiple]="false">
-            <mat-list-option selected (click) = "typeDebito()">
-                Debito
-            </mat-list-option>
-            <mat-list-option    (click) = "typeCredito()">
-                Credito
-            </mat-list-option>
-        </mat-selection-list>
+        
+        <div id="typeContainer">
+            <mat-selection-list #type [multiple]="false">
+                <mat-list-option selected (click) = "typeDebito()">
+                    Débito
+                </mat-list-option>
+                <mat-list-option    (click) = "typeCredito()">
+                    Crédito
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
 
         <br><br>
+        <h3>Los campos que no tengan contenido no se actualizarán</h3>
         <mat-form-field>
             <mat-label>Número de Tarjeta</mat-label>
             <input matInput name="number" type="text" minlength="16" maxlength="16" formControlName="number">
@@ -36,17 +39,18 @@
         <br>
         <br>
 
-        <button mat-flat-button color="primary" (click)="checkForm()">
-            Modificar Tarjeta
-        </button>
+        
         
     </form>
 
-    <br><br>
+    <button mat-fab extended color="primary" id="buttonUpdate" (click)="checkForm()">
+        <mat-icon>upgrade</mat-icon>Actualizar Tarjeta
+    </button>
+    &nbsp;
 
     <a routerLink="/paymenu">
-        <button mat-flat-button color="warn" >
-            Volver
+        <button mat-fab extended color="accent" id="buttonBack">
+            <mat-icon>chevron_left</mat-icon>Volver
         </button>
     </a>
 </div>

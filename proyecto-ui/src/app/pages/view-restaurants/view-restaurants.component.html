@@ -1,4 +1,20 @@
-<h1>{{type}}</h1>
+<br>
+<br>
+
+<a class="back" routerLink="/">
+    <button mat-raised-button color="accent">
+        Volver
+    </button>
+</a>
+
+<br>
+<br>
+<br>
+
+<div class="img-container">
+    <img src="../../../assets/images/{{image}}">
+    <h1 class="center">{{type}}</h1>
+</div>
 
 <div class="container">
     <div *ngFor="let item of restaurants">

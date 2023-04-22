@@ -30,40 +30,40 @@
             </table>
         </button>
         <mat-menu #menu="matMenu">
-        <a routerLink="/update_user">
+            <a class="submenu" routerLink="/update_user">
+                <button mat-menu-item>
+                    <mat-icon>edit</mat-icon>
+                    <span>Actualizar</span>
+                </button>
+            </a>
+            <a class="submenu" routerLink="/paymenu">
             <button mat-menu-item>
-                <mat-icon>edit</mat-icon>
-                <span>Actualizar</span>
+                <mat-icon>credit_cardl</mat-icon>
+                <span>Formas de pago</span>
             </button>
-        </a>
-        <a routerLink="/paymenu">
-        <button mat-menu-item>
-            <mat-icon>credit_cardl</mat-icon>
-            <span>Formas de pago</span>
-        </button>
-        </a>
-        <a routerLink="/restaurant_products">
-            <button mat-menu-item *ngIf="type">
-                <mat-icon>lunch_dining</mat-icon>
-                <span>Productos</span>
+            </a>
+            <a class="submenu" routerLink="/restaurant_products">
+                <button mat-menu-item *ngIf="type">
+                    <mat-icon>lunch_dining</mat-icon>
+                    <span>Productos</span>
+                </button>
+            </a>
+            <a class="submenu" routerLink="/restaurant_orders">
+                <button mat-menu-item *ngIf="type">
+                    <mat-icon>receipt_long</mat-icon>
+                    <span>Ordenes</span>
+                </button>
+            </a>
+            <a class="submenu" routerLink="/deleteuser">
+                <button mat-menu-item>
+                    <mat-icon>delete_forever</mat-icon>
+                    <span>Borrar cuenta</span>
+                </button>
+            </a>
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Cerrar sesión</span>
             </button>
-        </a>
-        <a routerLink="/restaurant_orders">
-            <button mat-menu-item *ngIf="type">
-                <mat-icon>receipt_long</mat-icon>
-                <span>Ordenes</span>
-            </button>
-        </a>
-        <a routerLink="/deleteuser">
-            <button mat-menu-item>
-                <mat-icon>delete_forever</mat-icon>
-                <span>Borrar cuenta</span>
-            </button>
-        </a>
-        <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>Cerrar sesión</span>
-        </button>
         </mat-menu>
     </div>
 </mat-toolbar>
@@ -82,7 +82,7 @@
         <mat-error>Este campo es requerido</mat-error>
     </mat-form-field>
 
-    <p>No tienes una cuenta? <a href="/createuser">Creala aquí</a></p>
+    <p>No tienes una cuenta? <a routerLink="createuser">Creala aquí</a></p>
 
     <button mat-flat-button color="primary" (click)="readLogin()">
         Iniciar sesión

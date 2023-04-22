@@ -11,10 +11,12 @@ import { Restaurant } from 'src/app/shared/interfaces/restaurant';
 })
 export class ViewRestaurantsComponent {
   type: String = "";
+  image: String = ""; 
   restaurants: Array<Restaurant> = [];
 
   constructor(private sharedDataService: SharedDataService, private restaurantService: RestaurantService) {
     this.type = this.sharedDataService.getTypeRestaurant();
+    this.image = this.type.toLowerCase() + ".jpg";
 
     this.restaurantService.filterRestaurants(this.type).subscribe((response: any) => {
       this.restaurants = response;

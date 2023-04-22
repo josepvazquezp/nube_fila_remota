@@ -1,4 +1,4 @@
-.general{
+#general{
     width: 30%;
     margin: auto;
 }
@@ -11,10 +11,31 @@ a{
     text-decoration: none;
 }
 
-.checked {
-    color: orange;
-  }
 
-.star{
-    color: black;
+h1{
+    font-size: 36px;
+    text-align: center;
+}
+
+h3{
+    font-size: 24px;
+}
+
+button{
+    font-size: 24px
+}
+
+#buttonCreate{
+    @extend button;
+    background-color: rgb(0, 183, 74);
+    color: white;
+
+}
+
+#buttonBack{
+    @extend button;
+}
+
+#typeContainer{
+    width: 30%;
 }

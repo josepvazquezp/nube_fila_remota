@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces/user';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
@@ -18,7 +17,7 @@ export class PayMenuComponent {
   cardList: Array<Card> = [];
 
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router,private cardService: CardService){
+  constructor(private sharedData: SharedDataService, private router: Router,private cardService: CardService){
     this.isLogged = sharedData.getLog();
     this.user[0] = sharedData.getUser();
 
@@ -26,6 +25,7 @@ export class PayMenuComponent {
       console.log(response);
       if(response.length > 0){//Ya hay tarjetas
         this.cardList = response;
+        console.log(this.cardList);
         this.areCards = true;
       }
 

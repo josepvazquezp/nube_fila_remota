@@ -15,28 +15,32 @@
             </ul>
         </div>
         
-        
         </td>
         <td id="menu">
-            <a routerLink="/display_restaurant">
-                <button id="back" mat-raised-button color="accent">Volver</button>
-            </a>
+            <div id="heightAdjust">
+                <h3>Chat entre</h3>
+                <h3>{{user[0].name}}</h3>
+                <h3>y</h3>
+                <h3>{{guestName}}</h3>
+                <br>
+                <a routerLink="/display_restaurant">
+                    <button id="back" mat-fab extended color="accent"><mat-icon>arrow_back_ios_new</mat-icon>Volver</button>
+                </a>
+            </div>
+            
+
         </td>
       </tr>
       <tr>
         <td colspan="2" id="message">
+            
             <form [formGroup]="message">
                 <mat-form-field>
                     <input id="messageField" matInput type="text" placeholder="Escribe un mensaje..." formControlName="message">
                     <mat-error>Este campo es requerido</mat-error>
                 </mat-form-field>
-                
-                
+                    <button id="send" mat-fab color="accent" (click)="checkMessage()"><mat-icon id="sendIcon">send</mat-icon></button>
             </form>
-            
-            <button id="send" mat-raised-button color="accent" (click)="checkMessage()">Envíar</button>
-
-
 
         </td>
       </tr>

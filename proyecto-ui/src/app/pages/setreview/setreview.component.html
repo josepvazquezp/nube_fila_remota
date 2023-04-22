@@ -1,18 +1,20 @@
-
-
-<div class="general">
+<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
+<div id="general" *ngIf="isLogged">
     <h1>Deja una Reseña!!</h1>
 
-    <h2>Evaluando a {{nameR}}</h2>
+    <h3>Evaluando a {{nameR}}</h3>
     <br><br><br>
 
     <h2>Puntuación</h2>
 
-    <button *ngFor="let index of ratingArr;index as i" mat-icon-button matTooltip="Primary" (click)="rate(i+1)">
-        <mat-icon color="accent">
-            {{showIcon(i)}}
-        </mat-icon>
-    </button>
+    <div class="centerObjects">
+        <button class="starButton" *ngFor="let index of ratingArr;index as i" mat-icon-button  (click)="rate(i+1)">
+            <mat-icon color="accent">
+                {{showIcon(i)}}
+            </mat-icon>
+        </button>
+    </div>
+    
 
     <br><br><br>
     <h2>Deja un Comentario:</h2>
@@ -24,8 +26,11 @@
     </form>
     
     <br><br>
-    <button mat-flat-button color="primary" (click)="checkReview()">
-        Enviar Reseña
-    </button>
+
+    <div class="centerObjects">
+        <button mat-fab extended color="primary" id="buttonEvaluate" (click)="checkReview()">
+            Enviar Reseña<mat-icon>send</mat-icon>
+        </button>
+    </div>
 
 </div>

@@ -16,12 +16,15 @@ export class SetreviewComponent {
   ratingArr = [1,2,3,4,5];
   customerID: String = "";
   restaurantID: String = "";
-  nameR: String = ""
+  nameR: String = "";
+  isLogged: boolean = false;
 
 
   constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private restaurantService: RestaurantService, private reviewService: ReviewService){
     this.customerID = sharedData.getUser()._id;
     this.restaurantID = sharedData.getRestaurant();
+    this.isLogged = sharedData.getLog();
+
     this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
       this.nameR = response.name;
   });

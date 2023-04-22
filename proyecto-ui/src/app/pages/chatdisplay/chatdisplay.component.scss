@@ -8,13 +8,10 @@ table{
     height: 100%;
 }
 
-
-
 #chat{
     width: 80%;
-    height: 80%;
-    background-color: #bd9ef6;
-    
+    height: 70%;
+    background-color: white;   
 }
 
 #scrollDiv{
@@ -26,12 +23,15 @@ table{
 }
 
 #menu{
-    background-color: #7d4dd4;
+    background-color: rgba(156, 195, 225, 0.45);;
 }
 
 #message{
-    background-color: #7d4dd4;
+    background-color: rgb(3, 3, 104);
+    height: 20%;
 }
+
+
 
 mat-form-field{
     margin-left: 5%;
@@ -40,15 +40,25 @@ mat-form-field{
     
 }
 
-#send{
-    margin-left: 5%;
-    width: 15%;
+
+
+#menu{
+    text-align: center;
+}
+
+h3{
+    font-size: 28px;
+    font-weight: bolder;
+}
+
+
+#heightAdjust{
+    margin-bottom: 60%;
 }
 
 #back{
     width: 50%;
     margin: 25%;
-    margin-bottom: 600px;
 }
 
 .messageDisplay{
@@ -77,4 +87,25 @@ ul{
     content: "";
     display: table;
     clear: both;
+}
+
+#buttonPos{
+    margin-top: 5px;
+}
+
+#messageField{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px;
+}
+
+#send{
+    @extend #messageField;
+    height: 60px;
+    width: 60px;
+    margin-left: 1%;
+}
+
+#sendIcon{
+    font-size: 25px;
 }

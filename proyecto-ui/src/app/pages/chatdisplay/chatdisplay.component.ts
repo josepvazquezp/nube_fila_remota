@@ -6,6 +6,7 @@ import { Chat } from 'src/app/shared/interfaces/chat';
 import { ChatService } from 'src/app/shared/services/chat.service';
 import { User } from 'src/app/shared/interfaces/user';
 import { Message } from 'src/app/shared/interfaces/message';
+import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 
 @Component({
   selector: 'app-chatdisplay',
@@ -17,17 +18,21 @@ export class ChatdisplayComponent {
   chatready = false;
   thisChat: Array<Chat> = []
   restaurantID: String = "";
-
-
   user: Array<User> = [];
-  
+  guestName: String = "";
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private chatService: ChatService){
+
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private chatService: ChatService, private restaurantService: RestaurantService){
     this.message = formBuilder.group({
       message: ['', Validators.required]
     });
     this.user[0] = sharedData.getUser();
     this.restaurantID = sharedData.getRestaurant();
+
+    this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
+      this.guestName = response.name;
+ 
+    });
 
 
     let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.restaurantID + '"}');
@@ -35,6 +40,9 @@ export class ChatdisplayComponent {
       this.thisChat = response;
      this.loadChat()
         });
+
+      
+
   }
 
   loadChat(){

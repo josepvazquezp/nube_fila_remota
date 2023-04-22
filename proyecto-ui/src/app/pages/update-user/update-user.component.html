@@ -1,11 +1,11 @@
 <h1 *ngIf="!isLogged">SIN PERMISOS</h1>
 <div *ngIf="isLogged">
     <h1>Modificando Cuenta</h1>
-    <h2>Nombre de la Cuenta: {{user[0].name}}</h2>
-    <h2>Correo de la Cuenta: {{user[0].email}}</h2>
+    <h2>Usuario: {{user[0].name}}</h2>
+    <br>
     
     <form [formGroup]="updateForm">
-        <h2>Imagen</h2>
+        <h2>Sube tu imagen de perfil:</h2>
         <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
         <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/png,image/jpeg">
         <span class="file-name">{{selectedFile?.name}}</span>
@@ -19,17 +19,17 @@
 
         <br>
     
-        &nbsp;
         <a routerLink="/">
-            <button mat-flat-button color="primary" (click)="updateUser()">
-                Actualizar
+            <button mat-fab extended id="buttonUpdate" color="primary" (click)="updateUser()">
+                <mat-icon>upgrade</mat-icon>Actualizar Usuario
             </button>
         </a>
         &nbsp;
         <a routerLink="/">
-            <button mat-flat-button color="warn" >
-                Cancelar
+            <button mat-fab extended color="accent" >
+                <mat-icon>chevron_left</mat-icon>Volver
             </button>
         </a>
+
     </form>
 </div>

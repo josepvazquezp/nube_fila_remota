@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { RestaurantService } from 'src/app/shared/services/restaurant.service';
+import { ReviewService } from 'src/app/shared/services/review.service';
 
 @Component({
   selector: 'app-setreview',
@@ -12,9 +14,18 @@ export class SetreviewComponent {
   review: FormGroup;
   rating: number = 1;
   ratingArr = [1,2,3,4,5];
+  customerID: String = "";
+  restaurantID: String = "";
+  nameR: String = ""
 
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router){
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private restaurantService: RestaurantService, private reviewService: ReviewService){
+    this.customerID = sharedData.getUser()._id;
+    this.restaurantID = sharedData.getRestaurant();
+    this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
+      this.nameR = response.name;
+  });
+
     this.review = formBuilder.group({
       comment: ['', Validators.required]
     });
@@ -42,19 +53,17 @@ export class SetreviewComponent {
       Description = this.review.value.comment;
     }
 
-    let temp1 = "Aqui va el user"
-    let temp2 = "Aqui va el evaluado"
-
-
     body = '{' +
-    '"ID_Evaluator": "' + temp1 + '",' +
-    '"ID_Evaluated": "' + temp2 + '",' +
+    '"ID_Evaluator": "' + this.customerID + '",' +
+    '"ID_Evaluated": "' + this.restaurantID + '",' +
     '"Rating": ' + this.rating + ',' + 
     '"Description": "' + Description + '"}';   
 
-    console.log(body)
-
-    //Ahora solo es enviarlo a la reseña
+    this.reviewService.createRating(body).subscribe((restaurant: any) => {
+      alert("Reseña Agregada!!!");
+      this.router.navigate(['/']);
+      
+    });
 
 
   }

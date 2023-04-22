@@ -16,6 +16,7 @@ export class ChatdisplayComponent {
   message: FormGroup;
   chatready = false;
   thisChat: Array<Chat> = []
+  restaurantID: String = "";
 
 
   user: Array<User> = [];
@@ -26,13 +27,12 @@ export class ChatdisplayComponent {
       message: ['', Validators.required]
     });
     this.user[0] = sharedData.getUser();
+    this.restaurantID = sharedData.getRestaurant();
 
 
-    let body = JSON.parse('{"MyID": "' + this.user[0]._id +'"}');
+    let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.restaurantID + '"}');
     this.chatService.getChat(body).subscribe((response: any) => {
-      console.log(response);
       this.thisChat = response;
-      console.log(this.thisChat[0])
      this.loadChat()
         });
   }
@@ -62,8 +62,6 @@ export class ChatdisplayComponent {
       this.chatService.putMessage(body, this.thisChat[0]._id).subscribe((response: any) => {
 
         this.thisChat[0] = response;
-
-
           });
 
     }

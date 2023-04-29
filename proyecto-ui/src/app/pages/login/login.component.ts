@@ -37,6 +37,14 @@ export class LoginComponent {
     });
   }
 
+  validateLogin(){
+    if(this.formLogin.valid){
+      this.readLogin();
+    }else{
+      alert("Por favor, complete sus datos")
+    }
+  }
+
   readLogin() {
     let body =  JSON.parse('{"email":"' + this.formLogin.value.email +'",'+
     '"password":"' + this.formLogin.value.password +'"}');
@@ -45,6 +53,7 @@ export class LoginComponent {
       // console.log(response)
       
      //Se encontró el usuario 
+        
         this.userLogged = response.user;
         this.sharedData.setLog(true);
         this.sharedData.setName(this.userLogged.name);
@@ -52,7 +61,7 @@ export class LoginComponent {
 
         this.authService.setToken(response.token);
 
-      // this.router.navigate(['/']);
+        this.router.navigate(['/']);
     },
     (error) => {
       alert("El correo y/o la contraseña están equivocados");

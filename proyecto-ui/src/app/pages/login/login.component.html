@@ -1,26 +1,35 @@
-<form [formGroup]="formLogin">
-    <mat-form-field>
-        <mat-label>Correo</mat-label>
-        <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
-        <mat-error>Este campo es requerido</mat-error>
-    </mat-form-field>
+<div id="box">
+    <h1>Iniciar Sesión</h1>
     <br>
-    <br>
-    <mat-form-field>
-        <mat-label>Contraseña</mat-label>
-        <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="password">
-        <mat-error>Este campo es requerido</mat-error>
-    </mat-form-field>
 
-    <p>No tienes una cuenta? <a routerLink="createuser">Creala aquí</a></p>
-
-    <button mat-flat-button color="primary" (click)="readLogin()">
-        Iniciar sesión
-    </button>
-    &nbsp;
-    <a routerLink="/">
-        <button mat-flat-button color="warn">
-            Cerrar
+    <form [formGroup]="formLogin">
+        <mat-form-field>
+            <mat-label>Correo</mat-label>
+            <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <br>
+        <mat-form-field>
+            <mat-label>Contraseña</mat-label>
+            <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="password">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+        <br>
+        <p>No tienes una cuenta? <a routerLink="/createuser">Creala aquí</a></p>
+        <br><br><br>
+        <button mat-fab extended color="primary" (click)="validateLogin()">
+            <mat-icon>login</mat-icon>Iniciar sesión
         </button>
-    </a>
-</form>
+        &nbsp;
+        <a routerLink="/">
+            <button mat-fab extended color="accent">
+                <mat-icon>arrow_back_ios_new</mat-icon>Volver
+            </button>
+        </a>
+    </form>
+
+
+        
+
+</div>

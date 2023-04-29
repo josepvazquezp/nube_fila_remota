@@ -1,6 +1,20 @@
 <div>
     <h1>Crea tu cuenta</h1>
     <form *ngIf="type == 'Cliente'" [formGroup]="userForm">
+        <h3>Eliga un tipo de cuenta:</h3>
+    
+        <mat-selection-list #type [multiple]="false">
+            <mat-list-option selected (click) = "typeCliente()">
+                Cliente
+            </mat-list-option>
+            <mat-list-option (click) = "typeRestaurant()">
+                Restaurante
+            </mat-list-option>
+        </mat-selection-list>
+        <br>
+        <br>
+
+
         <mat-form-field>
             <mat-label>Nombre</mat-label>
             <input matInput name="name" type="text" placeholder="Escriba su Nombre" formControlName="name">
@@ -31,30 +45,31 @@
         <br>
         <h3>Eliga un tipo de cuenta:</h3>
     
-        <mat-selection-list #type [multiple]="false">
-            <mat-list-option selected (click) = "typeCliente()">
-                Cliente
-            </mat-list-option>
-            <mat-list-option    (click) = "typeRestaurant()">
-                Restaurante
-            </mat-list-option>
-          </mat-selection-list>
-    
-        <br>
-
         &nbsp;
-        <button mat-flat-button color="primary" (click)="checkForm(userForm)">
-            Crear Cuenta
+        <button mat-fab extended color="primary" (click)="checkForm(userForm)">
+            <mat-icon>add_circle</mat-icon>Crear Cuenta
         </button>
         &nbsp;
         <a routerLink="/">
-        <button mat-flat-button color="warn" >
-            Volver
-        </button>
+            <button mat-fab extended color="warn">
+                <mat-icon>arrow_back_ios_new</mat-icon>Volver
+            </button>
         </a>
     </form>
 
     <form *ngIf="type == 'Restaurante'" [formGroup]="restaurantForm">
+        <h3>Eliga un tipo de cuenta:</h3>
+        <mat-selection-list #type [multiple]="false">
+            <mat-list-option (click) = "typeCliente()">
+                Cliente
+            </mat-list-option>
+            <mat-list-option  selected (click) = "typeRestaurant()">
+                Restaurante
+            </mat-list-option>
+        </mat-selection-list>
+        <br>
+        <br>
+
         <mat-form-field>
             <mat-label>Nombre de usuario</mat-label>
             <input matInput name="name" type="text" placeholder="Escriba su Nombre" formControlName="name">
@@ -83,18 +98,7 @@
         </mat-form-field>
         <br>
         <br>
-        <h3>Eliga un tipo de cuenta:</h3>
-    
-        <mat-selection-list #type [multiple]="false">
-            <mat-list-option (click) = "typeCliente()">
-                Cliente
-            </mat-list-option>
-            <mat-list-option  selected (click) = "typeRestaurant()">
-                Restaurante
-            </mat-list-option>
-        </mat-selection-list>
-        <br>
-        <br>
+        
 
         <mat-form-field>
             <mat-label>Nombre del Restaurante</mat-label>
@@ -134,18 +138,19 @@
         </mat-form-field>
         <br>
         <br>
-
         <br>
 
         &nbsp;
-        <button mat-flat-button color="primary" (click)="checkForm(restaurantForm)">
-            Crear Cuenta
+        <button mat-fab extended color="primary" (click)="checkForm(restaurantForm)">
+            <mat-icon>add_circle</mat-icon>Crear Cuenta
         </button>
         &nbsp;
         <a routerLink="/">
-        <button mat-flat-button color="warn" >
-            Volver
-        </button>
+            <button mat-fab extended color="warn">
+                <mat-icon>arrow_back_ios_new</mat-icon>Volver
+            </button>
         </a>
+        
     </form>
+    <br>
 </div>

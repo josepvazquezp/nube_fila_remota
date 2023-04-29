@@ -3,14 +3,16 @@
     <span>&nbsp;Fila Remota</span>
     <span class="spacer"></span>
     <div *ngIf="!flagLogin">
-        <button  mat-fab extended color="primary" (click)="displayLogin()">
-            <mat-icon>login</mat-icon>Iniciar sesión
-        </button>
+        <a routerLink="/login">
+            <button  mat-fab extended color="primary">
+                <mat-icon>login</mat-icon>Iniciar sesión
+            </button>
+        </a>
         &nbsp;
         <a routerLink="/createuser">
-        <button  mat-fab extended color="primary">
-            <mat-icon>person_add</mat-icon>Crear cuenta
-        </button>
+            <button  mat-fab extended color="primary">
+                <mat-icon>person_add</mat-icon>Crear cuenta
+            </button>
         </a>
     </div>
 
@@ -67,28 +69,3 @@
         </mat-menu>
     </div>
 </mat-toolbar>
-
-<form *ngIf="flagModalLogin" [formGroup]="formLogin">
-    <mat-form-field>
-        <mat-label>Correo</mat-label>
-        <input matInput name="email" type="email" placeholder="Escriba su email" formControlName="email">
-        <mat-error>Este campo es requerido</mat-error>
-    </mat-form-field>
-    <br>
-    <br>
-    <mat-form-field>
-        <mat-label>Contraseña</mat-label>
-        <input matInput name="password" type="password" placeholder="Escriba su contraseña" formControlName="password">
-        <mat-error>Este campo es requerido</mat-error>
-    </mat-form-field>
-
-    <p>No tienes una cuenta? <a routerLink="createuser">Creala aquí</a></p>
-
-    <button mat-flat-button color="primary" (click)="readLogin()">
-        Iniciar sesión
-    </button>
-    &nbsp;
-    <button mat-flat-button color="warn" (click)="quitLogin()">
-        Cerrar
-    </button>
-</form>

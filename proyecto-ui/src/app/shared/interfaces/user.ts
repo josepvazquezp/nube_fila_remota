@@ -6,6 +6,7 @@ export interface User {
     type:String,
     history: Array<Object>,
     status: String,
-    image:  String;
+    image:  String
+    restaurant: String;
 
 }

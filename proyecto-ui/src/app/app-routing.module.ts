@@ -20,6 +20,7 @@ import { UpdateCardComponent } from './pages/update-card/update-card.component';
 import { ChatdisplayComponent } from './pages/chatdisplay/chatdisplay.component';
 import { SetreviewComponent } from './pages/setreview/setreview.component';
 import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -42,7 +43,8 @@ const routes: Routes = [
   { path: "updatecard", component: UpdateCardComponent },
   { path: "chat", component: ChatdisplayComponent },
   { path: "review", component: SetreviewComponent },
-  { path: "view_restaurants", component: ViewRestaurantsComponent}
+  { path: "view_restaurants", component: ViewRestaurantsComponent},
+  { path: "login", component: LoginComponent }
 ];
 
 @NgModule({

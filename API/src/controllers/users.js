@@ -1,4 +1,10 @@
+const jwt = require('jsonwebtoken');
+
 const User = require('./../models/user');
+
+require('dotenv').config();
+
+const key = process.env.KEY;
 
 const UsersController = {
     create: (req, res) => {
@@ -31,7 +37,8 @@ const UsersController = {
         
         if(req.body.email == undefined && req.body.type == undefined && 
            (req.body.password != undefined || req.body.name != undefined || 
-            req.body.history != undefined || req.body.status != undefined || req.body.image != undefined)) {
+            req.body.history != undefined || req.body.status != undefined || 
+            req.body.image != undefined || req.body.restaurant != undefined)) {
                 console.log("Listo para modificar");
 
                 User.findByIdAndUpdate(id, req.body, {new:true})
@@ -108,15 +115,21 @@ const UsersController = {
             Lpassword: req.body.password
         };
 
-
-        User.find({email: loginCheck.Lemail, password: loginCheck.Lpassword})
+        User.findOne({email: loginCheck.Lemail, password: loginCheck.Lpassword})
                 .then(user => {
+                        // Si encontro al usuario, generamos el token
+                    const token = jwt.sign({
+                        id: user._id,
+                        name: user.nombre, 
+                        email: user.email,
+                        type: user.type 
+                    }, key);
                     res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.status(200).send(user);
+                    res.status(200).send({user, token});
                 })
                 .catch(error => {
                     res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.status(400).send('No se encontro el usuario: ' + id);
+                    res.status(400).send('No se encontro el usuario');
                 });
     }
 }

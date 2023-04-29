@@ -117,9 +117,18 @@ export class CreateUserComponent {
     }));
     
     this.usersService.postUsers(body).subscribe((response: any) => {
-        this.restaurantService.createRestaurant(bRes).subscribe((response: any) => {
-          alert("Usuario Restaurant Creado con Éxito!");
-          this.router.navigate(['/']);
+        this.restaurantService.createRestaurant(bRes).subscribe((restaurant: any) => {
+          let temp = JSON.parse(JSON.stringify({
+            restaurant: restaurant._id
+          }));
+
+          console.log(temp);
+
+          this.usersService.putUser(temp, response._id).subscribe((response: any) => {
+            alert("Usuario Restaurant Creado con Éxito!");
+            this.router.navigate(['/']);
+          });
+
         });
     });
   }

@@ -104,20 +104,26 @@ export class DisplayRestaurantComponent {
 
 
   prepareChat(){
-    let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.idRestaurant + '"}');
-    this.chatS.getChat(body).subscribe((response: any) => {
-      if(response.length == 0){ //No hay chat aun
-        
-        let bodytrue = JSON.parse('{"customerId": "' + this.user[0]._id +'", "restaurantId": "' + this.idRestaurant + '"}');
-
-        this.chatS.createChat(bodytrue).subscribe((response: any) => {
+    if(this.user[0] != undefined){
+      let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.idRestaurant + '"}');
+      this.chatS.getChat(body).subscribe((response: any) => {
+        if(response.length == 0){ //No hay chat aun
+          
+          let bodytrue = JSON.parse('{"customerId": "' + this.user[0]._id +'", "restaurantId": "' + this.idRestaurant + '"}');
+  
+          this.chatS.createChat(bodytrue).subscribe((response: any) => {
+            this.router.navigate(['/chat']);
+              });
+  
+        }else{ //ya hay chat
           this.router.navigate(['/chat']);
-            });
+        }
+      });
+    }else{
+      this.router.navigate(['/login']);
+    }
 
-      }else{ //ya hay chat
-        this.router.navigate(['/chat']);
-      }
-    });
+    
 
 
 

@@ -115,20 +115,22 @@ const UsersController = {
             Lpassword: req.body.password
         };
 
+
         User.findOne({email: loginCheck.Lemail, password: loginCheck.Lpassword})
                 .then(user => {
-                        // Si encontro al usuario, generamos el token
+                    // Si encontro al usuario, generamos el token
+                    console.log(user)
                     const token = jwt.sign({
                         id: user._id,
-                        name: user.nombre, 
+                        name: user.name, 
                         email: user.email,
                         type: user.type 
                     }, key);
-                    res.setHeader('Access-Control-Allow-Origin', '*');
+
                     res.status(200).send({user, token});
                 })
                 .catch(error => {
-                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    console.log(error)
                     res.status(400).send('No se encontro el usuario');
                 });
     }

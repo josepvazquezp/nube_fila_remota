@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+//Paginas
 import { HomeComponent } from './pages/home/home.component';
 import { PayMenuComponent } from './pages/pay-menu/pay-menu.component';
 import { CreateUserComponent } from './pages/create-user/create-user.component';
@@ -22,27 +23,45 @@ import { SetreviewComponent } from './pages/setreview/setreview.component';
 import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
 import { LoginComponent } from './pages/login/login.component';
 
+
+//Guardias
+import { AuthGuard } from './shared/guards/auth.guard';
+
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "createuser", component: CreateUserComponent },
-  { path: "paymenu", component: PayMenuComponent },
+  { path: "paymenu", component: PayMenuComponent, canActivate: [AuthGuard] },
   { path: "display_restaurant", component: DisplayRestaurantComponent },
-  { path: "update_user", component: UpdateUserComponent },
-  { path: "restaurant_products", component: RestaurantProductsComponent },
-  { path: "create_product", component: CreateProductComponent },
-  { path: "update_product", component: UpdateProductComponent },
-  { path: "delete_product", component: DeleteProductComponent },
-  { path: "display_order", component: DisplayOrderComponent },
-  { path: "order_in_progress", component: OrderInProgressComponent },
-  { path: "restaurant_orders", component: RetaurantOrdersComponent },
+  { path: "update_user", component: UpdateUserComponent, canActivate: [AuthGuard]},
+  { path: "restaurant_products", component: RestaurantProductsComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  } },
+  { path: "create_product", component: CreateProductComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
+  { path: "update_product", component: UpdateProductComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
+  { path: "delete_product", component: DeleteProductComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
+  { path: "display_order", component: DisplayOrderComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
+  { path: "order_in_progress", component: OrderInProgressComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
+  { path: "restaurant_orders", component: RetaurantOrdersComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  }  },
   { path: "createuser", component: CreateUserComponent },
-  { path: "deleteuser", component: DeleteUserComponent },
-  { path: "paymenu", component: PayMenuComponent },
-  { path: "createcard", component: CreateCardComponent },
-  { path: "deletecard", component: DeleteCardComponent },
-  { path: "updatecard", component: UpdateCardComponent },
-  { path: "chat", component: ChatdisplayComponent },
-  { path: "review", component: SetreviewComponent },
+  { path: "deleteuser", component: DeleteUserComponent, canActivate: [AuthGuard]  },
+  { path: "paymenu", component: PayMenuComponent, canActivate: [AuthGuard]  },
+  { path: "createcard", component: CreateCardComponent, canActivate: [AuthGuard]  },
+  { path: "deletecard", component: DeleteCardComponent, canActivate: [AuthGuard]  },
+  { path: "updatecard", component: UpdateCardComponent, canActivate: [AuthGuard]  },
+  { path: "chat", component: ChatdisplayComponent, canActivate: [AuthGuard]  },
+  { path: "review", component: SetreviewComponent, canActivate: [AuthGuard]  },
   { path: "view_restaurants", component: ViewRestaurantsComponent},
   { path: "login", component: LoginComponent }
 ];

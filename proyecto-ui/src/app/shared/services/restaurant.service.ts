@@ -40,4 +40,7 @@ export class RestaurantService {
     return this.http.put('http://localhost:3000/restaurants/category', body);
   }
 
+  searchRestaurants(filter: String) {
+    return this.http.get('http://localhost:3000/restaurants/filter/' + filter); 
+  }
 }

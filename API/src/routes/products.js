@@ -83,6 +83,26 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
+ * /products/filter/{filter}:
+ *  get:
+ *    description: filter products
+ *    parameters:
+ *      - in: path
+ *        name: filter
+ *        description: product filter
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get products
+ *      400:
+ *        description: bad request
+ */
+router.get('/filter/:filter', controller.search_in);
+
+/**
+ * @swagger
  * /products/{id}:
  *  delete:
  *    desription: delete a product

@@ -29,4 +29,8 @@ export class ProductService {
   deleteProduct(id: String) {
     return this.http.delete('http://localhost:3000/products/' + id); 
   }
+
+  searchProducts(filter: String) {
+    return this.http.get('http://localhost:3000/products/filter/' + filter); 
+  }
 }

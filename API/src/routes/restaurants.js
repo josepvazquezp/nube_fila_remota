@@ -103,6 +103,26 @@ router.get('/:id', controller.search);
 
 /**
  * @swagger
+ * /restaurants/filter/{filter}:
+ *  get:
+ *    description: filter restaurants
+ *    parameters:
+ *      - in: path
+ *        name: filter
+ *        description: restaurant filter
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get restaurants
+ *      400:
+ *        description: bad request
+ */
+router.get('/filter/:filter', controller.search_in);
+
+/**
+ * @swagger
  * /restaurants/{id}:
  *  delete:
  *    desription: delete restaurant

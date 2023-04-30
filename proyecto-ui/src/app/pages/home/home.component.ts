@@ -40,13 +40,21 @@ export class HomeComponent {
   searchRestaurants(filter: String) {
     this.restaurantService.searchRestaurants(filter).subscribe((response: any) => {
       this.searchR = response;
+      
+      if(response.length == 0) {
+        alert("No se encontro ningún restaurante que incluya:       " + filter);
+      }
     });
   }
   
   searchProducts(filter: String) {
     this.productService.searchProducts(filter).subscribe((response: any) => {
       this.searchP = response;
-      console.log(this.searchP.length);
+
+      if(response.length == 0) {
+        alert("No se encontro ningún producto que incluya:       " + filter);
+      }
+
       for(let i = 0 ; i < this.searchP.length ; i++) {
         this.restaurantService.getRestaurant(response[i].RestaurantId).subscribe((restaurant: any) => {
           this.displayR.push({
@@ -65,6 +73,9 @@ export class HomeComponent {
   }
 
   search() {
+    this.searchR = [];
+    this.searchP = [];
+
     if(this.filterP && this.filterR) {
       this.searchProducts(this.value);
       this.searchRestaurants(this.value);

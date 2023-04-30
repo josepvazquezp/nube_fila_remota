@@ -37,6 +37,9 @@ export class DisplayRestaurantComponent {
         this.name = response.name;
         this.description = response.description;
         this.type = response.type;
+
+        this.sharedDataService.setTypeRestaurant(this.type);
+
         this.location = response.location;
         this.image = response.image;
 

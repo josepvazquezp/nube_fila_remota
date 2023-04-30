@@ -107,6 +107,20 @@ const ProductsController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro al producto con ID:' + id);
                                 });
+    },
+    search_in: (req, res) => {
+        const filter = req.params.filter;
+
+        Product.find({Name: {
+            $regex: filter, 
+            $options: 'i'
+        }})
+                .then(restaurants => {
+                    res.status(200).send(restaurants);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro ningun restaurant con: ' + filter);
+                });
     }
 }
 

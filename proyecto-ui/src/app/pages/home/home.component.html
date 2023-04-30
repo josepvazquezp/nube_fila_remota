@@ -1,6 +1,85 @@
 <h1 *ngIf="isLogged">Hola, {{name}}</h1>
 <h1 *ngIf="!isLogged">Bienvenido a Fila Remota</h1>
 
+<table width="70%">
+    <tr>
+        <td>
+           
+                <mat-form-field class="example-form-field">
+                    <mat-label>Search</mat-label>
+
+                    <br>
+
+                    <mat-chip-listbox>
+                        <mat-chip-option color="accent" (click)="change(false, true)">Restaurantes</mat-chip-option>
+                        <mat-chip-option color="accent" (click)="change(true, false)">Productos</mat-chip-option>
+                        <mat-chip-option (click)="change(true, true)" selected>Both</mat-chip-option>
+                    </mat-chip-listbox>
+                    
+                    <input matInput type="text" [(ngModel)]="value"(keyup.enter)="search()">
+
+                    <button id="search" mat-fab  color="primary" matSuffix type="submit" (click)="search()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button id="clear" *ngIf="value" matSuffix mat-icon-button (click)="value=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                </mat-form-field>
+        </td>
+    </tr>
+</table>
+
+<div *ngIf="searchR.length > 0">
+    <h2>Restaurants</h2>
+    <div class="container">
+        <div *ngFor="let item of searchR">
+                <h2>{{item.name}}</h2>
+            <a routerLink="/display_restaurant" (ngModel)="item._id" (click)="setRestaurant(item._id)">
+                <img src="{{item.image}}" width="80%">
+            </a>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="searchP.length > 0">
+    <h2>Products</h2>
+    <div class="container">
+        <div *ngFor="let item of searchP; let i = index">
+            <mat-card  class="example-card container">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"><img src={{displayR[i].image}} width="50px"></div>
+                    <mat-card-title>{{item.Name}}</mat-card-title>
+                    <mat-card-subtitle>{{displayR[i].name}}</mat-card-subtitle>
+                </mat-card-header>
+            
+                <img mat-card-image class="banner" src={{item.Image}}>
+                
+                <mat-card-content>
+                    <br>
+                    <p>
+                        {{item.Description}}
+                    </p>
+                </mat-card-content>
+            
+                <br> 
+                 
+                <mat-card-actions>
+                    <h3>Precio: ${{item.Price}}</h3>
+                    <span class="spacer"></span>
+                    <button mat-raised-button color="accent" id="b-green" (ngModel)="displayR[i].id" (click)="setRestaurant(displayR[i].id)">
+                        <mat-icon>add</mat-icon>Ir al restaurant
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+    
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+
 <table width="80%">
     <tr>
         <td>

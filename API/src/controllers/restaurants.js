@@ -75,6 +75,20 @@ const RestaurantsController = {
                     res.status(400).send('No se encontro el restaurant con type: ' + type);
                 });
 
+    },
+    search_in: (req, res) => {
+        const filter = req.params.filter;
+
+        Restaurant.find({name: {
+            $regex: filter, 
+            $options: 'i'
+        }})
+                .then(restaurants => {
+                    res.status(200).send(restaurants);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro ningun restaurant con: ' + filter);
+                });
     }
 }
 

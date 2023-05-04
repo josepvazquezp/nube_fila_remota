@@ -45,4 +45,8 @@ export class UserService {
     return this.http.get('http://localhost:3000/users/' + id); 
   }
 
+  loadUser(token: string) {
+    return this.http.get('http://localhost:3000/users/load/' + token);
+  }
+
 }

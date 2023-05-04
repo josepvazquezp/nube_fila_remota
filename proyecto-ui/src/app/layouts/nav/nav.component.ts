@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { UserService } from 'src/app/shared/services/user.service';
-import { User } from 'src/app/shared/interfaces/user';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+
 import { share } from 'rxjs';
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+
+import { User } from 'src/app/shared/interfaces/user';
+import { UserService } from 'src/app/shared/services/user.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { LoginService } from 'src/app/shared/services/login.service';
 
 
 
@@ -26,10 +29,40 @@ export class NavComponent {
   type: Boolean = false; //false es Cliente, true es Restaurante
 
 
-  constructor(private router: Router, private sharedData: SharedDataService, private authService: AuthService) { 
+  constructor(
+    private router: Router, 
+    private sharedData: SharedDataService, 
+    private authService: AuthService, 
+    private userService: UserService,
+    private socialAuthService: SocialAuthService,
+    private loginService: LoginService) { 
     this.authService.authStatus.subscribe((status: boolean) => {
       this.flagLogin = status;
-      this.login(this.flagLogin);
+
+      if(this.sharedData.getUser() != undefined)
+        this.login(this.flagLogin);
+      else if(this.authService.isAuth()) {
+        let temp = this.authService.getToken();
+        this.userService.loadUser(temp).subscribe((response: any) => {
+            this.sharedData.setUser(response);
+            this.login(this.flagLogin);
+        });
+      }
+    });
+
+    this.socialAuthService.authState.subscribe((user: SocialUser) => {
+      if(user) {
+        this.loginService.googleLogin(user.idToken).subscribe(response => {
+          this.authService.setToken(response.token);
+
+          if(response.user != undefined) {
+            this.sharedData.setUser(response.user);
+            this.login(this.flagLogin);
+          }
+
+          this.router.navigate(['/']);
+        })
+      }
     });
   }
 
@@ -46,6 +79,7 @@ export class NavComponent {
   login(isLogged: boolean){
     if(isLogged) {
       let tempUser: User = this.sharedData.getUser();
+      console.log(tempUser);
       
       this.name = tempUser.name
       this.email = tempUser.email

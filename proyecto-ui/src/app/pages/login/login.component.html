@@ -16,8 +16,9 @@
             <mat-error>Este campo es requerido</mat-error>
         </mat-form-field>
         <br>
+        <br>
         <p>No tienes una cuenta? <a routerLink="/createuser">Creala aquí</a></p>
-        <br><br><br>
+        <br>
         <button mat-fab extended color="primary" (click)="validateLogin()">
             <mat-icon>login</mat-icon>Iniciar sesión
         </button>
@@ -27,6 +28,12 @@
                 <mat-icon>arrow_back_ios_new</mat-icon>Volver
             </button>
         </a>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <h4>Iniciar sesión con Google <asl-google-signin-button type='icon' size='large'></asl-google-signin-button></h4>
     </form>
 
 

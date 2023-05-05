@@ -1,7 +1,6 @@
-<h1 *ngIf="!isLogged">SIN PERMISOS</h1>
-<div *ngIf="isLogged">
+<div>
     <h1>Modificando Cuenta</h1>
-    <h2>Usuario: {{user[0].name}}</h2>
+    <h2>Usuario: {{user.name}}</h2>
     <br>
     
     <form [formGroup]="updateForm">

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../interfaces/user';
+import { JsonPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,17 @@ export class SharedDataService {
 
   private CardID: String = "";
 
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };;
 
   constructor() { }
 
@@ -87,11 +98,13 @@ export class SharedDataService {
   }
 
   setUser(user: User){
-    this.user[0] = user;
+    console.log("Usuario recibido: \n" + JSON.stringify(user));
+
+    this.user = user;
   }
 
   getUser(){
-    return this.user[0];
+    return this.user;
   }
 
   setTypeRestaurant(type: String) {

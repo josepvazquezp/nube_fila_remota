@@ -18,7 +18,17 @@ export class ChatdisplayComponent {
   chatready = false;
   thisChat: Array<Chat> = []
   restaurantID: String = "";
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
   guestName: String = "";
 
 
@@ -26,7 +36,7 @@ export class ChatdisplayComponent {
     this.message = formBuilder.group({
       message: ['', Validators.required]
     });
-    this.user[0] = sharedData.getUser();
+    this.user = sharedData.getUser();
     this.restaurantID = sharedData.getRestaurant();
 
     this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
@@ -35,7 +45,7 @@ export class ChatdisplayComponent {
     });
 
 
-    let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.restaurantID + '"}');
+    let body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.restaurantID + '"}');
     this.chatService.getChat(body).subscribe((response: any) => {
       this.thisChat = response;
      this.loadChat()
@@ -64,7 +74,7 @@ export class ChatdisplayComponent {
       
       
 
-      let body = JSON.parse('{"sender": "' + this.user[0].name + '", "message": "' + this.message.value.message + '"}');
+      let body = JSON.parse('{"sender": "' + this.user.name + '", "message": "' + this.message.value.message + '"}');
       this.clearMessage();
       console.log(body)
       this.chatService.putMessage(body, this.thisChat[0]._id).subscribe((response: any) => {

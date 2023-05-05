@@ -14,7 +14,17 @@ import { CardService } from 'src/app/shared/services/card.service';
 })
 export class UpdateCardComponent {
   isLogged: boolean = false;
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
   isCard: boolean = false;
   card: Array<Card> = [];
   id: String = "";
@@ -25,7 +35,7 @@ export class UpdateCardComponent {
   constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router,private cardService: CardService){
     
     this.isLogged = sharedData.getLog();
-    this.user[0] = sharedData.getUser();
+    this.user = sharedData.getUser();
     this.id = sharedData.getCard();
     this.updateForm = formBuilder.group({
       number: [''],

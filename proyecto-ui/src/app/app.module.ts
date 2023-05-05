@@ -9,6 +9,9 @@ import {
   GoogleSigninButtonModule 
 } from '@abacritt/angularx-social-login';
 
+
+import { enviroment } from 'src/enviroments/enviroment';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './layouts/nav/nav.component';
@@ -34,6 +37,8 @@ import { SetreviewComponent } from './pages/setreview/setreview.component';
 import { ChatdisplayComponent } from './pages/chatdisplay/chatdisplay.component';
 import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
 import { LoginComponent } from './pages/login/login.component';
+import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
+import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +64,9 @@ import { LoginComponent } from './pages/login/login.component';
     SetreviewComponent,
     ChatdisplayComponent,
     ViewRestaurantsComponent,
-    LoginComponent
+    LoginComponent,
+    PaymentSelectComponent,
+    PaymentConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +88,7 @@ import { LoginComponent } from './pages/login/login.component';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '264879683267-spjp2jpn7vqorbodu9n6s7mjgf24rn7l.apps.googleusercontent.com'
+              enviroment.GOOGLE_ID
             )
           }
         ],

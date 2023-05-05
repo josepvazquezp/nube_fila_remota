@@ -36,10 +36,12 @@ export class NavComponent {
     private userService: UserService,
     private socialAuthService: SocialAuthService,
     private loginService: LoginService) { 
+      
+
     this.authService.authStatus.subscribe((status: boolean) => {
       this.flagLogin = status;
 
-      if(this.sharedData.getUser() != undefined)
+      if(this.sharedData.getUser()._id != "")
         this.login(this.flagLogin);
       else if(this.authService.isAuth()) {
         let temp = this.authService.getToken();
@@ -56,6 +58,7 @@ export class NavComponent {
           this.authService.setToken(response.token);
 
           if(response.user != undefined) {
+            
             this.sharedData.setUser(response.user);
             this.login(this.flagLogin);
           }

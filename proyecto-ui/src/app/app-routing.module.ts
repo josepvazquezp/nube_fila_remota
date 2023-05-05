@@ -26,6 +26,8 @@ import { LoginComponent } from './pages/login/login.component';
 
 //Guardias
 import { AuthGuard } from './shared/guards/auth.guard';
+import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
+import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -63,7 +65,9 @@ const routes: Routes = [
   { path: "chat", component: ChatdisplayComponent, canActivate: [AuthGuard]  },
   { path: "review", component: SetreviewComponent, canActivate: [AuthGuard]  },
   { path: "view_restaurants", component: ViewRestaurantsComponent},
-  { path: "login", component: LoginComponent }
+  { path: "login", component: LoginComponent },
+  { path: "paymentSelect", component: PaymentSelectComponent},
+  { path: "paymentConfirm", component : PaymentConfirmComponent}
 ];
 
 @NgModule({

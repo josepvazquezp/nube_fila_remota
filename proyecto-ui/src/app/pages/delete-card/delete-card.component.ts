@@ -13,7 +13,17 @@ import { CardService } from 'src/app/shared/services/card.service';
 })
 export class DeleteCardComponent {
   isLogged: boolean = false;
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
   isCard: boolean = false;
   card: Array<Card> = [];
   id: String = "";
@@ -27,7 +37,7 @@ export class DeleteCardComponent {
     });
     
     this.isLogged = sharedData.getLog();
-    this.user[0] = sharedData.getUser();
+    this.user = sharedData.getUser();
     this.id = sharedData.getCard();
     this.cardService.getOneCard(this.id).subscribe((response: any) => {
       this.card[0] = response;

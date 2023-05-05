@@ -5,7 +5,7 @@
             <ul *ngIf="chatready">
                 <li *ngFor="let item of thisChat[0].messages">
                     <div class="container">
-                        <div class="messageDisplay" [ngClass]="{'positionUser': item.sender == user[0].name }">
+                        <div class="messageDisplay" [ngClass]="{'positionUser': item.sender == user.name }">
                         <p><b>{{item.sender}} dice:</b><br> 
                             {{item.message}}</p> 
                         </div>
@@ -19,7 +19,7 @@
         <td id="menu">
             <div id="heightAdjust">
                 <h3>Chat entre</h3>
-                <h3>{{user[0].name}}</h3>
+                <h3>{{user.name}}</h3>
                 <h3>y</h3>
                 <h3>{{guestName}}</h3>
                 <br>

@@ -9,6 +9,9 @@ import {
   GoogleSigninButtonModule 
 } from '@abacritt/angularx-social-login';
 
+
+import { enviroment } from 'src/enviroments/enviroment';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './layouts/nav/nav.component';
@@ -85,7 +88,7 @@ import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '264879683267-spjp2jpn7vqorbodu9n6s7mjgf24rn7l.apps.googleusercontent.com'
+              enviroment.GOOGLE_ID
             )
           }
         ],

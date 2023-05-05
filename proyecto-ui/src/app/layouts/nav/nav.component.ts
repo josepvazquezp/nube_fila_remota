@@ -36,6 +36,8 @@ export class NavComponent {
     private userService: UserService,
     private socialAuthService: SocialAuthService,
     private loginService: LoginService) { 
+      
+
     this.authService.authStatus.subscribe((status: boolean) => {
       this.flagLogin = status;
 

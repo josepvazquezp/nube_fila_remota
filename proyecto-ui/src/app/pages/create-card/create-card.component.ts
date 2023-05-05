@@ -5,6 +5,7 @@ import { User } from 'src/app/shared/interfaces/user';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Card } from 'src/app/shared/interfaces/card';
 import { CardService } from 'src/app/shared/services/card.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-create-card',
@@ -13,13 +14,25 @@ import { CardService } from 'src/app/shared/services/card.service';
 })
 export class CreateCardComponent {
   isLogged: boolean = false;
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
   cardForm: FormGroup;
   type: string = "Debito";
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router,private cardService: CardService){
-    this.isLogged = sharedData.getLog();
-    this.user[0] = sharedData.getUser();
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router,private cardService: CardService, private authService: AuthService){
+    
+
+
+    this.user = sharedData.getUser();
 
     this.cardForm = formBuilder.group({
       number: ['', Validators.required],
@@ -61,7 +74,7 @@ export class CreateCardComponent {
   createCard(){
 
     let defMonth = (this.cardForm.value.month < 10) ? '0' +   this.cardForm.value.month : this.cardForm.value.month.toString()
-    let body = JSON.parse('{"ID_User":"'+ this.user[0]._id + '",'+
+    let body = JSON.parse('{"ID_User":"'+ this.user._id + '",'+
     '"Type": "'+ this.type +'", "Number": "'+ this.cardForm.value.number + '",'+
     '"Date":"'+defMonth+ '/' +this.cardForm.value.year  +'"}');
 

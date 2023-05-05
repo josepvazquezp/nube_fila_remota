@@ -34,6 +34,8 @@ import { SetreviewComponent } from './pages/setreview/setreview.component';
 import { ChatdisplayComponent } from './pages/chatdisplay/chatdisplay.component';
 import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaurants.component';
 import { LoginComponent } from './pages/login/login.component';
+import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
+import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { LoginComponent } from './pages/login/login.component';
     SetreviewComponent,
     ChatdisplayComponent,
     ViewRestaurantsComponent,
-    LoginComponent
+    LoginComponent,
+    PaymentSelectComponent,
+    PaymentConfirmComponent
   ],
   imports: [
     BrowserModule,

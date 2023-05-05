@@ -13,13 +13,23 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class DeleteUserComponent {
   isLogged: boolean = false;
   name: String = "";
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
   formDelete: FormGroup;
 
   constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router){
     this.isLogged = sharedData.getLog();
     this.name = sharedData.getName();
-    this.user[0] = sharedData.getUser();
+    this.user = sharedData.getUser();
     
     this.formDelete = formBuilder.group({
       pass: ['', Validators.required],
@@ -33,7 +43,7 @@ export class DeleteUserComponent {
     if(!this.formDelete.valid){
       alert("Por favor, coloque su contraseña y acepte los términos.");
     }else{
-      if(this.formDelete.value.pass == this.user[0].password){
+      if(this.formDelete.value.pass == this.user.password){
         //El usuario se puede eliminar
         this.deleteUser();
       }else{
@@ -50,7 +60,7 @@ export class DeleteUserComponent {
     this.sharedData.setLog(false);
 
 
-    this.userService.deleteUser(this.user[0]._id).subscribe((response: any) => {
+    this.userService.deleteUser(this.user._id).subscribe((response: any) => {
       alert("Usuario Eliminado")
       this.router.navigate(['/']);
     });

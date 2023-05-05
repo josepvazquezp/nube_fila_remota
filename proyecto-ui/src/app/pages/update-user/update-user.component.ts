@@ -18,12 +18,22 @@ export class UpdateUserComponent {
   type: Boolean = false;
   idRestaurant: String = "6438b2f687c92dd913c334c8";
   isLogged: boolean = false;
-  user: Array<User> = [];
-  
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
+
   constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router, private restaurantService: RestaurantService){
     this.isLogged = sharedData.getLog();
-    this.user[0] = sharedData.getUser();
-    this.type = this.user[0].type == "Cliente"? false:true;
+    this.user = sharedData.getUser();
+    this.type = this.user.type == "Cliente"? false:true;
     
     this.updateForm = formBuilder.group({
       link: [''],

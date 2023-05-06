@@ -19,6 +19,8 @@ export class SharedDataService {
 
   private CardID: String = "";
 
+  private Origin: String = "";
+
   user: User = {
     _id: "",
     email: "",
@@ -114,4 +116,13 @@ export class SharedDataService {
   getTypeRestaurant() {
     return this.typeRestaurant;
   }
+
+  setOrigin(origin: String){
+    this.Origin = origin;
+  }
+
+  getOrigin(){
+    return this.Origin;
+  }
+
 }

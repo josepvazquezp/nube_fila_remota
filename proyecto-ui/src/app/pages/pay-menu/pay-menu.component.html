@@ -28,11 +28,11 @@
         
         
     </div>
-    <a routerLink="/createcard">
-        <button mat-fab extended id="buttonAdd" >
+    
+        <button mat-fab extended id="buttonAdd" (click)="redirectCreate()">
             <mat-icon>add_circle</mat-icon>Añadir Tarjeta
         </button>
-    </a>
+    
     <br><br>
     <a routerLink="/">
         <button mat-fab extended color="accent" >

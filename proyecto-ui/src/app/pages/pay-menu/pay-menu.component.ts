@@ -57,5 +57,9 @@ export class PayMenuComponent {
     this.router.navigate(['/updatecard']);
   }
 
+  redirectCreate(){
+    this.sharedData.setOrigin("paymenu")
+    this.router.navigate(['/createcard']);
+  }
 
 }

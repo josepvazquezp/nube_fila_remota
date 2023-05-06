@@ -80,11 +80,15 @@ export class CreateCardComponent {
 
     this.cardService.postCard(body).subscribe((response: any) => {
       alert("Tarjeta añadida")
-      this.router.navigate(['/paymenu']);
+      this.router.navigate([this.sharedData.getOrigin()]);
       
     });
 
     
+  }
+
+  goBack(){
+    this.router.navigate([this.sharedData.getOrigin()]);
   }
 
 }

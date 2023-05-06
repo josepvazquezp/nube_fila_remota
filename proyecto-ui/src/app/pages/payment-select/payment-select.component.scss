@@ -1,0 +1,65 @@
+#box{
+    width: 20%;
+    margin: auto;
+    text-align: center;
+}
+
+mat-form-field{
+    width: 100%;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+
+#cardsAdvice{
+
+}
+
+#buttonAdd{ 
+
+    background-color: rgb(0, 183, 74);
+    color: white;
+}
+
+
+
+#cardsContainer{
+    width: 100%;
+}
+
+.cardsDisplay{
+    width: 100%;
+    margin:auto;
+    background-color: rgba(156, 195, 225, 0.45)
+    
+}
+
+h1{
+    font-size: 36px;
+    text-align: center;
+}
+
+h3{
+    font-size: 24;
+}
+
+
+.titleContainer{
+    text-align: center;
+}
+
+mat-card{
+    margin-bottom: 18px;
+}
+
+mat-card-tittle{
+    font-size: 30px;
+}
+
+mat-card-content{
+    font-size: 20px;
+    line-height: 30px;
+}

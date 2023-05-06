@@ -1,1 +1,35 @@
-<p>payment-select works!</p>
+<div id="box" >
+    <h1>Seleccione una tarjeta para pagar</h1>
+
+    <h2 id="cardsAdvise" *ngIf="!areCards">{{user.name}} no tiene tarjetas registradas</h2>
+    <div id="cardsContainer" *ngIf="areCards" >
+        <div *ngFor="let item of cardList">
+            <mat-card class="cardsDisplay">
+                <mat-card-content>
+                    <b>Número:</b> {{item.Number}}<br>
+                    <b>Tipo:</b> {{item.Type}}<br>
+                    <b>Fecha de Vencimiento:</b> {{item.Date}}<br>
+    
+                    <button mat-fab extended color="primary" (click)="selectCard(item._id)">
+                        <mat-icon>payments</mat-icon>Seleccionar Tarjeta
+                    </button>
+    
+                </mat-card-content>
+            </mat-card>
+            <br><br><br>
+
+        </div>
+
+        
+        
+    </div>
+    <button mat-fab extended id="buttonAdd" (click)="redirectCreate()">
+        <mat-icon>add_circle</mat-icon>Añadir Tarjeta
+    </button>
+    <br><br>
+    <a routerLink="/display_restaurant">
+        <button mat-fab extended color="accent" >
+            <mat-icon>arrow_back_ios_new</mat-icon>Volver
+        </button>
+    </a>
+</div>

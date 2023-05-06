@@ -1,1 +1,23 @@
-<p>payment-confirm works!</p>
+<div id="general" >
+    <h1>Ingrese el Código de Seguridad de la Tarjeta:<br>[{{card.Number}}]</h1>
+
+    <form [formGroup]="checkSecurityCode">
+        <br>
+        <mat-form-field>
+            <mat-label>Código</mat-label>
+            <input matInput name="number" type="text" minlength="3" maxlength="3" formControlName="secCode">
+            <mat-error>Este campo es requerido</mat-error>
+        </mat-form-field>
+    </form>
+
+    <button mat-fab extended color="primary" id="buttonUpdate" (click)="checkGivenSecurityCode()">
+        <mat-icon>attach_money</mat-icon>Realizar el Pago
+    </button>
+    &nbsp;
+
+    <a routerLink="/paymentSelect">
+        <button mat-fab extended color="accent" id="buttonBack">
+            <mat-icon>chevron_left</mat-icon>Volver
+        </button>
+    </a>
+</div>

@@ -149,15 +149,15 @@ export class DisplayOrderComponent {
     });
   }
 
-  uploadOrder() {
-    this.restaurant.orders.push(this.idOrder);
+  // uploadOrder() {
+  //   this.restaurant.orders.push(this.idOrder);
 
-    let body = {orders: this.restaurant.orders}
+  //   let body = {orders: this.restaurant.orders}
     
-    this.restaurantService.updateRestaurant(this.restaurant._id, body).subscribe((response: any) => {
-      this.router.navigate(['/order_in_progress']);
-    });
-  }
+  //   this.restaurantService.updateRestaurant(this.restaurant._id, body).subscribe((response: any) => {
+  //     this.router.navigate(['/order_in_progress']);
+  //   });
+  // }
 
   deleteOrder() {
     this.orderService.deleteOrder(this.idOrder).subscribe((response: any) => {

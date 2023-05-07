@@ -47,6 +47,7 @@ export class NavComponent {
         let temp = this.authService.getToken();
         this.userService.loadUser(temp).subscribe((response: any) => {
             this.sharedData.setUser(response);
+            this.sharedData.setLog(true);
             this.login(this.flagLogin);
         });
       }
@@ -82,7 +83,6 @@ export class NavComponent {
   login(isLogged: boolean){
     if(isLogged) {
       let tempUser: User = this.sharedData.getUser();
-      console.log(tempUser);
       
       this.name = tempUser.name
       this.email = tempUser.email
@@ -93,7 +93,7 @@ export class NavComponent {
 
 
       // se da de alta el usuario para que todos los proceso sean en base a ese ID
-      this.sharedData.setCustomer(tempUser._id);    //"64399dacddc3bcf1989b709b");
+      this.sharedData.setCustomer(tempUser._id);    
 
       if(tempUser.type == "Cliente") {
         this.type = false;      
@@ -101,9 +101,10 @@ export class NavComponent {
       else {
         this.type = true;
         // se da de alta el restaurante para que todos los proceso sean en base a ese ID
-        this.sharedData.setUserRestaurant(tempUser.restaurant);    //"6438b2f687c92dd913c334c8");
+        this.sharedData.setUserRestaurant(tempUser.restaurant);   
       }
 
+      this.router.navigate(['/']);
     }
   }
 }

@@ -66,8 +66,8 @@ const routes: Routes = [
   { path: "review", component: SetreviewComponent, canActivate: [AuthGuard]  },
   { path: "view_restaurants", component: ViewRestaurantsComponent},
   { path: "login", component: LoginComponent },
-  { path: "paymentSelect", component: PaymentSelectComponent},
-  { path: "paymentConfirm", component : PaymentConfirmComponent}
+  { path: "paymentSelect", component: PaymentSelectComponent, canActivate: [AuthGuard]},
+  { path: "paymentConfirm", component : PaymentConfirmComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

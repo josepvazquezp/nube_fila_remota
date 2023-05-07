@@ -33,10 +33,8 @@ export class PaymentSelectComponent {
     this.user = sharedData.getUser();
 
     this.cardService.getCards(this.user._id).subscribe((response: any) => {
-      console.log(response);
       if(response.length > 0){//Ya hay tarjetas
         this.cardList = response;
-        console.log(this.cardList);
         this.areCards = true;
       }
 

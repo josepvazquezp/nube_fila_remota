@@ -28,9 +28,17 @@ export class HomeComponent {
     name: String
   }> = [];
   
-  constructor(private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private productService: ProductService, private router: Router) {
-    this.isLogged = sharedDataService.getLog();
-    this.name = sharedDataService.getUser() == undefined? "":sharedDataService.getUser() .name; 
+  constructor(
+    private sharedDataService: SharedDataService, 
+    private restaurantService: RestaurantService, 
+    private productService: ProductService, 
+    private router: Router) {
+
+    this.sharedDataService.userHome.subscribe((status: boolean) => {
+      this.isLogged = status;
+
+      this.name = sharedDataService.getUser() == undefined? "":sharedDataService.getUser().name; 
+    });
   }
 
   setType(type: String) {

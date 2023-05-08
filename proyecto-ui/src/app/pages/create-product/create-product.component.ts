@@ -27,7 +27,7 @@ export class CreateProductComponent {
   }
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] ?? null;
+    this.selectedFile = event.target.files[0];
   }
 
   createProduct() {
@@ -40,7 +40,18 @@ export class CreateProductComponent {
 
     if(this.productForm.value != '' || this.selectedFile != null) {
       this.productService.createProduct(body).subscribe((response: any) => {
-        this.router.navigate(['/restaurant_products']);
+        let id: any = response.product._id;
+        console.log(response.product._id);
+  
+        const formData = new FormData();
+        formData.append("file", this.selectedFile);
+        this.productService.changeImage(formData, id).subscribe((response: any) => {
+          let body = {Image: "../../../assets/uploads/" + response.image};
+          
+          this.productService.updateProduct(id, body).subscribe((response: any) => {
+            this.router.navigate(['/restaurant_products']);
+          });
+        });
       });
     }
   }

@@ -2,6 +2,31 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./../controllers/products');
 
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '../proyecto-ui/src/assets/uploads');                    
+    },
+    filename: (req, file, cb) => {
+        const nombre = req.params.id;
+        console.log(nombre);
+        const extention = file.originalname.split('.').pop();
+        cb(null, `${nombre}.${extention}`);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const flag = file.mimetype.startsWith('image');
+    cb(null, flag);
+};
+
+const upload = multer({storage: multerStorage, fileFilter: fileFilter});
+
+router.post('/upload/:id', upload.single('file'), (req, res) => {
+    res.status(201).send({image: req.file.filename});
+}); 
+
 /**
  * @swagger
  * /products:

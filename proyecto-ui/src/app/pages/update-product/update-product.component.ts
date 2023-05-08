@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ProductService } from 'src/app/shared/services/product.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
@@ -14,7 +15,11 @@ export class UpdateProductComponent {
   selectedFile: any = null;
   idProduct: String = "";
 
-  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder) {
+  constructor(
+        private sharedDataService: SharedDataService, 
+        private productService: ProductService, 
+        formBuilder: FormBuilder,
+        private router: Router) {
     this.idProduct = this.sharedDataService.getProduct();
 
     this.productForm = formBuilder.group({
@@ -26,7 +31,7 @@ export class UpdateProductComponent {
   }
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] ?? null;
+    this.selectedFile = event.target.files[0];
   }
 
   updateProduct() {
@@ -52,11 +57,6 @@ export class UpdateProductComponent {
             this.selectedFile == null) {
           body = {Available: false};
     }
-    else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
-            this.productForm.value.price == '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-          body = {Image: ''};
-    }
     else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
             this.productForm.value.price == '' && this.productForm.value.available == '1' &&
             this.selectedFile == null) {
@@ -72,11 +72,6 @@ export class UpdateProductComponent {
             this.selectedFile == null) {
             body = {Name: this.productForm.value.name, Available: false};
     }
-    else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
-            this.productForm.value.price == '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {Name: this.productForm.value.name, Image: ''};
-    }
     else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
             this.productForm.value.price != '' && this.productForm.value.available == '1' &&
             this.selectedFile == null) {
@@ -87,25 +82,10 @@ export class UpdateProductComponent {
             this.selectedFile == null) {
             body = {Description: this.productForm.value.description, Available: false};
     }
-    else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
-            this.productForm.value.price == '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {Description: this.productForm.value.description, Image: ''};
-    }
     else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
             this.productForm.value.price != '' && this.productForm.value.available != '1' &&
             this.selectedFile == null) {
             body = {Price: this.productForm.value.price, Available: false};
-    }
-    else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
-            this.productForm.value.price != '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {Price: this.productForm.value.price, Image: ''};
-    }
-    else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
-            this.productForm.value.price == '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {Available: false, Image: ''};
     }
     else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
             this.productForm.value.price != '' && this.productForm.value.available == '1' &&
@@ -125,15 +105,6 @@ export class UpdateProductComponent {
               Available: false
             };
     }
-    else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
-            this.productForm.value.price == '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {
-              Name: this.productForm.value.name, 
-              Description: this.productForm.value.description,
-              Image: ''
-            };
-    }
     else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
             this.productForm.value.price != '' && this.productForm.value.available != '1' &&
             this.selectedFile == null) {
@@ -143,15 +114,6 @@ export class UpdateProductComponent {
               Available: false
             };
     }
-    else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
-            this.productForm.value.price != '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {
-              Name: this.productForm.value.name, 
-              Description: this.productForm.value.description,
-              Image: ''
-            };
-    }
     else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
             this.productForm.value.price != '' && this.productForm.value.available != '1' &&
             this.selectedFile == null) {
@@ -159,24 +121,6 @@ export class UpdateProductComponent {
               Description: this.productForm.value.description,
               Price: this.productForm.value.price,
               Available: false
-            };
-    }
-    else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
-            this.productForm.value.price == '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {
-              Description: this.productForm.value.description,
-              Available: false,
-              Image: ''
-            };
-    }
-    else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
-            this.productForm.value.price != '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {
-              Price: this.productForm.value.price,
-              Available: false,
-              Image: ''
             };
     }
     else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
@@ -189,49 +133,124 @@ export class UpdateProductComponent {
               Available: false
             };
     }
-    else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
-            this.productForm.value.price != '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {
-              Name: this.productForm.value.name, 
-              Price: this.productForm.value.price,
-              Available: false,
-              Image: '' 
-            };
-    }
-    else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
-            this.productForm.value.price != '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {
-              Description: this.productForm.value.description,
-              Price: this.productForm.value.price,
-              Available: false,
-              Image: '' 
-            };
-    }
-    else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
-            this.productForm.value.price == '' && this.productForm.value.available != '1' &&
-            this.selectedFile != null) {
-            body = {
-              Name: this.productForm.value.name, 
-              Description: this.productForm.value.description,
-              Available: false,
-              Image: '' 
-            };
-    }
-    else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
-            this.productForm.value.price != '' && this.productForm.value.available == '1' &&
-            this.selectedFile != null) {
-            body = {
-              Name: this.productForm.value.name, 
-              Description: this.productForm.value.description,
-              Price: this.productForm.value.price,
-              Image: '' 
-            };
-    }
+    
 
-    this.productService.updateProduct(this.idProduct, body).subscribe((response: any) => {
-    });
+    if(this.selectedFile == null){
+        this.productService.updateProduct(this.idProduct, body).subscribe((response: any) => {
+        });
+    }
+    else {
+        let id: any = this.idProduct;
+  
+        const formData = new FormData();
+        formData.append("file", this.selectedFile);
+        this.productService.changeImage(formData, id).subscribe((response: any) => {
+                if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {Image: "../../../assets/uploads/" + response.image};
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {Name: this.productForm.value.name, Image: "../../../assets/uploads/" + response.image};
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {Description: this.productForm.value.description, Image: "../../../assets/uploads/" + response.image};
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {Price: this.productForm.value.price, Image: "../../../assets/uploads/" + response.image};
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {Available: false, Image: "../../../assets/uploads/" + response.image};
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Name: this.productForm.value.name, 
+                        Description: this.productForm.value.description,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Name: this.productForm.value.name, 
+                        Description: this.productForm.value.description,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Description: this.productForm.value.description,
+                        Available: false,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Price: this.productForm.value.price,
+                        Available: false,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Name: this.productForm.value.name, 
+                        Price: this.productForm.value.price,
+                        Available: false,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name == '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Description: this.productForm.value.description,
+                        Price: this.productForm.value.price,
+                        Available: false,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price == '' && this.productForm.value.available != '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Name: this.productForm.value.name, 
+                        Description: this.productForm.value.description,
+                        Available: false,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                else if(this.productForm.value.name != '' && this.productForm.value.description != '' && 
+                        this.productForm.value.price != '' && this.productForm.value.available == '1' &&
+                        this.selectedFile != null) {
+                        body = {
+                        Name: this.productForm.value.name, 
+                        Description: this.productForm.value.description,
+                        Price: this.productForm.value.price,
+                        Image: "../../../assets/uploads/" + response.image
+                        };
+                }
+                this.productService.updateProduct(id, body).subscribe(response => {
+                        this.router.navigate(["/restaurant_products"]); 
+                });
+        });
+    }
   }
 
 }

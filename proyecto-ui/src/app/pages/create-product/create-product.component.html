@@ -24,7 +24,7 @@
         <br>
         <h2>Imagen</h2>
         <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
-        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/png,image/jpeg">
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" name="file" accept="image/png,image/jpeg">
         <span class="file-name">{{selectedFile?.name}}</span>
         <br>
         <br>

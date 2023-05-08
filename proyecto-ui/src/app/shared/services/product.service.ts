@@ -33,4 +33,8 @@ export class ProductService {
   searchProducts(filter: String) {
     return this.http.get('http://localhost:3000/products/filter/' + filter); 
   }
+
+  changeImage(formData: FormData, id: string) {
+    return this.http.post('http://localhost:3000/users/upload/' + id, formData);
+  }
 }

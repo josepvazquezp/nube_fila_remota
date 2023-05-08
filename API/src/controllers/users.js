@@ -42,7 +42,6 @@ const UsersController = {
            (req.body.password != undefined || req.body.name != undefined || 
             req.body.history != undefined || req.body.status != undefined || 
             req.body.image != undefined || req.body.restaurant != undefined)) {
-                console.log("Listo para modificar");
 
                 User.findByIdAndUpdate(id, req.body, {new:true})
                                 .then(user => {

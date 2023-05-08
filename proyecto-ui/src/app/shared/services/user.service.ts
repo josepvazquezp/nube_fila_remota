@@ -47,4 +47,8 @@ export class UserService {
     return this.http.get('http://localhost:3000/users/load/' + token);
   }
 
+  changeImage(formData: FormData, id: string) {
+    return this.http.post('http://localhost:3000/users/upload/' + id, formData);
+  }
+
 }

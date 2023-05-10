@@ -46,8 +46,6 @@ mongoose.connect(mongoUrl).then(() =>{
     });
 
     io.on("connection", socket => {
-        io.emit("Someone came in");
-
         socket.on("sendMessage", (data) => {
             socket.broadcast.emit("newMessage", {message: data});
         });

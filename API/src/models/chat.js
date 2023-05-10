@@ -6,9 +6,10 @@ const chatSchema = new Schema({
     messages: {type: [
         {
             sender: String,
-            message: String
+            message: String,
+            date: String
         }
-    ]}
+    ]},
 });
 
 module.exports = model('chats', chatSchema)

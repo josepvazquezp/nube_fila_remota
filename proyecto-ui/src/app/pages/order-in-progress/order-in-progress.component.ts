@@ -38,6 +38,16 @@ export class OrderInProgressComponent {
     this.socket.on("receiveStatus", (data: any) => {
       console.log("Status: " + data.status) 
 
+      if(data.status == 'aceptada') {
+        document.getElementById('aceptada')?.click();
+      }
+      else if(data.status == 'lista'){
+        document.getElementById('lista')?.click();
+      }
+      else if(data.status == 'finalizada'){
+        document.getElementById('finalizada')?.click();
+      }
+      
     });
   }
 

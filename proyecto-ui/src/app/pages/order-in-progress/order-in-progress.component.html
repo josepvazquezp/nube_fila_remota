@@ -2,20 +2,27 @@
     <tr>
         <td>
             <mat-stepper orientation="vertical">
-                <mat-step>
+                <ng-template matStepperIcon="edit">
+                  <mat-icon>done</mat-icon>
+                </ng-template>
+
+                <mat-step aria-labelledby="disabled">
                   <ng-template matStepLabel>Orden Recibida</ng-template>
+                  <button mat-button id="aceptada" matStepperNext></button>
                 </mat-step>
-                <mat-step>
+                <mat-step aria-labelledby="disabled">
                   <ng-template matStepLabel>Preparando</ng-template>
+                  <button mat-button id="lista" matStepperNext></button>
                 </mat-step>
-                <mat-step>
+                <mat-step aria-labelledby="disabled">
                   <ng-template matStepLabel>Lista para recoger</ng-template>
+                  <button mat-button id="finalizada" matStepperNext></button>
                 </mat-step>
-                <mat-step>
+                <mat-step aria-labelledby="disabled">
                     <ng-template matStepLabel>Orden finalizada</ng-template>
                     <br>
                     <button mat-flat-button color="primary" routerLink="/review">Calificar servicio</button>
-                  </mat-step>
+                </mat-step>
             </mat-stepper>
         </td>
         <td class="edit">

@@ -9,7 +9,9 @@ import { ProductService } from 'src/app/shared/services/product.service';
 import { OrderService } from 'src/app/shared/services/order.service';
 
 import { enviroment } from 'src/enviroments/enviroment';
+
 import { io } from 'socket.io-client';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-retaurant-orders',
@@ -31,7 +33,16 @@ export class RetaurantOrdersComponent {
 
   socket: any;
 
-  constructor(private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private productService: ProductService, private orderService: OrderService) {
+  keys: Array<String> = [];
+
+  status: Array<string> = ['creada', 'aceptada', 'lista', 'finalizada'];
+
+  constructor(
+    private router:Router, 
+    private sharedDataService: SharedDataService, 
+    private restaurantService: RestaurantService, 
+    private productService: ProductService, 
+    private orderService: OrderService) {
     this.idUserRestaurant = this.sharedDataService.getUserRestaurant();
     this.getData();
   }
@@ -41,6 +52,29 @@ export class RetaurantOrdersComponent {
   }
 
   getData() {
+    this.keys = [];
+
+    setTimeout(() => {
+      for(let i = 0 ; i < this.keys.length ; i++) {
+        let temp = this.hashmap.get(this.keys[i])?.status;
+
+        let index = this.status.findIndex(item => item == temp);
+
+        if(index > 0) {
+          document.getElementById(this.keys[i] + '_aceptada')?.click();
+
+          if(index > 1) {
+            document.getElementById(this.keys[i] + '_lista')?.click();
+
+            if(index > 2) {
+              document.getElementById(this.keys[i] + '_finalizada')?.click();
+            }
+          }
+        }
+      }
+      
+    }, 1000);
+
     this.restaurantService.getRestaurant(this.idUserRestaurant).subscribe((response: any) => {
       this.rName = response.name;
 
@@ -67,6 +101,8 @@ export class RetaurantOrdersComponent {
               };
 
               this.hashmap.set(response.orders[i]._id, o);
+              this.keys.push(response.orders[i]._id);
+             
             }
 
           });
@@ -81,7 +117,6 @@ export class RetaurantOrdersComponent {
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
       this.socket.emit("changeStatus", body.status);
-      this.router.navigate(['/restaurant_orders']);
     });
   }
 

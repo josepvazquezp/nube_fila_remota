@@ -25,21 +25,31 @@
     <br>
     <br>
 
-    <mat-stepper *ngIf="item.value.status != 'finalizada' && item.value.status !='rechazada'" labelPosition="bottom" #stepper>
-        <mat-step>
+    <mat-stepper *ngIf="item.value.status !='rechazada'" labelPosition="bottom" #stepper>
+        <ng-template matStepperIcon="edit">
+            <mat-icon>done</mat-icon>
+        </ng-template>
+        
+        <!-- <mat-step [aria-labelledby]="item.value.status != 'creada' ? 'disabled' : ''"> -->
+        <mat-step aria-labelledby="disabled">
             <ng-template matStepLabel>Aceptar orden</ng-template>
             <button mat-button id="b-green" matStepperNext (ngModel)="item.key" (click)="aceptOrder(item.key)">Aceptar</button>
             <button mat-button id="b-warn" (ngModel)="item.key" (click)="refuseOrder(item.key)">Rechazar</button>
+            <button mat-button id="{{item.key}}_aceptada" matStepperNext></button>
         </mat-step>
-        <mat-step>
+        <!-- <mat-step [aria-labelledby]="item.value.status != 'aceptada' ? 'disabled' : ''"> -->
+        <mat-step aria-labelledby="disabled">
             <ng-template matStepLabel>Preparar orden</ng-template>
             <button id="b-orden-2" mat-button matStepperNext (ngModel)="item.key" (click)="readyOrder(item.key)">Orden lista</button>
+            <button mat-button id="{{item.key}}_lista" matStepperNext></button>
         </mat-step>
-        <mat-step>
+        <!-- <mat-step [aria-labelledby]="item.value.status != 'lista' ? 'disabled' : ''"> -->
+        <mat-step aria-labelledby="disabled">
             <ng-template matStepLabel>Entregar orden</ng-template>
             <button id="b-orden-3" mat-button matStepperNext (ngModel)="item.key" (click)="finishOrder(item.key)">Orden finalizada</button>
+            <button mat-button id="{{item.key}}_finalizada" matStepperNext></button>
         </mat-step>
-        <mat-step>
+        <mat-step aria-labelledby="disabled">
             <ng-template matStepLabel>Orden finalizada</ng-template>
         </mat-step>
     </mat-stepper>

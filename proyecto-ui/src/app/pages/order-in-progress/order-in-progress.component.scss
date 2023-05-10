@@ -7,3 +7,8 @@ h1 {
 .edit {
     vertical-align: middle;
 }
+
+::ng-deep.mat-step-header[aria-labelledby="disabled"] {
+    pointer-events: none !important;
+    cursor: not-allowed;
+}

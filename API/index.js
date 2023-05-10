@@ -46,17 +46,12 @@ mongoose.connect(mongoUrl).then(() =>{
     });
 
     io.on("connection", socket => {
-
-
         socket.on("sendMessage", (data) => {
-            //console.log("New Message: " + data);
             socket.broadcast.emit("newMessage", {message: data});
         });
 
         socket.on("changeStatus", (data) => {
-            console.log("Estado de Orden Actualizado")
             socket.broadcast.emit("receiveStatus", {status: data})
-
         })
 
     });

@@ -28,6 +28,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
 import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
+import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -67,7 +68,8 @@ const routes: Routes = [
   { path: "view_restaurants", component: ViewRestaurantsComponent},
   { path: "login", component: LoginComponent },
   { path: "paymentSelect", component: PaymentSelectComponent, canActivate: [AuthGuard]},
-  { path: "paymentConfirm", component : PaymentConfirmComponent, canActivate: [AuthGuard]}
+  { path: "paymentConfirm", component : PaymentConfirmComponent, canActivate: [AuthGuard]},
+  { path: "chatSelect", component: ChatSelectComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

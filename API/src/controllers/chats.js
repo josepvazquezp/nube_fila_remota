@@ -25,10 +25,6 @@ const ChatsController = {
             message: req.body.message
         }
 
-        console.log("ID: " + id);
-        console.log("Cuerpo: " + newMessage)
-
-
         Chat.findByIdAndUpdate(id, {$push: {messages: newMessage}},  { new: true })
                         .then(chat => {
                             res.status(200).send(chat);
@@ -68,16 +64,30 @@ const ChatsController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro el chat: ' + id);
                                 });
+    },findAllMine: (req, res) => {
+        const MyID = req.body.MyID
+        const type  = (req.body.type == "Cliente") ? "customerId" : "restaurantId";
+        let body = JSON.parse('{"' + type + '": "' + MyID + '"}');
+
+        Chat.find(body)
+                .then(chat => {
+                    res.status(200).send(chat);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro el chat: ');
+                });
     },
-    findMyChat: (req, res) => {
+    findChat: (req, res) => {
         const MyID = req.body.MyID
         const ItID = req.body.ItID;
-        console.log(req.body);
+        let body = "";
+        
+        body = JSON.parse('{"customerId": "' + MyID + '", "restaurantId": "' + ItID +'"}')
 
-        Chat.find({customerId: MyID, restaurantId: ItID})
+
+        Chat.find(body)
                 .then(chat => {
-                    console.log("Chat encontrado")
-                    console.log(chat);
+
                     res.status(200).send(chat);
                 })
                 .catch(error => {

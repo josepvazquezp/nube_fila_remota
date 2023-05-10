@@ -6,6 +6,8 @@ const swaggerJsDoc= require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const swaggerConf = require('./swagger.config');
 
+const socketio = require("socket.io");
+
 require('dotenv').config();
 
 const app = express();
@@ -32,9 +34,34 @@ routes(app);
 
 mongoose.connect(mongoUrl).then(() =>{
     console.log('Se conecto correctamente a la base de datos');
-    app.listen(port, function() {
+    const server = app.listen(port, function() {
         console.log('app is running in port ' + port);
     });   
+
+    const io = socketio(server, {
+        cors: {
+            origins: "*",
+            methods: ["GET", "POST", "PUT", "DELETE"]
+        }
+    });
+
+    io.on("connection", socket => {
+        io.emit("Someone came in");
+        console.log("Alguien se conecto");
+
+        socket.on("sendMessage", (data) => {
+            //console.log("New Message: " + data);
+            socket.broadcast.emit("newMessage", {message: data});
+        });
+
+        socket.on("changeStatus", (data) => {
+            console.log("Estado de Orden Actualizado")
+            socket.broadcast.emit("receiveStatus", {status: data})
+
+        })
+
+    });
+
 }).catch(err => {
     console.log('No se pudo conectar a la base de datos', err);
 });

@@ -7,6 +7,9 @@ import { ChatService } from 'src/app/shared/services/chat.service';
 import { User } from 'src/app/shared/interfaces/user';
 import { Message } from 'src/app/shared/interfaces/message';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
+import { io } from 'socket.io-client';
+
+import { enviroment } from 'src/enviroments/enviroment';
 
 @Component({
   selector: 'app-chatdisplay',
@@ -30,30 +33,50 @@ export class ChatdisplayComponent {
     restaurant: ""
   };
   guestName: String = "";
+  socket: any;
 
 
   constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private chatService: ChatService, private restaurantService: RestaurantService){
     this.message = formBuilder.group({
       message: ['', Validators.required]
     });
+
     this.user = sharedData.getUser();
-    this.restaurantID = sharedData.getRestaurant();
+
+    this.setChat();
+    
+  }
+
+  ngOnInit(){
+    this.socket = io(enviroment.host);
+    this.socket.on("newMessage", (data: any) => {
+      console.log("Mensaje Nuevo: " + data) 
+      this.setChat();
+    });
+  }
+
+
+  setChat(){
+    let body = "";
+
+    if(this.user.type == "Cliente"){
+      this.restaurantID = this.sharedData.getRestaurant();
 
     this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
       this.guestName = response.name;
- 
     });
-
-
-    let body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.restaurantID + '"}');
+     body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.restaurantID + '", "type": "' + this.user.type + '"}');
+    }else{
+      this.guestName = this.sharedData.getClientID();
+      body = JSON.parse('{"MyID": "' + this.sharedData.getClientID() +'", "ItID": "' + this.user.restaurant + '", "type": "' + this.user.type + '"}');
+    }
+    
     this.chatService.getChat(body).subscribe((response: any) => {
-      this.thisChat = response;
-     this.loadChat()
+        this.thisChat = response;
+        this.loadChat()
         });
-
-      
-
   }
+
 
   loadChat(){
     this.chatready = true;
@@ -76,13 +99,19 @@ export class ChatdisplayComponent {
 
       let body = JSON.parse('{"sender": "' + this.user.name + '", "message": "' + this.message.value.message + '"}');
       this.clearMessage();
-      console.log(body)
+
       this.chatService.putMessage(body, this.thisChat[0]._id).subscribe((response: any) => {
 
+        this.socket.emit("sendMessage", this.message.value.message);
         this.thisChat[0] = response;
-          });
+      });
 
     }
+  }
+
+
+  goBack(){
+    this.router.navigate([this.sharedData.getOrigin()]);
   }
 
 }

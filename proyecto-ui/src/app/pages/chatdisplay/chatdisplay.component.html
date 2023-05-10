@@ -23,9 +23,9 @@
                 <h3>y</h3>
                 <h3>{{guestName}}</h3>
                 <br>
-                <a routerLink="/display_restaurant">
-                    <button id="back" mat-fab extended color="accent"><mat-icon>arrow_back_ios_new</mat-icon>Volver</button>
-                </a>
+                <button mat-fab extended id="buttonBack" color="accent" (click)="goBack()">
+                    <mat-icon>arrow_back_ios_new</mat-icon>Volver
+                </button>
             </div>
             
 

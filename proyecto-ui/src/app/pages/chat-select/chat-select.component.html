@@ -1,0 +1,40 @@
+<div id="box" >
+    <h1>Chats Disponibles</h1>
+
+    <div *ngIf="areChats">
+        <div *ngFor="let item of chatsDisplay">
+            <h2>Chat con:</h2>
+            <div *ngIf="user.type == 'Cliente'">
+                <h3>{{item.restaurantId}}</h3>
+                <br>
+                <button mat-fab extended color="primary" (click)="selectChat(item.restaurantId)">
+                    <mat-icon>arrow_circle_right</mat-icon>Ir al Chat
+                </button>
+                <br>
+                <br>
+            </div>
+            <div *ngIf="user.type != 'Cliente'">
+                <h3>{{item.customerId}}</h3>
+                <br>
+                <button mat-fab extended color="primary" (click)="selectChat(item.customerId)">
+                    <mat-icon>arrow_circle_right</mat-icon>Ir al Chat
+                </button>
+                <br>
+                <br>
+    
+            </div>
+        </div>
+    </div>
+    
+
+    <div *ngIf="!areChats">
+        <h1>Aún no se tienen Chats</h1>
+    </div>
+
+    <a routerLink="/">
+        <button mat-fab extended id="buttonBack" color="accent">
+            <mat-icon>arrow_back_ios_new</mat-icon>Volver
+        </button>
+    </a>
+    
+</div>

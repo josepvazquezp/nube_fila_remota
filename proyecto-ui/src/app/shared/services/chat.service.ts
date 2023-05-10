@@ -16,12 +16,18 @@ export class ChatService {
 
   getChat(body: String) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/chats/mine', body,  {headers} );
+    return this.http.post('http://localhost:3000/chats/find', body,  {headers} );
   }
 
   putMessage(body : string, id : String) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     return this.http.put('http://localhost:3000/chats/' + id, body, {headers});
   }
+
+  getMyChats(body: String) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/chats/allmine', body,  {headers} );
+  }
+
 
 }

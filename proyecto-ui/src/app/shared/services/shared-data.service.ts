@@ -34,6 +34,8 @@ export class SharedDataService {
     restaurant: ""
   };;
 
+  private clientID: String = "";
+
   userHome: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() { 
@@ -111,6 +113,16 @@ export class SharedDataService {
 
   getUser(){
     return this.user;
+  }
+
+
+  setClientID(id: String){
+    this.clientID = id;
+  }
+
+
+  getClientID(){
+    return this.clientID;
   }
 
   setTypeRestaurant(type: String) {

@@ -21,17 +21,28 @@ export class DisplayRestaurantComponent {
   location: String = "";
   image: String = "";
   products: Array<Product> = [];
-  user: Array<User> = [];
+  user: User = {
+    _id: "",
+    email: "",
+    password: "",
+    name: "",
+    type: "",
+    history: [],
+    status: "",
+    image:  "",
+    restaurant: ""
+  };
 
   idRestaurant: String = "";
   idCustomer: String = "";
   idOrder: String = "";
+  chatButtonDisplay:boolean = true;
 
   constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private orderService: OrderService) {
       this.idRestaurant = this.sharedDataService.getRestaurant();
       this.idCustomer = this.sharedDataService.getCustomer();
       this.idOrder = this.sharedDataService.getOrder();
-      this.user[0] = sharedDataService.getUser();
+      this.user = sharedDataService.getUser();
 
       this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
         this.name = response.name;
@@ -45,6 +56,10 @@ export class DisplayRestaurantComponent {
 
         this.products = response.products;
     });
+
+      if(this.user.type != "Cliente" && this.user.restaurant == this.idRestaurant){
+        this.chatButtonDisplay = false;
+      }
   }
 
   addOrder(id: String) {    
@@ -107,15 +122,15 @@ export class DisplayRestaurantComponent {
 
 
   prepareChat(){
-    if(this.user[0] != undefined){
+    if(this.user != undefined){
       this.sharedDataService.setOrigin("display_restaurant");
 
 
-      let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.idRestaurant + '"}');
+      let body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.idRestaurant + '"}');
       this.chatS.getChat(body).subscribe((response: any) => {
         if(response.length == 0){ //No hay chat aun
           
-          let bodytrue = JSON.parse('{"customerId": "' + this.user[0]._id +'", "restaurantId": "' + this.idRestaurant + '"}');
+          let bodytrue = JSON.parse('{"customerId": "' + this.user._id +'", "restaurantId": "' + this.idRestaurant + '"}');
   
           this.chatS.createChat(bodytrue).subscribe((response: any) => {
             this.router.navigate(['/chat']);

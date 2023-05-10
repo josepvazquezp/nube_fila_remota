@@ -10,7 +10,7 @@ table{
 
 #chat{
     width: 80%;
-    height: 70%;
+    height: 700px;
     background-color: white;   
 }
 
@@ -19,7 +19,6 @@ table{
     overflow-y: scroll;
     width: 100%;
     height: 100%;
-    
 }
 
 #menu{
@@ -28,7 +27,7 @@ table{
 
 #message{
     background-color: rgb(3, 3, 104);
-    height: 20%;
+    height: 30%;
 }
 
 
@@ -68,9 +67,15 @@ h3{
 }
 
 p{
+    margin-top: 5px;
     margin-left: 3%;
     font-size: 18px;
 }
+
+.dateDisplay{
+    font-size: 14px;   
+}
+
 
 ul{
     list-style-type: none;
@@ -78,9 +83,13 @@ ul{
 
 .container{
     width: 100%;
+    >.messageDisplay{
+        float: left;
+    }
     > .positionUser{
         float: right;
     }
+    
 }
 
 .container::after{
@@ -109,3 +118,8 @@ ul{
 #sendIcon{
     font-size: 25px;
 }
+
+img{
+    height: 80px;
+}
+

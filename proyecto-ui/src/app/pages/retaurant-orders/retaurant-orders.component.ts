@@ -8,6 +8,8 @@ import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 import { ProductService } from 'src/app/shared/services/product.service'; 
 import { OrderService } from 'src/app/shared/services/order.service';
 
+import { enviroment } from 'src/enviroments/enviroment';
+import { io } from 'socket.io-client';
 
 @Component({
   selector: 'app-retaurant-orders',
@@ -27,9 +29,15 @@ export class RetaurantOrdersComponent {
 
   idUserRestaurant: String = "";
 
+  socket: any;
+
   constructor(private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private productService: ProductService, private orderService: OrderService) {
     this.idUserRestaurant = this.sharedDataService.getUserRestaurant();
     this.getData();
+  }
+
+  ngOnInit(){
+    this.socket = io(enviroment.host);
   }
 
   getData() {
@@ -72,6 +80,7 @@ export class RetaurantOrdersComponent {
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
+      this.socket.emit("changeStatus", body.status);
       this.router.navigate(['/restaurant_orders']);
     });
   }
@@ -81,6 +90,7 @@ export class RetaurantOrdersComponent {
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
+      this.socket.emit("changeStatus", body.status);
       this.router.navigate(['/restaurant_orders']);
     });
   }
@@ -90,6 +100,7 @@ export class RetaurantOrdersComponent {
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
+      this.socket.emit("changeStatus", body.status);
       this.router.navigate(['/restaurant_orders']);
     });
   }
@@ -99,6 +110,7 @@ export class RetaurantOrdersComponent {
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
+      this.socket.emit("changeStatus", body.status);
       this.router.navigate(['/restaurant_orders']);
     });
   } 

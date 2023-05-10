@@ -108,6 +108,9 @@ export class DisplayRestaurantComponent {
 
   prepareChat(){
     if(this.user[0] != undefined){
+      this.sharedDataService.setOrigin("display_restaurant");
+
+
       let body = JSON.parse('{"MyID": "' + this.user[0]._id +'", "ItID": "' + this.idRestaurant + '"}');
       this.chatS.getChat(body).subscribe((response: any) => {
         if(response.length == 0){ //No hay chat aun

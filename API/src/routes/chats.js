@@ -101,6 +101,10 @@ router.get('/:id', controller.search);
  */
 router.delete('/:id', controller.delete);
 
-router.post("/mine", express.json(), controller.findMyChat);
+router.post("/find", express.json(), controller.findChat);
+
+//router.post("/restaurant", express.json(), controller.findClientChat);
+
+router.post("/allmine", express.json(), controller.findAllMine);
 
 module.exports = router;

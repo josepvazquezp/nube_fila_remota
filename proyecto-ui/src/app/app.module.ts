@@ -39,6 +39,7 @@ import { ViewRestaurantsComponent } from './pages/view-restaurants/view-restaura
 import { LoginComponent } from './pages/login/login.component';
 import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
 import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
+import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm
     ViewRestaurantsComponent,
     LoginComponent,
     PaymentSelectComponent,
-    PaymentConfirmComponent
+    PaymentConfirmComponent,
+    ChatSelectComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,9 @@ import { OrderService } from 'src/app/shared/services/order.service';
 import { Restaurant } from 'src/app/shared/interfaces/restaurant';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 
+import { enviroment } from 'src/enviroments/enviroment';
+import { io } from 'socket.io-client';
+
 @Component({
   selector: 'app-order-in-progress',
   templateUrl: './order-in-progress.component.html',
@@ -13,6 +16,7 @@ import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 export class OrderInProgressComponent {
   idOrder: String = "";
   actualOrder: number = 0;
+  socket: any;
 
   constructor(private sharedDataService: SharedDataService, private orderService: OrderService, private restaurantService: RestaurantService) {
     this.idOrder = this.sharedDataService.getOrder();
@@ -28,4 +32,14 @@ export class OrderInProgressComponent {
     
     });
   }
+
+  ngOnInit(){
+    this.socket = io(enviroment.host);
+    this.socket.on("receiveStatus", (data: any) => {
+      console.log("Status: " + data.status) 
+
+    });
+  }
+
+
 }

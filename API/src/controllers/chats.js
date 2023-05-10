@@ -20,11 +20,17 @@ const ChatsController = {
     update: (req, res) => {
         const id = req.params.id;
 
+        
+        let ts = Date.now()
+        let date = new Date(ts);
+        let stringDate = date.getHours()  + ":" + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+
+
         const newMessage = {
             sender: req.body.sender,
-            message: req.body.message
+            message: req.body.message,
+            date: stringDate
         }
-
         Chat.findByIdAndUpdate(id, {$push: {messages: newMessage}},  { new: true })
                         .then(chat => {
                             res.status(200).send(chat);
@@ -32,6 +38,7 @@ const ChatsController = {
                         .catch(error => {
                             res.status(400).send('No se pudo actualizar el chat');
                         });
+
     },
     
     list: (req, res) => {

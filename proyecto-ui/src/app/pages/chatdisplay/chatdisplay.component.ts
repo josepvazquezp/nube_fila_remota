@@ -10,6 +10,7 @@ import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 import { io } from 'socket.io-client';
 
 import { enviroment } from 'src/enviroments/enviroment';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-chatdisplay',
@@ -21,6 +22,7 @@ export class ChatdisplayComponent {
   chatready = false;
   thisChat: Array<Chat> = []
   restaurantID: String = "";
+  clientID: String = "";
   user: User = {
     _id: "",
     email: "",
@@ -34,14 +36,19 @@ export class ChatdisplayComponent {
   };
   guestName: String = "";
   socket: any;
+  myImage: String = "";
+  itImage: String = "";
+  clientEmail: String = "";
 
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router, private chatService: ChatService, private restaurantService: RestaurantService){
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private router: Router,
+    private chatService: ChatService, private restaurantService: RestaurantService, private userService: UserService){
     this.message = formBuilder.group({
       message: ['', Validators.required]
     });
 
     this.user = sharedData.getUser();
+    this.myImage = this.user.image;
 
     this.setChat();
     
@@ -64,11 +71,18 @@ export class ChatdisplayComponent {
 
     this.restaurantService.getRestaurant(this.restaurantID).subscribe((response: any) => {
       this.guestName = response.name;
+      this.itImage = response.image;
     });
      body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.restaurantID + '", "type": "' + this.user.type + '"}');
     }else{
-      this.guestName = this.sharedData.getClientID();
-      body = JSON.parse('{"MyID": "' + this.sharedData.getClientID() +'", "ItID": "' + this.user.restaurant + '", "type": "' + this.user.type + '"}');
+
+      this.clientID= this.sharedData.getClientID();
+      body = JSON.parse('{"MyID": "' + this.clientID +'", "ItID": "' + this.user.restaurant + '", "type": "' + this.user.type + '"}');
+      this.userService.getOneUser(this.clientID).subscribe((responseU: any) => {
+        this.guestName = responseU.name;
+        this.itImage = responseU.image;
+        this.clientEmail = responseU.email;
+      });
     }
     
     this.chatService.getChat(body).subscribe((response: any) => {

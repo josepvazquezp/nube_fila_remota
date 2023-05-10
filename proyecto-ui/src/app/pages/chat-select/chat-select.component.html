@@ -1,28 +1,23 @@
 <div id="box" >
     <h1>Chats Disponibles</h1>
+    <br>
 
     <div *ngIf="areChats">
         <div *ngFor="let item of chatsDisplay">
-            <h2>Chat con:</h2>
-            <div *ngIf="user.type == 'Cliente'">
-                <h3>{{item.restaurantId}}</h3>
-                <br>
-                <button mat-fab extended color="primary" (click)="selectChat(item.restaurantId)">
-                    <mat-icon>arrow_circle_right</mat-icon>Ir al Chat
-                </button>
-                <br>
-                <br>
+            <div class="chatCard">
+                <h2>Chat con:</h2>
+                <div >
+                    <img src="{{item.image}}" alt="image">
+                    <h2>{{item.name}}</h2>
+                    <h2 *ngIf="!type">{{item.email}}</h2>
+                    <button class="chatButton" mat-fab extended color="primary" (click)="selectChat(item.id)">
+                        <mat-icon>arrow_circle_right</mat-icon>Ir al Chat
+                    </button>
+                </div>
             </div>
-            <div *ngIf="user.type != 'Cliente'">
-                <h3>{{item.customerId}}</h3>
-                <br>
-                <button mat-fab extended color="primary" (click)="selectChat(item.customerId)">
-                    <mat-icon>arrow_circle_right</mat-icon>Ir al Chat
-                </button>
-                <br>
-                <br>
-    
-            </div>
+            <br>
+            <br>
+            <br>
         </div>
     </div>
     
@@ -31,6 +26,7 @@
         <h1>Aún no se tienen Chats</h1>
     </div>
 
+    <br>        
     <a routerLink="/">
         <button mat-fab extended id="buttonBack" color="accent">
             <mat-icon>arrow_back_ios_new</mat-icon>Volver

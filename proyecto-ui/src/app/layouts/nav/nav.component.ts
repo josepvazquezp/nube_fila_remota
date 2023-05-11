@@ -77,7 +77,7 @@ export class NavComponent {
     this.type = false;
 
     this.authService.deleteToken();
-    this.router.navigate(['/']);
+    window.location.href = '/';
   }
 
   login(isLogged: boolean){

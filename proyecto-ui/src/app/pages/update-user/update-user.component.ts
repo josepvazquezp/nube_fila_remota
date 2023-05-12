@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces/user';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { enviroment } from 'src/enviroments/enviroment';
 
 @Component({
   selector: 'app-update-user',
@@ -65,7 +66,7 @@ export class UpdateUserComponent {
           const formData = new FormData();
           formData.append("file", this.selectedFile);
           this.userService.changeImage(formData, id).subscribe((response: any) => {
-            let body = JSON.parse(JSON.stringify({image: "../../../assets/uploads/" + response.image}));
+            let body = JSON.parse(JSON.stringify({image: enviroment.host +  "/image/" + response.image}));
             
             this.userService.putUser(body, id).subscribe(response => {
               window.location.href = '/';
@@ -81,10 +82,10 @@ export class UpdateUserComponent {
           formData.append("file", this.selectedFile);
           this.userService.changeImage(formData, id).subscribe((response: any) => {
             let img = response.image;
-            let body = JSON.parse(JSON.stringify({image: "../../../assets/uploads/" + img}));
+            let body = JSON.parse(JSON.stringify({image: enviroment.host +  "/image/" + img}));
             
             this.userService.putUser(body, id).subscribe(response => {
-              body = {description: this.updateForm.value.description, image: "../../../assets/uploads/" + img};
+              body = {description: this.updateForm.value.description, image: enviroment.host +  "/image/" + img};
 
               this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
                 window.location.href = '/';

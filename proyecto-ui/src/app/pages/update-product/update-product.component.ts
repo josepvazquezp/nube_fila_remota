@@ -248,7 +248,8 @@ export class UpdateProductComponent {
                         Image: enviroment.host +  "/image/" + response.image
                         };
                 }
-                this.productService.updateProduct(id, body).subscribe(response => {
+                
+                this.productService.updateProduct(id, body).subscribe((response) => {
                         this.router.navigate(["/restaurant_products"]); 
                 });
         });

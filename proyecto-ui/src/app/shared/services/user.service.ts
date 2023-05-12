@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { enviroment } from 'src/enviroments/enviroment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,29 +10,29 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers() {
-    return this.http.get('http://localhost:3000/users');
+    return this.http.get(enviroment.host + '/users');
   }
 
   getOneUser(id : String) {
-    return this.http.get('http://localhost:3000/users/' + id);
+    return this.http.get(enviroment.host + '/users/' + id);
   }
 
   postUsers(body : string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/users', body, {headers});
+    return this.http.post(enviroment.host + '/users', body, {headers});
   }
 
   putUser(body : string, id : String) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
-    return this.http.put('http://localhost:3000/users/' + id, body, {headers});
+    return this.http.put(enviroment.host + '/users/' + id, body, {headers});
   }
 
   deleteUser(id : String) {
-    return this.http.delete('http://localhost:3000/users/' + id);
+    return this.http.delete(enviroment.host + '/users/' + id);
   }
 
   getUserCreate(email: string){
-    return this.http.get('http://localhost:3000/users/look/' + email);
+    return this.http.get(enviroment.host + '/users/look/' + email);
   }
 
   getUserLogin(body : string) {

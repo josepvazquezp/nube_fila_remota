@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { enviroment } from 'src/enviroments/enviroment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +13,21 @@ export class OrderService {
 
     body = JSON.parse(JSON.stringify(body));
 
-    return this.http.post('http://localhost:3000/orders', body); 
+    return this.http.post(enviroment.host + '/orders', body); 
   }
 
   getOrder(id: String) {
-    return this.http.get('http://localhost:3000/orders/' + id); 
+    return this.http.get(enviroment.host + '/orders/' + id); 
   }
 
   updateOrder(id: String, body: Object) {
 
     body = JSON.parse(JSON.stringify(body));
 
-    return this.http.put('http://localhost:3000/orders/' + id, body); 
+    return this.http.put(enviroment.host + '/orders/' + id, body); 
   }
 
   deleteOrder(id: String) {
-    return this.http.delete('http://localhost:3000/orders/' + id); 
+    return this.http.delete(enviroment.host + '/orders/' + id); 
   }
 }

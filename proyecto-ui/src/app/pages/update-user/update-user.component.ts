@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces/user';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { enviroment } from 'src/enviroments/enviroment';
 
 @Component({
   selector: 'app-update-user',
@@ -84,7 +85,7 @@ export class UpdateUserComponent {
             let body = JSON.parse(JSON.stringify({image: "../../../assets/uploads/" + img}));
             
             this.userService.putUser(body, id).subscribe(response => {
-              body = {description: this.updateForm.value.description, image: "../../../assets/uploads/" + img};
+              body = {description: this.updateForm.value.description, image: enviroment.host +  "/image/" + img};
 
               this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
                 window.location.href = '/';

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
+import { enviroment } from 'src/enviroments/enviroment';
+
 @Component({
   selector: 'app-update-product',
   templateUrl: './update-product.component.html',
@@ -148,7 +150,7 @@ export class UpdateProductComponent {
                 if(this.productForm.value.name == '' && this.productForm.value.description == '' && 
                         this.productForm.value.price == '' && this.productForm.value.available == '1' &&
                         this.selectedFile != null) {
-                        body = {Image: "../../../assets/uploads/" + response.image};
+                        body = {Image: enviroment.host +  "/image/" + response.image};
                 }
                 else if(this.productForm.value.name != '' && this.productForm.value.description == '' && 
                         this.productForm.value.price == '' && this.productForm.value.available == '1' &&

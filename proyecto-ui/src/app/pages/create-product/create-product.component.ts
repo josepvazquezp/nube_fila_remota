@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { enviroment } from 'src/enviroments/enviroment';
+
 import { ProductService } from 'src/app/shared/services/product.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
@@ -16,7 +18,11 @@ export class CreateProductComponent {
   selectedFile: any = null;
   idRestaurant: String = "";
 
-  constructor(private sharedDataService: SharedDataService, private productService: ProductService, formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private sharedDataService: SharedDataService, 
+    private productService: ProductService, 
+    private formBuilder: FormBuilder, 
+    private router: Router) {
     this.idRestaurant = this.sharedDataService.getUserRestaurant();
     
     this.productForm = formBuilder.group({
@@ -46,7 +52,7 @@ export class CreateProductComponent {
         const formData = new FormData();
         formData.append("file", this.selectedFile);
         this.productService.changeImage(formData, id).subscribe((response: any) => {
-          let body = {Image: "../../../assets/uploads/" + response.image};
+          let body = {Image: enviroment.host +  "/image/" + response.image};
           
           this.productService.updateProduct(id, body).subscribe((response: any) => {
             this.router.navigate(['/restaurant_products']);

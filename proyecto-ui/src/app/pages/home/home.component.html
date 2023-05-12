@@ -7,14 +7,14 @@
             <td>
             
                     <mat-form-field class="example-form-field">
-                        <mat-label>Search</mat-label>
+                        <mat-label>Buscar</mat-label>
 
                         <br>
 
                         <mat-chip-listbox>
                             <mat-chip-option color="accent" (click)="change(false, true)">Restaurantes</mat-chip-option>
                             <mat-chip-option color="accent" (click)="change(true, false)">Productos</mat-chip-option>
-                            <mat-chip-option (click)="change(true, true)" selected>Both</mat-chip-option>
+                            <mat-chip-option (click)="change(true, true)" selected>Ambos</mat-chip-option>
                         </mat-chip-listbox>
                         
                         <input matInput type="text" [(ngModel)]="value"(keyup.enter)="search()">

@@ -73,7 +73,7 @@ export class RetaurantOrdersComponent {
         }
       }
       
-    }, 1000);
+    }, 2000);
 
     this.restaurantService.getRestaurant(this.idUserRestaurant).subscribe((response: any) => {
       this.rName = response.name;

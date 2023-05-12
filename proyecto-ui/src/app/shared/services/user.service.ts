@@ -37,16 +37,16 @@ export class UserService {
 
   getUserLogin(body : string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/users/login', body, {headers});
+    return this.http.post(enviroment.host + '/users/login', body, {headers});
   }
 
 
   loadUser(token: string) {
-    return this.http.get('http://localhost:3000/users/load/' + token);
+    return this.http.get(enviroment.host + '/users/load/' + token);
   }
 
   changeImage(formData: FormData, id: string) {
-    return this.http.post('http://localhost:3000/users/upload/' + id, formData);
+    return this.http.post(enviroment.host + '/users/upload/' + id, formData);
   }
 
 }

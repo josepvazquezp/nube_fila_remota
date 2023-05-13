@@ -1,6 +1,17 @@
+@import "../../app.component.scss";
+
 div {
     width: 30%;
     margin: auto;
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 mat-form-field {
@@ -21,4 +32,8 @@ h3.price {
 
 .banner {
     background-color: rgba(156, 195, 225, 0.45);
+}
+
+button{
+    margin-top: 15px;
 }

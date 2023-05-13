@@ -92,7 +92,6 @@ export class CreateUserComponent {
 
        this.usersService.postUsers(body).subscribe((response: any) => {
         if(response != undefined){
-          console.log("Usuario creado: \n" + response);
           alert("Usuario Creado con Éxito!");
           this.router.navigate(['/']);
         }
@@ -122,7 +121,6 @@ export class CreateUserComponent {
             restaurant: restaurant._id
           }));
 
-          console.log(temp);
 
           this.usersService.putUser(temp, response._id).subscribe((response: any) => {
             alert("Usuario Restaurant Creado con Éxito!");

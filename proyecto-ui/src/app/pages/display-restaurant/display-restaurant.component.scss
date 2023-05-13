@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 table {
     margin-left: 6%;
     margin-right: 6%;
@@ -39,6 +41,15 @@ h3 {
     margin-right: 6%;
     float: left;
     box-sizing: border-box;
+    @include primerBreakpoint{
+        width: 30%;
+    }
+    @include tercerBreakpoint{
+        width: 45%;
+    }
+    @include cuartoBreakpoint{
+        width: 60%;
+    }
 }
 
 .container::after {
@@ -64,6 +75,9 @@ h3 {
 #b-green {
     background-color: rgb(0, 183, 74);
     color:white;
+    @include cuartoBreakpoint{
+        font-size: 12px;
+    }
 }
 
 #margin {

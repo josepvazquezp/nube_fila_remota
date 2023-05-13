@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 h1 {
     font-size: 30px;
     font-weight: bold;
@@ -11,12 +13,20 @@ p, h4 {
 }
 
 h3 {
+    font-size: 20px;
     margin-left: 10%;
 }
 
 mat-card {
     width: 25%;
     margin: auto;
+    overflow-wrap: break-word;
+    @include tercerBreakpoint{
+        width: 30%;
+    }
+    @include cuartoBreakpoint{
+        width: 50%;
+    }
 }
 
 .margins {
@@ -51,4 +61,24 @@ mat-card {
 
 .b-down-accent {
     margin-left: 10%;
+}
+
+#container{
+    margin: auto;
+    text-align: center;
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
+}
+
+button{
+    @include tercerBreakpoint{
+        margin-bottom: 15px;
+    }
 }

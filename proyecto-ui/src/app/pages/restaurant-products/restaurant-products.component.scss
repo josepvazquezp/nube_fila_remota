@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 h1 {
     font-size: 30px;
     font-weight: bold;
@@ -8,6 +10,7 @@ h1 {
 
 p, h4 {
     text-align: justify;
+    overflow-wrap: break-word;
 }
 
 h3 {
@@ -17,6 +20,15 @@ h3 {
 mat-card {
     width: 25%;
     margin: auto;
+    @include primerBreakpoint{
+        width: 30%;
+    }
+    @include tercerBreakpoint{
+        width: 45%;
+    }
+    @include cuartoBreakpoint{
+        width: 50%;
+    }
 }
 
 .banner {

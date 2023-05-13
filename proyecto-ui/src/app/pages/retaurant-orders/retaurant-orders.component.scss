@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 h1 {
     font-weight: bold;
     font-family: monospace;
@@ -19,6 +21,13 @@ h2.products {
     margin-right: 6%;
     float: left;
     box-sizing: border-box;
+    @include primerBreakpoint{
+        width: 250px;
+    }
+    @include cuartoBreakpoint{
+        width: 150px;
+    }
+
 }
 
 .container::after {

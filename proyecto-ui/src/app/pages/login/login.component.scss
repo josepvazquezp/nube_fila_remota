@@ -1,14 +1,30 @@
+@import "../../app.component.scss";
+
 #box{
-    
     width: 30%;
     margin: auto;
     margin-top: 6%;
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 mat-form-field{
     width: 60%;
+    @include tercerBreakpoint{
+        width: 90%;
+    }
 }
 
 button{
     font-size: 24px;
+    @include tercerBreakpoint{
+        margin-top: 15px;
+    }
 }

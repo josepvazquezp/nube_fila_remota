@@ -41,7 +41,6 @@ export class ChatSelectComponent {
 
 
     let body = JSON.parse('{"MyID": "' +definitiveID +'", "type": "' + this.user.type + '"}'); 
-    console.log(this.sharedData.getRestaurant());
 
     this.chatService.getMyChats(body).subscribe((response: any) => {
 
@@ -52,7 +51,6 @@ export class ChatSelectComponent {
 
           for(let i = 0; i < response.length; i++){
 
-            console.log(i);
             if(type){             
               this.restaurantService.getRestaurant(response[i].restaurantId).subscribe((responseR: any) => {
                 this.chatsDisplay[i] = {id: response[i].restaurantId, name: responseR.name, email: "", image: responseR.image}

@@ -1,23 +1,23 @@
 <mat-toolbar color="">
     <a routerLink="/"><img src="../../../assets/images/logo.png"></a>
-    <span>&nbsp;Fila Remota</span>
+    <span id="appName">&nbsp;Fila Remota</span>
     <span class="spacer"></span>
     <div *ngIf="!flagLogin">
         <a routerLink="/login">
-            <button  mat-fab extended color="primary">
+            <button class="noLogButton"  mat-fab extended color="primary">
                 <mat-icon>login</mat-icon>Iniciar sesión
             </button>
         </a>
         &nbsp;
         <a routerLink="/createuser">
-            <button  mat-fab extended color="primary">
+            <button class="noLogButton" mat-fab extended color="primary">
                 <mat-icon>person_add</mat-icon>Crear cuenta
             </button>
         </a>
     </div>
 
     <div *ngIf="flagLogin">
-        <button mat-fab extended color="primary" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <button id="menu" mat-fab extended color="primary" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <table>
                 <tr>
                     <td>

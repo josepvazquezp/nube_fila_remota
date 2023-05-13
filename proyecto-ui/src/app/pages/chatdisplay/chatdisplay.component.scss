@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 table, th, td {
     border: 5px solid black;
     border-collapse: collapse;
@@ -12,6 +14,9 @@ table{
     width: 80%;
     height: 700px;
     background-color: white;   
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 #scrollDiv{
@@ -22,7 +27,11 @@ table{
 }
 
 #menu{
-    background-color: rgba(156, 195, 225, 0.45);;
+    background-color: rgba(156, 195, 225, 0.45);
+    @include cuartoBreakpoint{
+        width: 150px;
+    }
+    
 }
 
 #message{
@@ -30,16 +39,11 @@ table{
     height: 30%;
 }
 
-
-
 mat-form-field{
     margin-left: 5%;
     justify-content: center;
     width: 70%;
-    
 }
-
-
 
 #menu{
     text-align: center;
@@ -48,8 +52,10 @@ mat-form-field{
 h3{
     font-size: 28px;
     font-weight: bolder;
+    @include cuartoBreakpoint{
+        font-size: 20px;
+    }
 }
-
 
 #heightAdjust{
     margin-bottom: 60%;
@@ -64,6 +70,7 @@ h3{
     border-radius: 15px;
     background-color: #ffc814;
     width: 35%;
+    overflow-wrap: break-word;
 }
 
 p{

@@ -137,8 +137,9 @@ export class UpdateProductComponent {
     }
     
 
-    if(this.selectedFile == null){
+    if(this.selectedFile == null) {
         this.productService.updateProduct(this.idProduct, body).subscribe((response: any) => {
+                this.router.navigate(['/restaurant_products']);
         });
     }
     else {

@@ -106,7 +106,7 @@ button{
     margin-right: 6%;
     float: left;
     box-sizing: border-box;
-    @include primerBreakpoint{
+    @include segundoBreakpoint{
         width: 30%;
     }
     @include tercerBreakpoint{

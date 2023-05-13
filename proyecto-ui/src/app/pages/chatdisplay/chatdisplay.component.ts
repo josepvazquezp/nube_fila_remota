@@ -57,7 +57,6 @@ export class ChatdisplayComponent {
   ngOnInit(){
     this.socket = io(enviroment.host);
     this.socket.on("newMessage", (data: any) => {
-      console.log("Mensaje Nuevo: " + data) 
       this.setChat();
     });
   }

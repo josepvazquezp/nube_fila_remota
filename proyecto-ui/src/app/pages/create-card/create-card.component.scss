@@ -1,6 +1,20 @@
+@import "../../app.component.scss";
+
 #general{
     width: 30%;
     margin: auto;
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include segundoBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 mat-form-field{
@@ -22,6 +36,7 @@ h3{
 }
 
 button{
+    margin-top: 15px;
     font-size: 24px
 }
 
@@ -30,12 +45,4 @@ button{
     background-color: rgb(0, 183, 74);
     color: white;
 
-}
-
-#buttonBack{
-    @extend button;
-}
-
-#typeContainer{
-    width: 30%;
 }

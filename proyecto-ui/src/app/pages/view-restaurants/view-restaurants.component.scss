@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 h1 {
     font-size: 70px;
     text-align: center;
@@ -8,10 +10,19 @@ h2 {
     font-size: 35px;
     font-family: monospace;
     color:rgb(3, 3, 104);
+    @include tercerBreakpoint{
+        font-size: 22px;
+    }
+    @include cuartoBreakpoint{
+        font-size: 20px;
+    }
 }
 
 .back {
     margin-left: 90%; 
+    @include tercerBreakpoint{
+        margin-left: 80%;
+    }
 }
 
 .container {
@@ -45,7 +56,14 @@ h2 {
 .img-container > img {
     opacity: 0.5;
     height: 400px;
+    @include tercerBreakpoint{
+        height: 260px;
+    }
+    @include cuartoBreakpoint{
+        height: 200px;
+    }
 }
+
 
 .center {
     position: absolute;

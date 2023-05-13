@@ -12,7 +12,6 @@ const ProductsController = {
             RestaurantId: req.body.RestaurantId
         };
 
-        console.log(newProduct);
 
         Product(newProduct).save()
                         .then(product => {

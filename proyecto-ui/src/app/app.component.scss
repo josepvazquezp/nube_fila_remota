@@ -1,0 +1,23 @@
+@mixin primerBreakpoint{
+    @media screen and (max-width: 1500px) {
+        @content;
+    }
+}
+
+@mixin segundoBreakpoint{
+    @media screen and (max-width: 1200px) {
+        @content;
+    }
+}
+
+@mixin tercerBreakpoint{
+    @media screen and (max-width: 800px) {
+        @content;
+    }
+}
+
+@mixin cuartoBreakpoint{
+    @media screen and (max-width: 500px) {
+        @content;
+    }
+}

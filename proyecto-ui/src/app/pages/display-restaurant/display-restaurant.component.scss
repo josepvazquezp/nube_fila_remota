@@ -1,6 +1,16 @@
+@import "../../app.component.scss";
+
 table {
     margin-left: 6%;
     margin-right: 6%;
+    @include segundoBreakpoint{
+        margin-left: 2%;
+    margin-right: 2%
+    }
+    @include tercerBreakpoint{
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 h1 {
@@ -8,6 +18,15 @@ h1 {
     font-weight: bold;
     font-family: monospace;
     color:rgb(3, 3, 104);
+    @include primerBreakpoint{
+
+    }
+    @include tercerBreakpoint{
+        font-size: 24px;
+    }
+    @include cuartoBreakpoint{
+        font-size: 20px;
+    }
 }
 
 h2 {
@@ -18,7 +37,14 @@ h2 {
 
 p, h4 {
     text-align: justify;
+    @include primerBreakpoint{
+
+    }
+    @include tercerBreakpoint{
+        font-size: 15px;
+    }
 }
+
 
 h3 {
     margin-left: 10%;
@@ -26,7 +52,48 @@ h3 {
 
 .banner {
     background-color: rgba(156, 195, 225, 0.45);
+    
+    @include primerBreakpoint{
+
+    }
+    @include tercerBreakpoint{
+        width: 100%;
+    }
+    
 }
+
+button{
+    width: 150px;
+    @include primerBreakpoint{
+
+    }
+    @include segundoBreakpoint{
+        font-size: 12px;
+        width: 130px;
+    }
+    @include cuartoBreakpoint{
+        width: 60px;
+    }
+}
+
+#restaurantImg {
+    width: 350px;
+    @include primerBreakpoint{
+
+    }
+    @include tercerBreakpoint{
+        width: 180px;
+    }
+    @include cuartoBreakpoint{
+        width: 150px;
+    }
+}
+
+#innerData{
+    width: 200px;
+}
+
+
 
 .container {
     margin-left: 6%;
@@ -39,6 +106,15 @@ h3 {
     margin-right: 6%;
     float: left;
     box-sizing: border-box;
+    @include primerBreakpoint{
+        width: 30%;
+    }
+    @include tercerBreakpoint{
+        width: 45%;
+    }
+    @include cuartoBreakpoint{
+        width: 60%;
+    }
 }
 
 .container::after {
@@ -52,18 +128,15 @@ h3 {
     flex: 1 1 auto;
 }
 
-#restaurantImg {
-    width: 350px;
-}
 
 #buttonChat {
-    width: 150px;
     background-color: rgb(3, 3, 104);
 }
 
 #b-green {
     background-color: rgb(0, 183, 74);
     color:white;
+    width: 150px;
 }
 
 #margin {

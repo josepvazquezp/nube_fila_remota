@@ -50,7 +50,6 @@ export class LoginComponent {
     '"password":"' + this.formLogin.value.password +'"}');
 
     this.loginService.login(body).subscribe((response: any) => {
-      // console.log(response)
       
      //Se encontró el usuario 
         

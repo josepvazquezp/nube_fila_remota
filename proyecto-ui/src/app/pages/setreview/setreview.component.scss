@@ -1,7 +1,17 @@
+@import "../../app.component.scss";
+
 #general{
     width: 30%;
     margin: auto;
-
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 mat-form-field{

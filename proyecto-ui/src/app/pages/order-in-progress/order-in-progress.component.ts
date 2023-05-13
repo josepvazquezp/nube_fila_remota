@@ -36,7 +36,7 @@ export class OrderInProgressComponent {
   ngOnInit(){
     this.socket = io(enviroment.host);
     this.socket.on("receiveStatus", (data: any) => {
-      console.log("Status: " + data.status) 
+    
 
       if(data.status == 'aceptada') {
         document.getElementById('aceptada')?.click();

@@ -9,7 +9,6 @@ const CardController = {
             Number: req.body.Number
         };
 
-        console.log(newCard);
 
         Card(newCard).save()
                         .then(card => {
@@ -70,7 +69,6 @@ const CardController = {
     },
     searchCreate: (req, res) => { 
         const Qnumber = req.params.number;
-        console.log("Tarjeta numero: " + Qnumber)
 
 
         Card.find({Number: Qnumber})
@@ -85,7 +83,6 @@ const CardController = {
     },
     listUserCards: (req, res) => {
         const Quser = req.params.user;
-        console.log("Tarjeta del usuario; " + Quser);
 
         Card.find({ID_User: Quser})
                 .then(cards => {

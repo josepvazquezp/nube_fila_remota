@@ -9,7 +9,6 @@ const RatingController = {
             Description: req.body.Description
         };
 
-        console.log(newRating);
 
         Rating(newRating).save()
                         .then(rating => {

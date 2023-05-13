@@ -21,7 +21,7 @@ const UsersController = {
             image: "default icon"
         };
 
-        console.log(newUser);
+
 
         User(newUser).save()
                         .then(user => {
@@ -99,7 +99,7 @@ const UsersController = {
 
     searchCreate: (req, res) => { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
         const Qemail = req.params.email;
-        console.log("Buscando con email: " + Qemail)
+
 
 
         User.find({email: Qemail})
@@ -133,7 +133,7 @@ const UsersController = {
                     res.status(200).send({user, token});
                 })
                 .catch(error => {
-                    console.log(error)
+
                     res.status(400).send('No se encontro el usuario');
                 });
     },
@@ -163,7 +163,7 @@ const UsersController = {
             User.findOne({email: user.email})
             .then(user => {
                 // Si encontro al usuario, generamos el token
-                console.log(user)
+
                 const token = jwt.sign({
                     id: user._id,
                     name: user.name, 
@@ -184,7 +184,6 @@ const UsersController = {
                     image: user.picture
                 };
         
-                console.log(newUser);
         
                 User(newUser).save()
                                 .then(user => {

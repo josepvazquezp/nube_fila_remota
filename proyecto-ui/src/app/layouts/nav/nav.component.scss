@@ -1,3 +1,5 @@
+@import "../../app.component.scss";
+
 .spacer {
     flex: 1 1 auto;
 }
@@ -17,4 +19,23 @@ a {
 
 #user_image {
     height: 30px;
+}
+
+#appName{
+    @include tercerBreakpoint{
+        font-size: 16px;
+    }
+}
+
+#menu{
+    @include tercerBreakpoint{
+        width: 250px;
+    }
+}
+
+.noLogButton{
+    @include cuartoBreakpoint{
+        width: 120px;
+        font-size: 12px;
+    }
 }

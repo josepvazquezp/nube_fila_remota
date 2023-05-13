@@ -63,15 +63,13 @@ export class UpdateCardComponent {
     body += '"Type": "' + this.type + '"';
     let tempMonth = this.card[0].Date.substring(0,2);
     let tempYear = this.card[0].Date.substring(3,5);
-    console.log(tempMonth);
-    console.log(tempYear);
 
     body += (this.updateForm.value.number != "" && this.updateForm.value.number.length == 16) ? ',"Number": "' + this.updateForm.value.number  + '"': ',"Number": "' + this.card[0].Number + '"';
-    console.log(body);
+
     
     body += (this.updateForm.value.month != ""  && this.updateForm.value.month >=  1 && this.updateForm.value.month <= 12) ? ',"Date": "' + 
     ((this.updateForm.value.month < 10) ? '0' +   this.updateForm.value.month : this.updateForm.value.month.toString())  + '/': ',"Date": "' + tempMonth + '/';
-    console.log(body);
+
     
     body += (this.updateForm.value.year != "" && this.updateForm.value.year >=  23 && this.updateForm.value.year <= 99) ? this.updateForm.value.year : tempYear;
 

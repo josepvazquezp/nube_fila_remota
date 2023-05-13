@@ -1,7 +1,18 @@
+@import "../../app.component.scss";
+
 #box{
     width: 20%;
     margin: auto;
     text-align: center;
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
 }
 
 

@@ -47,7 +47,6 @@ export class CreateProductComponent {
     if(this.productForm.value != '' || this.selectedFile != null) {
       this.productService.createProduct(body).subscribe((response: any) => {
         let id: any = response.product._id;
-        console.log(response.product._id);
   
         const formData = new FormData();
         formData.append("file", this.selectedFile);

@@ -40,6 +40,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
 import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
+import { SpinnerComponent } from './pages/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
     LoginComponent,
     PaymentSelectComponent,
     PaymentConfirmComponent,
-    ChatSelectComponent
+    ChatSelectComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

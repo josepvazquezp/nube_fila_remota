@@ -11,7 +11,9 @@ import { OrderService } from 'src/app/shared/services/order.service';
 import { enviroment } from 'src/enviroments/enviroment';
 
 import { io } from 'socket.io-client';
-import { MatStepper } from '@angular/material/stepper';
+
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-retaurant-orders',
@@ -37,12 +39,15 @@ export class RetaurantOrdersComponent {
 
   status: Array<string> = ['creada', 'aceptada', 'lista', 'finalizada'];
 
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
   constructor(
     private router:Router, 
     private sharedDataService: SharedDataService, 
     private restaurantService: RestaurantService, 
     private productService: ProductService, 
-    private orderService: OrderService) {
+    private orderService: OrderService,
+    private snackBar: MatSnackBar) {
     this.idUserRestaurant = this.sharedDataService.getUserRestaurant();
     this.getData();
   }
@@ -53,6 +58,9 @@ export class RetaurantOrdersComponent {
 
   getData() {
     this.keys = [];
+    let snackBarRef = this.snackBar.openFromComponent(SpinnerComponent, {
+      verticalPosition: this.verticalPosition
+    });
 
     setTimeout(() => {
       for(let i = 0 ; i < this.keys.length ; i++) {
@@ -72,7 +80,8 @@ export class RetaurantOrdersComponent {
           }
         }
       }
-      
+
+      snackBarRef.dismiss();
     }, 3000);
 
     this.restaurantService.getRestaurant(this.idUserRestaurant).subscribe((response: any) => {

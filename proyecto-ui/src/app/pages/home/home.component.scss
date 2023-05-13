@@ -57,7 +57,7 @@ mat-form-field {
     float: left;
     box-sizing: border-box;
     text-align: center;
-    @include primerBreakpoint{
+    @include segundoBreakpoint{
         width: 30%;
     }
     @include tercerBreakpoint{

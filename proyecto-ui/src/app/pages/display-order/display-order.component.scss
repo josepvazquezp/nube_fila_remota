@@ -15,17 +15,24 @@ p, h4 {
 h3 {
     font-size: 20px;
     margin-left: 10%;
+    margin-top: 28px;
 }
 
 mat-card {
     width: 25%;
     margin: auto;
     overflow-wrap: break-word;
+    @include primerBreakpoint{
+        width: 40%;
+    }
+    @include segundoBreakpoint{
+        width: 60%;
+    }
     @include tercerBreakpoint{
-        width: 30%;
+        width: 80%;
     }
     @include cuartoBreakpoint{
-        width: 50%;
+        width: 90%;
     }
 }
 
@@ -78,7 +85,6 @@ mat-card {
 }
 
 button{
-    @include tercerBreakpoint{
-        margin-bottom: 15px;
-    }
+    margin-bottom: 15px;
+
 }

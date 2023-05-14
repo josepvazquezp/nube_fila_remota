@@ -41,11 +41,15 @@ p, h4 {
 }
 
 
-h3 {
+h3.review {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0.01%;
+}
+
+h3{
     margin-left: 10%;
-    @include cuartoBreakpoint{
-        font-size: 16px;
-    }
 }
 
 .banner {
@@ -132,7 +136,7 @@ button{
     margin-left: 6%;
 }
 
-#star{
+.stars{
     height: 32px;
     width: 32px;
     font-size: 32px;
@@ -140,4 +144,5 @@ button{
 
 #rating{
     vertical-align: middle;
+    width: 100%;
 }

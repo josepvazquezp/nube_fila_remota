@@ -67,17 +67,32 @@
                             </td>
                         </tr>
                         <tr>
-
-                            <table id="rating">
-                                <td >
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table id="rating">
+                                    <tr>
+                                        <td>
+                                            <h3 class="review">Calificación:</h3>
+                                        </td>
+                                        <td>
+                                            <button *ngFor="let index of ratingArr;index as i" mat-icon-button disabled>
+                                                <mat-icon class="stars" color="primary">
+                                                    {{displayStars(i)}}
+                                                </mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
                                     
-                                    <mat-icon id="star" color="primary">star</mat-icon>
-                                </td>
-                                <td>
-                                    <h3>{{ratingDisplay}} / 5<br>Reseñas:<br>{{ratingNumber}}</h3>
-                                </td>
-                            </table>
+                                </table>
+                            </td>
                             
+                            <td>
+                                <h3 class="review">Reseñas: {{ratingNumber}}</h3>
+                            </td>
                         </tr>
                     </table>
                     

@@ -43,6 +43,8 @@ export class DisplayRestaurantComponent {
   ratingNumber: number = 0;
   ratingDisplay: string = "";
 
+  ratingArr = [1,2,3,4,5];
+
   constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService,
     private orderService: OrderService, private ratingService: ReviewService) {
       this.idRestaurant = this.sharedDataService.getRestaurant();
@@ -72,9 +74,9 @@ export class DisplayRestaurantComponent {
           this.ratingsAverage += response[i].Rating;
         }
         this.ratingsAverage = this.ratingsAverage / response.length;
+        this.ratingsAverage = Math.ceil(this.ratingsAverage);
         this.ratingNumber = response.length;
-        this.ratingDisplay = this.ratingsAverage.toFixed(1);
-
+        this.ratingDisplay = this.ratingsAverage.toFixed(0);
       });
 
   }
@@ -160,11 +162,14 @@ export class DisplayRestaurantComponent {
     }else{
       this.router.navigate(['/login']);
     }
+  }
 
-    
-
-
-
+  displayStars(index: number){
+    if (this.ratingsAverage >= index + 1) {
+      return 'star';
+    } else {
+      return 'star_border';
+    }
   }
 
 

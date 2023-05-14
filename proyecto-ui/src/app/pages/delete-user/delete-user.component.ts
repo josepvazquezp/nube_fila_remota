@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces/user';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -26,7 +27,12 @@ export class DeleteUserComponent {
   };
   formDelete: FormGroup;
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router){
+  constructor(
+    private sharedData: SharedDataService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private authService: AuthService,
+    private restaurantService: RestaurantService) {
     this.isLogged = sharedData.getLog();
     this.name = sharedData.getName();
     this.user = sharedData.getUser();
@@ -61,8 +67,16 @@ export class DeleteUserComponent {
 
 
     this.userService.deleteUser(this.user._id).subscribe((response: any) => {
-      alert("Usuario Eliminado")
-      this.router.navigate(['/']);
+      if(response.restaurant) {
+        this.restaurantService.deleteRestaurant(this.user.restaurant).subscribe((response: any) => {
+          this.authService.deleteToken();
+          window.location.href = '/';
+        });
+      }
+      else {
+        this.authService.deleteToken();
+        window.location.href = '/';
+      }
     });
   }  
 

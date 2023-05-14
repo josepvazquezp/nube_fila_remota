@@ -18,7 +18,7 @@ const UsersController = {
             type: req.body.type,
             history: [],
             status: "ok",
-            image: "default icon"
+            image: "../../../assets/images/logo.png"
         };
 
 

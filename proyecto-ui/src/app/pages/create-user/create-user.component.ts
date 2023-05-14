@@ -6,6 +6,9 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
 
 import { User } from 'src/app/shared/interfaces/user';
+import { LoginService } from 'src/app/shared/services/login.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 
 @Component({
   selector: 'app-create-user',
@@ -21,7 +24,14 @@ export class CreateUserComponent {
 
   type: string = "Cliente";
 
-  constructor(private usersService: UserService, private restaurantService: RestaurantService, formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private usersService: UserService, 
+    private restaurantService: RestaurantService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private loginService: LoginService,
+    private authService: AuthService,
+    private sharedData: SharedDataService) {
     this.userForm = formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -91,12 +101,19 @@ export class CreateUserComponent {
        ' "password":"' + this.userForm.value.pass1 +'","type":"' + this.type +'"  }');
 
        this.usersService.postUsers(body).subscribe((response: any) => {
-        if(response != undefined){
-          alert("Usuario Creado con Éxito!");
-          this.router.navigate(['/']);
-        }
-        
-
+        let body =  JSON.parse('{"email":"' + response.email +'",'+
+                                   '"password":"' + response.password +'"}');
+            this.loginService.login(body).subscribe((response: any) => {
+      
+              //Se encontró el usuario 
+                 this.sharedData.setLog(true);
+                 this.sharedData.setName(response.user.name);
+                 this.sharedData.setUser(response.user);
+         
+                 this.authService.setToken(response.token);
+         
+                 this.router.navigate(['/']);
+             });
        });
   }
 
@@ -109,7 +126,7 @@ export class CreateUserComponent {
     }));
 
     let bRes = JSON.parse(JSON.stringify({
-      name: this.restaurantForm.value.nameRestaurant,
+      name: this.restaurantForm.value.restaurantName,
       description: this.restaurantForm.value.description,
       type: this.restaurantForm.value.category,
       location: this.restaurantForm.value.location
@@ -123,8 +140,20 @@ export class CreateUserComponent {
 
 
           this.usersService.putUser(temp, response._id).subscribe((response: any) => {
-            alert("Usuario Restaurant Creado con Éxito!");
-            this.router.navigate(['/']);
+            let body =  JSON.parse('{"email":"' + response.email +'",'+
+                                   '"password":"' + response.password +'"}');
+            this.loginService.login(body).subscribe((response: any) => {
+      
+              //Se encontró el usuario 
+                 this.sharedData.setLog(true);
+                 this.sharedData.setName(response.user.name);
+                 this.sharedData.setUser(response.user);
+         
+                 this.authService.setToken(response.token);
+         
+                 this.router.navigate(['/']);
+             });
+
           });
 
         });

@@ -1,4 +1,5 @@
 const Restaurant = require('./../models/restaurant');
+const Product = require('./../models/product');
 
 const RestaurantsController = {
     create: (req, res) => {
@@ -8,7 +9,7 @@ const RestaurantsController = {
             description: req.body.description,
             type: req.body.type,
             location: req.body.location,
-            image: "default icon",
+            image: "../../../assets/images/logo.png",
             orders: []
         };
 
@@ -58,7 +59,11 @@ const RestaurantsController = {
         const id = req.params.id;
         Restaurant.findByIdAndDelete(id)
                                 .then(restaurant => {
-                                    res.status(200).send(restaurant);
+                                    Product.deleteMany({ 
+                                        RestaurantId: {$gte: id}
+                                    }).then(products => {
+                                        res.status(200).send({restaurant, products});
+                                    }) 
                                 })
                                 .catch(error => {
                                     res.status(400).send('No se encontro el restaurant: ' + id);

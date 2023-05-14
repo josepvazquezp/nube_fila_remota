@@ -7,7 +7,6 @@ import { User } from 'src/app/shared/interfaces/user';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { LoginService } from 'src/app/shared/services/login.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',

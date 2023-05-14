@@ -69,7 +69,14 @@ export class UpdateUserComponent {
             let body = JSON.parse(JSON.stringify({image: enviroment.host +  "/image/" + response.image}));
             
             this.userService.putUser(body, id).subscribe(response => {
-              window.location.href = '/';
+              if(this.idRestaurant) {
+                this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
+                  window.location.href = '/';
+                });
+              }
+              else {
+                window.location.href = '/';
+              }
             });
           });
         }

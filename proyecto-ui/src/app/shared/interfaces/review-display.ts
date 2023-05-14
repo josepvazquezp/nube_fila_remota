@@ -3,5 +3,12 @@ export interface ReviewDisplay {
     email: String,
     image: String,
     description: String,
-    rating: number
+    rating: number,
+    total: number,
+    products: {
+        Name: String,
+        Image: String,
+        Price: number,
+        Quantity: number
+    }[]
 }

@@ -3,6 +3,7 @@ const {Schema, model} = require('mongoose');
 const ratingSchema = new Schema({
     ID_Evaluator: {type: String},
     ID_Evaluated: {type: String},
+    ID_Order: {type: String},
     Rating: {type: Number},
     Description: {type: String}
 });

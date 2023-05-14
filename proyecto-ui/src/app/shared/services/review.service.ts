@@ -13,4 +13,8 @@ export class ReviewService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     return this.http.post(enviroment.host + '/ratings/', body,  {headers} );
   }
+
+  getRatingR(id: String) {
+    return this.http.get(enviroment.host + '/ratings/mineR/' + id);
+  }
 }

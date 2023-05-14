@@ -29,6 +29,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { PaymentSelectComponent } from './pages/payment-select/payment-select.component';
 import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
+import { RestaurantReviewsComponent } from './pages/restaurant-reviews/restaurant-reviews.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -69,7 +70,10 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "paymentSelect", component: PaymentSelectComponent, canActivate: [AuthGuard]},
   { path: "paymentConfirm", component : PaymentConfirmComponent, canActivate: [AuthGuard]},
-  { path: "chatSelect", component: ChatSelectComponent, canActivate: [AuthGuard]}
+  { path: "chatSelect", component: ChatSelectComponent, canActivate: [AuthGuard]},
+  { path: "restaurantReviews", component: RestaurantReviewsComponent, canActivate: [AuthGuard], data:{
+    type: 'Restaurant'
+  } }
 ];
 
 @NgModule({

@@ -41,6 +41,7 @@ import { PaymentSelectComponent } from './pages/payment-select/payment-select.co
 import { PaymentConfirmComponent } from './pages/payment-confirm/payment-confirm.component';
 import { ChatSelectComponent } from './pages/chat-select/chat-select.component';
 import { SpinnerComponent } from './pages/spinner/spinner.component';
+import { RestaurantReviewsComponent } from './pages/restaurant-reviews/restaurant-reviews.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { SpinnerComponent } from './pages/spinner/spinner.component';
     PaymentSelectComponent,
     PaymentConfirmComponent,
     ChatSelectComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    RestaurantReviewsComponent
   ],
   imports: [
     BrowserModule,

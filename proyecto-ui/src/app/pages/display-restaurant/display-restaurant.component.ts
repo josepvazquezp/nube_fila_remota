@@ -9,6 +9,8 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { ChatService } from 'src/app/shared/services/chat.service';
 import { User } from 'src/app/shared/interfaces/user';
 
+import { ReviewService } from 'src/app/shared/services/review.service';
+
 @Component({
   selector: 'app-display-restaurant',
   templateUrl: './display-restaurant.component.html',
@@ -37,8 +39,12 @@ export class DisplayRestaurantComponent {
   idCustomer: String = "";
   idOrder: String = "";
   chatButtonDisplay:boolean = true;
+  ratingsAverage: number = 0.0;
+  ratingNumber: number = 0;
+  ratingDisplay: string = "";
 
-  constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService, private orderService: OrderService) {
+  constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService,
+    private orderService: OrderService, private ratingService: ReviewService) {
       this.idRestaurant = this.sharedDataService.getRestaurant();
       this.idCustomer = this.sharedDataService.getCustomer();
       this.idOrder = this.sharedDataService.getOrder();
@@ -60,6 +66,17 @@ export class DisplayRestaurantComponent {
       if(this.user.type != "Cliente" && this.user.restaurant == this.idRestaurant){
         this.chatButtonDisplay = false;
       }
+
+      this.ratingService.getRatingR(this.idRestaurant).subscribe((response: any) => {
+        for(let  i = 0; i < response.length; i++){
+          this.ratingsAverage += response[i].Rating;
+        }
+        this.ratingsAverage = this.ratingsAverage / response.length;
+        this.ratingNumber = response.length;
+        this.ratingDisplay = this.ratingsAverage.toFixed(1);
+
+      });
+
   }
 
   addOrder(id: String) {    

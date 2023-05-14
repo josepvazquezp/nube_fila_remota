@@ -101,4 +101,6 @@ router.get('/:id', controller.search);
  */
 router.delete('/:id', controller.delete);
 
+router.get('/mineR/:id', controller.listMineR);
+
 module.exports = router;

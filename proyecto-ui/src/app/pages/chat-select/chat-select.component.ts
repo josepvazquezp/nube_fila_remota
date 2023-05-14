@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { User } from 'src/app/shared/interfaces/user';
-import { Chat } from 'src/app/shared/interfaces/chat';
 import { ChatService } from 'src/app/shared/services/chat.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Router } from '@angular/router';

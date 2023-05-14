@@ -18,9 +18,6 @@ h1 {
     font-weight: bold;
     font-family: monospace;
     color:rgb(3, 3, 104);
-    @include primerBreakpoint{
-
-    }
     @include tercerBreakpoint{
         font-size: 24px;
     }
@@ -33,13 +30,11 @@ h2 {
     font-size: 20px;
     font-weight: bold;
     font-family: monospace;
+
 }
 
 p, h4 {
     text-align: justify;
-    @include primerBreakpoint{
-
-    }
     @include tercerBreakpoint{
         font-size: 15px;
     }
@@ -48,14 +43,14 @@ p, h4 {
 
 h3 {
     margin-left: 10%;
+    @include cuartoBreakpoint{
+        font-size: 16px;
+    }
 }
 
 .banner {
     background-color: rgba(156, 195, 225, 0.45);
     
-    @include primerBreakpoint{
-
-    }
     @include tercerBreakpoint{
         width: 100%;
     }
@@ -64,9 +59,6 @@ h3 {
 
 button{
     width: 150px;
-    @include primerBreakpoint{
-
-    }
     @include segundoBreakpoint{
         font-size: 12px;
         width: 130px;
@@ -78,9 +70,6 @@ button{
 
 #restaurantImg {
     width: 350px;
-    @include primerBreakpoint{
-
-    }
     @include tercerBreakpoint{
         width: 180px;
     }
@@ -141,4 +130,14 @@ button{
 
 #margin {
     margin-left: 6%;
+}
+
+#star{
+    height: 32px;
+    width: 32px;
+    font-size: 32px;
+}
+
+#rating{
+    vertical-align: middle;
 }

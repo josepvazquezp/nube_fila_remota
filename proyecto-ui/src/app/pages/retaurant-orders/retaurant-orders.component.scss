@@ -71,3 +71,7 @@ h3.price {
     pointer-events: none !important;
     cursor: not-allowed;
 }
+
+.aceptada, .lista, .finalizada {
+    display: none;
+}

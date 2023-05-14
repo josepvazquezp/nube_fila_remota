@@ -12,3 +12,7 @@ h1 {
     pointer-events: none !important;
     cursor: not-allowed;
 }
+
+#aceptada, #lista, #finalizada {
+    display: none;
+}

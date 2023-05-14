@@ -5,6 +5,7 @@ const RatingController = {
         let newRating = {
             ID_Evaluator: req.body.ID_Evaluator,
             ID_Evaluated: req.body.ID_Evaluated,
+            ID_Order: req.body.ID_Order,
             Rating: req.body.Rating,
             Description: req.body.Description
         };
@@ -66,7 +67,19 @@ const RatingController = {
                                 .catch(error => {
                                     res.status(400).send('No se encontro la reseña con ID:' + id);
                                 });
+    },
+    listMineR: (req, res) => {
+        const id = req.params.id;
+
+        Rating.find({ID_Evaluated: id})
+                .then(rating => {
+                    res.status(200).send(rating);
+                })
+                .catch(error => {
+                    res.status(400).send('No se encontro la reseña con ID: ' + id);
+                });
     }
+
 }
 
 module.exports = RatingController;

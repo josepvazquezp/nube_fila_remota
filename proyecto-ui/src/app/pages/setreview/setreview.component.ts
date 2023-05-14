@@ -59,6 +59,7 @@ export class SetreviewComponent {
     body = '{' +
     '"ID_Evaluator": "' + this.customerID + '",' +
     '"ID_Evaluated": "' + this.restaurantID + '",' +
+    '"ID_Order": "' + this.sharedData.getOrder() + '",' +
     '"Rating": ' + this.rating + ',' + 
     '"Description": "' + Description + '"}';   
 

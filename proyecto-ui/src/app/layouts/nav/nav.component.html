@@ -62,6 +62,12 @@
                     <span>Ordenes</span>
                 </button>
             </a>
+            <a class="submenu" routerLink="/restaurantReviews">
+                <button mat-menu-item *ngIf="type">
+                    <mat-icon>star</mat-icon>
+                    <span>Reseñas</span>
+                </button>
+            </a>
             <a class="submenu" routerLink="/deleteuser">
                 <button mat-menu-item>
                     <mat-icon>delete_forever</mat-icon>

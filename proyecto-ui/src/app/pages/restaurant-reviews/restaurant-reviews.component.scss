@@ -1,0 +1,94 @@
+@import "../../app.component.scss";
+
+#box{
+    width: 33%;
+    margin: auto;
+    
+    @include primerBreakpoint{
+        width: 500px;
+    }
+    @include tercerBreakpoint{
+        width: 400px;
+    }
+    @include cuartoBreakpoint{
+        width: 300px;
+    }
+}
+
+a{
+    text-decoration: none;
+}
+
+
+h1{
+    font-size: 38px;
+    line-height: 40px;
+    text-align: center;
+}
+
+h2{
+    font-size: 32px;
+    margin-left: 20px;
+    @include tercerBreakpoint{
+        
+    }
+    @include cuartoBreakpoint{
+        font-size: 26px;
+    }
+}
+
+
+h3{
+    margin-left: 20px;
+    font-size: 26px;
+}
+
+h4{
+    margin-left: 20px;
+    font-size: 24px;
+    line-height: 28px;
+    @include tercerBreakpoint{
+        
+    }
+    @include cuartoBreakpoint{
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+img{
+    text-align: center;
+    margin-left: 20px;
+    height: 60px;
+}
+
+.reviewCard{
+    border-radius: 15px;
+    background-color: rgba(156, 195, 225, 0.45);
+    overflow-wrap: break-word;
+    border: solid 4px black;
+}
+
+
+.stars{
+    height: 48px;
+    width: 48px;
+    font-size: 48px;
+}
+
+.starsButton{
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+}
+
+.horizontal{
+    display: flex;
+    
+    justify-content: space-between;
+    border-top: dashed 2px black;
+    border-bottom: dashed 2px black;
+    @include tercerBreakpoint{
+        display: grid;
+    }
+}

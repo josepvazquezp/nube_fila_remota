@@ -3,6 +3,7 @@
 #box{
     width: 33%;
     margin: auto;
+    margin-top: 2%;
     @include primerBreakpoint{
         width: 500px;
     }
@@ -30,8 +31,9 @@ button{
     font-size: 28px;
 }
 
-h1{
-    font-size: 32px;
+h1 {
+    font-size: 36px;
+    color:rgb(3, 3, 104);
 }
 
 h3{

@@ -3,6 +3,7 @@
 #general{
     width: 30%;
     margin: auto;
+    margin-top: 2%;
     @include primerBreakpoint{
         width: 500px;
     }
@@ -28,6 +29,7 @@ a{
 
 h1{
     font-size: 36px;
+    color:rgb(3, 3, 104);
 }
 
 h3{

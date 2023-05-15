@@ -16,7 +16,6 @@ table {
 h1 {
     font-size: 30px;
     font-weight: bold;
-    font-family: monospace;
     color:rgb(3, 3, 104);
     @include tercerBreakpoint{
         font-size: 24px;
@@ -29,8 +28,6 @@ h1 {
 h2 {
     font-size: 20px;
     font-weight: bold;
-    font-family: monospace;
-
 }
 
 p, h4 {
@@ -42,7 +39,6 @@ p, h4 {
 
 
 h3.review {
-    font-family: monospace;
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 0.01%;

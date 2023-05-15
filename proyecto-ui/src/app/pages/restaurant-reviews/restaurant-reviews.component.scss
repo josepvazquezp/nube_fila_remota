@@ -25,14 +25,12 @@ h1{
     line-height: 38px;
     text-align: center;
     font-size: 36px;
-    font-family: monospace;
     color:rgb(3, 3, 104);
 }
 
 h2{
     font-size: 32px;
     margin-left: 20px;
-    font-family: monospace;
     @include tercerBreakpoint{
         
     }
@@ -45,7 +43,6 @@ h2{
 h3{
     margin-left: 20px;
     font-size: 26px;
-    font-family: monospace;
     font-weight: bold;
 }
 
@@ -53,7 +50,6 @@ h4{
     margin-left: 20px;
     font-size: 24px;
     line-height: 28px;
-    font-family: monospace;
     @include tercerBreakpoint{
         
     }

@@ -74,6 +74,7 @@ button{
 
 #restaurantImg {
     width: 350px;
+    border-radius: 50%;
     @include tercerBreakpoint{
         width: 180px;
     }

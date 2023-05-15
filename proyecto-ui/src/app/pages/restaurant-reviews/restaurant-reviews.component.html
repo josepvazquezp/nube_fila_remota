@@ -6,7 +6,8 @@
             <div class="reviewCard">
                 <br>
                 <h2>De: {{item.name}}<br>{{item.email}}</h2>
-                <img src="{{item.image}}" alt="image">
+                <img src="{{item.image}}" class="user" alt="image">
+                <br>
                 <br>
                 <h3>Detalles de la Orden:</h3>
                             <div class="horizontal" *ngFor="let product of item.products">
@@ -16,7 +17,8 @@
                                 <h4>Cantidad: {{product.Quantity}}</h4>
                             </div>
                 <h4>Total: ${{item.total}}</h4>
-
+                <br>
+                <br>
                 <h3>Puntaje:</h3>
                 <button *ngFor="let index of ratingArr;index as i" class="starsButton" mat-icon-button disabled>
                     <mat-icon *ngIf="showStar(i, item.rating)" class="stars" color="primary">
@@ -24,7 +26,9 @@
                     </mat-icon>
                 </button>
                 <br>
-                <h4>Dice:<br>{{item.description}}</h4>
+                <br>
+                <h3>Dice:</h3>
+                <h4>{{item.description}}</h4>
                 <br>
             </div>
             <br><br>

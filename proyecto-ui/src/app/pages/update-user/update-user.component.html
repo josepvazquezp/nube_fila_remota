@@ -1,10 +1,10 @@
 <div>
     <h1>Modificando Cuenta</h1>
-    <h2>Usuario: {{user.name}}</h2>
+    <h2>Usuario: <h2 id="no-bold">{{user.name}}</h2></h2>
     <br>
     
     <form [formGroup]="updateForm">
-        <h2>Sube tu imagen de perfil:</h2>
+        <h2>Sube tu nueva imagen de perfil:</h2>
         <button type="button" mat-raised-button (click)="fileInput.click()">Seleccionar archivo</button>
         <input type="file" class="file-upload" hidden (change)="onFileSelected($event)" #fileInput name="file" accept="image/png,image/jpeg">
         <span class="file-name">{{selectedFile?.name}}</span>
@@ -12,12 +12,13 @@
         <br>
         <br>
         <mat-form-field *ngIf="type">
-            <mat-label>Descripción</mat-label>
+            <mat-label>Nueva descripción</mat-label>
             <input matInput name="description" type="text" placeholder="Escriba su nueva descripción" formControlName="description">
         </mat-form-field>
 
         <br>
-    
+        <br>
+        <br>
        
         <button type="submit" mat-fab extended id="buttonUpdate" color="primary" (click)="updateUser()">
             <mat-icon>upgrade</mat-icon>Actualizar Usuario

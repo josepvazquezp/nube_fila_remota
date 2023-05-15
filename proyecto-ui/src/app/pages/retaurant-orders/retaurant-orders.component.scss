@@ -1,13 +1,20 @@
 @import "../../app.component.scss";
 
 h1 {
-    font-weight: bold;
+    font-size: 36px;
     font-family: monospace;
     color:rgb(3, 3, 104);
+    margin-left: 6%;
+}
+
+h2 {
+    margin-left: 6%;
+    font-family: monospace;
 }
 
 h2.products {
     color: rgb(255, 102, 0);
+    font-weight: bold;
 }
 
 .container {
@@ -44,6 +51,10 @@ h3.price {
     background-color: rgba(156, 195, 225, 0.45);
 }
 
+div.top-spacer {
+    margin-top: 2%;
+}
+
 #b-orden-2 {
     margin-left: 30%;
     background-color: rgb(109, 66, 186);
@@ -65,6 +76,10 @@ h3.price {
     background-color: rgb(244, 74, 62);
     color: white;
     margin-left: 5px;
+}
+
+#box {
+    margin-top: 2%;
 }
 
 ::ng-deep.mat-step-header[aria-labelledby="disabled"] {

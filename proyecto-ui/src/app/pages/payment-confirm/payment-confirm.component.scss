@@ -3,6 +3,7 @@
 #general{
     width: 30%;
     margin: auto;
+    margin-top: 2%;
     @include primerBreakpoint{
         width: 500px;
     }
@@ -18,6 +19,10 @@ mat-form-field{
     width: 100%;
 }
 
+mat-card-content {
+    font-family: monospace;
+}
+
 a{
     text-decoration: none;
 }
@@ -26,10 +31,13 @@ a{
 h1{
     font-size: 36px;
     line-height: 50px;
+    font-family: monospace;
+    color:rgb(3, 3, 104);
 }
 
 h3{
     font-size: 24;
+    font-family: monospace;
 }
 
 button{

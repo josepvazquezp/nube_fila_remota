@@ -1,4 +1,4 @@
-<div *ngFor="let item of hashmap | keyvalue; let i = index">
+<div id="box" *ngFor="let item of hashmap | keyvalue; let i = index">
     <h1>Orden: [{{i + 1}}]</h1>
     <h2>Estado: {{item.value.status}}</h2>
     <h2 class="products">Productos:</h2>
@@ -56,8 +56,4 @@
     
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-
 </div>

@@ -5,7 +5,7 @@ table {
     margin-right: 6%;
     @include segundoBreakpoint{
         margin-left: 2%;
-    margin-right: 2%
+        margin-right: 2%
     }
     @include tercerBreakpoint{
         margin-left: 0;
@@ -54,7 +54,7 @@ h3{
 
 .banner {
     background-color: rgba(156, 195, 225, 0.45);
-    
+    width: 88%;
     @include tercerBreakpoint{
         width: 100%;
     }

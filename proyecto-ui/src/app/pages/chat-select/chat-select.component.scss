@@ -3,6 +3,7 @@
 #box{
     width: 20%;
     margin: auto;
+    margin-top: 2%;
     text-align: center;
     @include primerBreakpoint{
         width: 500px;
@@ -15,8 +16,6 @@
     }
 }
 
-
-
 a{
     text-decoration: none;
 }
@@ -25,10 +24,18 @@ a{
 h1{
     font-size: 36px;
     text-align: center;
+    color:rgb(3, 3, 104);
+    font-family: monospace;
 }
 
 h2{
     font-size: 24;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+h3 {
+    font-family: monospace;
 }
 
 .chatCard{

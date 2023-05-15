@@ -111,7 +111,6 @@ export class RetaurantOrdersComponent {
 
               this.hashmap.set(response.orders[i]._id, o);
               this.keys.push(response.orders[i]._id);
-             
             }
 
           });

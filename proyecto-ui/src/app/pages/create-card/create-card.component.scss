@@ -3,6 +3,7 @@
 #general{
     width: 30%;
     margin: auto;
+    margin-top: 2%;
     @include primerBreakpoint{
         width: 500px;
     }
@@ -25,14 +26,16 @@ a{
     text-decoration: none;
 }
 
-
-h1{
+h1 {
     font-size: 36px;
     text-align: center;
+    font-family: monospace;
+    color:rgb(3, 3, 104);
 }
 
 h3{
     font-size: 24px;
+    font-family: monospace;
 }
 
 button{

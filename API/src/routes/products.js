@@ -7,7 +7,7 @@ const multer = require('multer');
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', '..', 'uploads'));                    
+        cb(null, path.join(__dirname, '..', '..', 'uploads'));
     },
     filename: (req, file, cb) => {
         const nombre = req.params.id;
@@ -21,11 +21,11 @@ const fileFilter = (req, file, cb) => {
     cb(null, flag);
 };
 
-const upload = multer({storage: multerStorage, fileFilter: fileFilter});
+const upload = multer({ storage: multerStorage, fileFilter: fileFilter });
 
 router.post('/upload/:id', upload.single('file'), (req, res) => {
-    res.status(201).send({image: req.file.filename});
-}); 
+    res.status(201).send({ image: req.file.filename });
+});
 
 /**
  * @swagger

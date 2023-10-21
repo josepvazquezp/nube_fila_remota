@@ -21,8 +21,9 @@ const multer = require('multer');
 const s3 = new S3Client({                   // como crear cuenta
     region: "us-east-1",
     credentials: {
-        accessKeyId: "ASIARAKHDECVG2RY5ZHR",
-        secretAccessKey: "0tPi5gIj6Oyup7OdQPdCHYdBBh75T+ucA/ieS5oL"
+        accessKeyId: "ASIARAKHDECVC26QYXXZ",
+        secretAccessKey: "ehlpS05zTbHAAGoqfLPE3J4JknOEZNZtckxLENXz",
+        sessionToken: "FwoGZXIvYXdzEO3//////////wEaDN5tHhHhb6dQNzVs+yLGARXitY6NORE/K0O7QE6HF1DJgERktTNIOlCz918+9GEymGZmLWYiEayiMOliKbpVwlPqxfPioBkjKkvTY149NIYovB5lI5r1+SHShcmVtZwl5c4UU9U0EPlkmHy1uwelssTR4uMlYSXJqCG1kwEUtcc3IuZ2dHawtlD1epR9d2PnINSo2qXA4sApii1t25+pqBGNdEhUb9Z6Zrdmf+DmqhSN3IUiOfzf/kERBkbPaQnYDnjvPArxr6OPkkq6YXG1jJg75GAaICiJ2dCpBjItugSWd98x1tSyZb1EB3TImOi4HCWhehmutajj7eONiqsFpV7SwtCSx46LJPe/"
     }
 });
 

@@ -28,15 +28,15 @@ export class UpdateUserComponent {
     type: "",
     history: [],
     status: "",
-    image:  "",
+    image: "",
     restaurant: ""
   };
 
-  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router, private restaurantService: RestaurantService){
+  constructor(private sharedData: SharedDataService, formBuilder: FormBuilder, private userService: UserService, private router: Router, private restaurantService: RestaurantService) {
     this.isLogged = sharedData.getLog();
     this.user = sharedData.getUser();
-    this.type = this.user.type == "Cliente"? false:true;
-    
+    this.type = this.user.type == "Cliente" ? false : true;
+
     this.idRestaurant = this.user.restaurant;
 
     this.updateForm = formBuilder.group({
@@ -46,30 +46,30 @@ export class UpdateUserComponent {
   }
 
   onFileSelected(event: any): void {
-      this.selectedFile = event.target.files[0];
+    this.selectedFile = event.target.files[0];
   }
 
   updateUser() {
-    if(this.updateForm.value.description != '' || this.selectedFile != null) {
+    if (this.updateForm.value.description != '' || this.selectedFile != null) {
       let body = {};
 
-      if(this.selectedFile == null && this.updateForm.value.description != '') {
-        body = {description: this.updateForm.value.description};
+      if (this.selectedFile == null && this.updateForm.value.description != '') {
+        body = { description: this.updateForm.value.description };
 
         this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
         });
       }
-      else if(this.selectedFile != null && this.updateForm.value.description == '') {
+      else if (this.selectedFile != null && this.updateForm.value.description == '') {
         if (this.selectedFile) {
           let id: any = this.sharedData.getUser()._id;
-  
+
           const formData = new FormData();
           formData.append("file", this.selectedFile);
           this.userService.changeImage(formData, id).subscribe((response: any) => {
-            let body = JSON.parse(JSON.stringify({image: enviroment.host +  "/image/" + response.image}));
-            
+            let body = JSON.parse(JSON.stringify({ image: enviroment.bucket + response.image }));
+
             this.userService.putUser(body, id).subscribe(response => {
-              if(this.idRestaurant) {
+              if (this.idRestaurant) {
                 this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
                   window.location.href = '/';
                 });
@@ -84,15 +84,15 @@ export class UpdateUserComponent {
       else {
         if (this.selectedFile) {
           let id: any = this.sharedData.getUser()._id;
-  
+
           const formData = new FormData();
           formData.append("file", this.selectedFile);
           this.userService.changeImage(formData, id).subscribe((response: any) => {
             let img = response.image;
-            let body = JSON.parse(JSON.stringify({image: enviroment.host +  "/image/" + img}));
-            
+            let body = JSON.parse(JSON.stringify({ image: enviroment.host + "/image/" + img }));
+
             this.userService.putUser(body, id).subscribe(response => {
-              body = {description: this.updateForm.value.description, image: enviroment.host +  "/image/" + img};
+              body = { description: this.updateForm.value.description, image: enviroment.host + "/image/" + img };
 
               this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
                 window.location.href = '/';
@@ -101,7 +101,7 @@ export class UpdateUserComponent {
           });
         }
       }
-      
+
     }
   }
 }

@@ -21,9 +21,9 @@ const multer = require('multer');
 const s3 = new S3Client({                   // como crear cuenta
     region: "us-east-1",
     credentials: {
-        accessKeyId: "ASIARAKHDECVC26QYXXZ",
-        secretAccessKey: "ehlpS05zTbHAAGoqfLPE3J4JknOEZNZtckxLENXz",
-        sessionToken: "FwoGZXIvYXdzEO3//////////wEaDN5tHhHhb6dQNzVs+yLGARXitY6NORE/K0O7QE6HF1DJgERktTNIOlCz918+9GEymGZmLWYiEayiMOliKbpVwlPqxfPioBkjKkvTY149NIYovB5lI5r1+SHShcmVtZwl5c4UU9U0EPlkmHy1uwelssTR4uMlYSXJqCG1kwEUtcc3IuZ2dHawtlD1epR9d2PnINSo2qXA4sApii1t25+pqBGNdEhUb9Z6Zrdmf+DmqhSN3IUiOfzf/kERBkbPaQnYDnjvPArxr6OPkkq6YXG1jJg75GAaICiJ2dCpBjItugSWd98x1tSyZb1EB3TImOi4HCWhehmutajj7eONiqsFpV7SwtCSx46LJPe/"
+        accessKeyId: process.env.ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        sessionToken: process.env.SESSION_TOKEN
     }
 });
 
@@ -49,7 +49,9 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: s3Storage, fileFilter: fileFilter });
 
 router.post('/upload/:id', upload.single('file'), (req, res) => {
-    res.status(201).send({ image: req.file.filename });
+    const name = req.params.id;
+    const ext = req.file.originalname.split('.').pop();
+    res.status(201).send({ image: `${name}.${ext}` });
 });
 
 /**

@@ -2,17 +2,31 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./../controllers/products');
 const path = require('path');
+const multerS3 = require('multer-s3');
+const { S3Client } = require("@aws-sdk/client-s3");
 
 const multer = require('multer');
 
-const multerStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', '..', 'uploads'));
+const s3 = new S3Client({                   // como crear cuenta
+    region: "us-east-1",
+    credentials: {
+        accessKeyId: process.env.ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        sessionToken: process.env.SESSION_TOKEN
+    }
+});
+
+const s3Storage = multerS3({                // esto dónde se usa tenemos sospecha que es con el handle file en el post
+    s3: s3,
+    bucket: "filaremotabucket",
+    metadata: (req, file, cb) => {
+        cb(null, { ...file });
     },
-    filename: (req, file, cb) => {
-        const nombre = req.params.id;
-        const extention = file.originalname.split('.').pop();
-        cb(null, `${nombre}.${extention}`);
+    acl: 'public-read',
+    key: (req, file, cb) => {
+        const name = req.params.id;
+        const ext = file.originalname.split('.').pop();
+        cb(null, `${name}.${ext}`);
     }
 });
 
@@ -21,10 +35,12 @@ const fileFilter = (req, file, cb) => {
     cb(null, flag);
 };
 
-const upload = multer({ storage: multerStorage, fileFilter: fileFilter });
+const upload = multer({ storage: s3Storage, fileFilter: fileFilter });
 
 router.post('/upload/:id', upload.single('file'), (req, res) => {
-    res.status(201).send({ image: req.file.filename });
+    var name = req.params.id;
+    var ext = req.file.originalname.split('.').pop();
+    res.status(201).send({ image: `${name}.${ext}` });
 });
 
 /**

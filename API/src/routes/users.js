@@ -7,17 +7,6 @@ const { S3Client } = require("@aws-sdk/client-s3");
 
 const multer = require('multer');
 
-// const multerStorage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, path.join(__dirname, '..', '..', 'uploads'));
-//     },
-//     filename: (req, file, cb) => {
-//         const nombre = req.params.id;
-//         const extention = file.originalname.split('.').pop();
-//         cb(null, `${nombre}.${extention}`);
-//     }
-// });
-
 const s3 = new S3Client({                   // como crear cuenta
     region: "us-east-1",
     credentials: {
@@ -49,8 +38,8 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: s3Storage, fileFilter: fileFilter });
 
 router.post('/upload/:id', upload.single('file'), (req, res) => {
-    const name = req.params.id;
-    const ext = req.file.originalname.split('.').pop();
+    var name = req.params.id;
+    var ext = req.file.originalname.split('.').pop();
     res.status(201).send({ image: `${name}.${ext}` });
 });
 

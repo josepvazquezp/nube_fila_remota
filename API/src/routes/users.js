@@ -3,18 +3,9 @@ const router = express.Router();
 const controller = require('./../controllers/users');
 const path = require('path');
 const multerS3 = require('multer-s3');
-const { S3Client } = require("@aws-sdk/client-s3");
+const s3 = require("./con_s3");
 
 const multer = require('multer');
-
-const s3 = new S3Client({                   // como crear cuenta
-    region: "us-east-1",
-    credentials: {
-        accessKeyId: process.env.ACCESS_KEY_ID,
-        secretAccessKey: process.env.SECRET_ACCESS_KEY,
-        sessionToken: process.env.SESSION_TOKEN
-    }
-});
 
 const s3Storage = multerS3({                // esto dónde se usa tenemos sospecha que es con el handle file en el post
     s3: s3,

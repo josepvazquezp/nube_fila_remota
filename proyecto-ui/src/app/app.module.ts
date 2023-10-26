@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { 
-  SocialLoginModule, 
+import {
+  SocialLoginModule,
   SocialAuthServiceConfig,
   GoogleLoginProvider,
-  GoogleSigninButtonModule 
+  GoogleSigninButtonModule
 } from '@abacritt/angularx-social-login';
 
 
@@ -91,12 +91,6 @@ import { RestaurantReviewsComponent } from './pages/restaurant-reviews/restauran
       useValue: {
         autoLogin: false,
         providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              enviroment.GOOGLE_ID
-            )
-          }
         ],
         onError: (err) => {
           console.error(err);

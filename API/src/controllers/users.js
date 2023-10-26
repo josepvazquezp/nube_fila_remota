@@ -3,7 +3,7 @@ const { OAuth2Client } = require('google-auth-library');
 
 const User = require('./../models/user');
 
-const { ListTablesCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { PutItemCommand, GetItemCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 
 require('dotenv').config();
@@ -13,7 +13,7 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_ID);
 const key = process.env.KEY;
 
 const UsersController = {
-    create: (req, res) => {
+    create: async function createUser(req, res) {
         let newUser = {
             email: req.body.email,
             password: req.body.password,
@@ -26,19 +26,27 @@ const UsersController = {
 
         let insertValue = new PutItemCommand({
             TableName: 'Users',
-            Item: newUser
-        }).then(conDBC.send(insertValue)); ///CHECAR ESTO PARA QUE JALE
+            Item: {
+                id: {
+                    N: "0"
+                },
+                email: { S: req.body.email },
+                password: { S: req.body.password },
+                name: { S: req.body.name },
+                type: { S: req.body.type },
+                history: { L: [] },
+                status: { S: "ok" },
+                image: { S: "../../../assets/images/logo.png" }
+            }
+        });
 
-        // User(newUser).save()
-        //     .then(user => {
-
-
-        //         res.status(201).send(user);
-        //     })
-        //     .catch(error => {
-        //         res.setHeader('Access-Control-Allow-Origin', '*');
-        //         res.status(400).send('No se pudo crear el usuario');
-        //     });
+        await conDBC.send(insertValue).then(user => {
+            res.status(201).send(newUser);
+        })
+            .catch(error => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(400).send('No se pudo crear el usuario');
+            });
     },
 
     update: (req, res) => {
@@ -106,8 +114,6 @@ const UsersController = {
     searchCreate: (req, res) => { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
         const Qemail = req.params.email;
 
-
-
         User.find({ email: Qemail })
             .then(user => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -119,29 +125,41 @@ const UsersController = {
             });
     },
 
-    searchLogin: (req, res) => { //Esta ruta se encarga de verificar si el email y contraseña son correctos
-        let loginCheck = {
-            Lemail: req.body.email,
-            Lpassword: req.body.password
-        };
+    searchLogin: async function getUsuarF(req, res) { //Esta ruta se encarga de verificar si el email y contraseña son correctos
+        let getUser = new GetItemCommand({
+            TableName: "Users",
+            Key: {
+                email: {
+                    "S": req.body.email
+                }
+            },
+            ExpressionAttributeValues: {
+                password: {
+                    "S": req.body.password
+                }
+            }
+        });
 
+        let user = await conDBC.send(getUser);
 
-        User.findOne({ email: loginCheck.Lemail, password: loginCheck.Lpassword })
-            .then(user => {
-                // Si encontro al usuario, generamos el token
-                const token = jwt.sign({
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    type: user.type
-                }, key);
+        console.log(user.Item.email);
+        // .then(user => {
+        //     // Si encontro al usuario, generamos el token
+        //     const token = jwt.sign({
+        //         id: user._id,
+        //         name: user.name,
+        //         email: user.email,
+        //         type: user.type
+        //     }, key);
 
-                res.status(200).send({ user, token });
-            })
-            .catch(error => {
+        //     console.log(user);
 
-                res.status(400).send('No se encontro el usuario');
-            });
+        //     res.status(200).send({ user, token });
+        // })
+        //     .catch(error => {
+
+        //         res.status(400).send('No se encontro el usuario');
+        //     });
     },
 
     loadUser: (req, res) => {
@@ -158,58 +176,6 @@ const UsersController = {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(400).send('No se encontro el usuario con ese token');
             });
-    },
-
-    googleLogin: (req, res) => {
-        const idToken = req.body.googleToken;
-
-        googleClient.verifyIdToken({ idToken: idToken }).then(response => {
-            const user = response.getPayload();
-            // registrar ususario si no existe y sino validar que existe el usuario y mandar el token correcto
-            User.findOne({ email: user.email })
-                .then(user => {
-                    // Si encontro al usuario, generamos el token
-
-                    const token = jwt.sign({
-                        id: user._id,
-                        name: user.name,
-                        email: user.email,
-                        type: user.type
-                    }, key);
-
-                    res.status(200).send({ user, token });
-                })
-                .catch(error => {
-                    let newUser = {
-                        email: user.email,
-                        password: "",
-                        name: user.given_name,
-                        type: "Cliente",
-                        history: [],
-                        status: "ok",
-                        image: user.picture
-                    };
-
-
-                    User(newUser).save()
-                        .then(user => {
-
-                            const token = jwt.sign({
-                                id: user._id,
-                                name: user.name,
-                                email: user.email,
-                                type: user.type
-                            }, key);
-
-                            res.status(201).send({ user, token });
-                        })
-                        .catch(error => {
-                            res.status(400).send('No se pudo crear el usuario');
-                        });
-                });
-        }).catch(err => {
-            res.status(401).send({ msg: 'token invalido' });
-        })
     }
 }
 

@@ -139,6 +139,4 @@ router.post('/login', express.json(), controller.searchLogin);
 
 router.get('/load/:token', controller.loadUser);
 
-router.post('/login/google', express.json(), controller.googleLogin);
-
 module.exports = router;

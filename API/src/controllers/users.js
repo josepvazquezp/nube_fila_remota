@@ -140,9 +140,37 @@ const UsersController = {
             }
         });
 
-        let user = await conDBC.send(getUser);
+        let resUser = await conDBC.send(getUser);
 
-        console.log(user.Item.email);
+        let user = {
+            id: resUser.Item.id.N,
+            email: resUser.Item.email.S,
+            password: resUser.Item.password.S,
+            name: resUser.Item.name.S,
+            type: resUser.Item.type.S,
+            history: resUser.Item.history.L,
+            status: resUser.Item.status.S,
+            image: resUser.Item.image.S
+        }
+
+
+        if (resUser != undefined) {
+            // Si encontro al usuario, generamos el token
+            const token = jwt.sign({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                type: user.type
+            }, key);
+
+            console.log(user);
+
+            res.status(200).send({ user, token });
+        }
+        else {
+            res.status(400).send('No se encontro el usuario');
+        }
+
         // .then(user => {
         //     // Si encontro al usuario, generamos el token
         //     const token = jwt.sign({

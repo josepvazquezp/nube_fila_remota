@@ -3,7 +3,7 @@ const { OAuth2Client } = require('google-auth-library');
 
 const User = require('./../models/user');
 
-const { PutItemCommand, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { PutItemCommand, GetItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 
 require('dotenv').config();
@@ -14,6 +14,18 @@ const key = process.env.KEY;
 
 const UsersController = {
     create: async function createUser(req, res) {
+
+        let getIdCount = new GetItemCommand({
+            TableName: "Users",
+            Key: {
+                email: {
+                    "S": "IdCount"
+                }
+            },
+        });
+
+        let resIdCount = await conDBC.send(getIdCount);
+
         let newUser = {
             email: req.body.email,
             password: req.body.password,
@@ -28,7 +40,7 @@ const UsersController = {
             TableName: 'Users',
             Item: {
                 id: {
-                    N: "0"
+                    N: resIdCount.Item.IdCount.N
                 },
                 email: { S: req.body.email },
                 password: { S: req.body.password },
@@ -39,6 +51,26 @@ const UsersController = {
                 image: { S: "../../../assets/images/logo.png" }
             }
         });
+
+        let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
+
+        let idUpdate = new UpdateItemCommand({
+            TableName: 'Users',
+            Key: {
+                email: {
+                    "S": "IdCount"
+                }
+            },
+            UpdateExpression: "SET IdCount = :c",
+            ExpressionAttributeValues: {
+                ":c": {
+                    "N": newId.toString()
+                }
+            },
+            ReturnValues: "ALL_NEW"
+        });
+
+        await conDBC.send(idUpdate);
 
         await conDBC.send(insertValue).then(user => {
             res.status(201).send(newUser);
@@ -170,24 +202,6 @@ const UsersController = {
         else {
             res.status(400).send('No se encontro el usuario');
         }
-
-        // .then(user => {
-        //     // Si encontro al usuario, generamos el token
-        //     const token = jwt.sign({
-        //         id: user._id,
-        //         name: user.name,
-        //         email: user.email,
-        //         type: user.type
-        //     }, key);
-
-        //     console.log(user);
-
-        //     res.status(200).send({ user, token });
-        // })
-        //     .catch(error => {
-
-        //         res.status(400).send('No se encontro el usuario');
-        //     });
     },
 
     loadUser: (req, res) => {

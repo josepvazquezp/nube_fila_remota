@@ -3,7 +3,7 @@ const { OAuth2Client } = require('google-auth-library');
 
 const User = require('./../models/user');
 
-const { PutItemCommand, GetItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 
 require('dotenv').config();
@@ -18,8 +18,8 @@ const UsersController = {
         let getIdCount = new GetItemCommand({
             TableName: "Users",
             Key: {
-                email: {
-                    "S": "IdCount"
+                _id: {
+                    "N": "0"
                 }
             },
         });
@@ -36,11 +36,13 @@ const UsersController = {
             image: "../../../assets/images/logo.png"
         };
 
+        let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
+
         let insertValue = new PutItemCommand({
             TableName: 'Users',
             Item: {
-                id: {
-                    N: resIdCount.Item.IdCount.N
+                _id: {
+                    N: newId.toString()
                 },
                 email: { S: req.body.email },
                 password: { S: req.body.password },
@@ -52,13 +54,11 @@ const UsersController = {
             }
         });
 
-        let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
-
         let idUpdate = new UpdateItemCommand({
             TableName: 'Users',
             Key: {
-                email: {
-                    "S": "IdCount"
+                _id: {
+                    "N": "0"
                 }
             },
             UpdateExpression: "SET IdCount = :c",
@@ -81,20 +81,73 @@ const UsersController = {
             });
     },
 
-    update: (req, res) => {
+    update: async function updateUser(req, res) {
         const id = req.params.id;
 
         if (req.body.email == undefined && req.body.type == undefined &&
-            (req.body.password != undefined || req.body.name != undefined ||
-                req.body.history != undefined || req.body.status != undefined ||
+            (req.body.history != undefined || req.body.status != undefined ||
                 req.body.image != undefined || req.body.restaurant != undefined)) {
 
-            User.findByIdAndUpdate(id, req.body, { new: true })
+            let updateSomeone;
+
+            if (req.body.type == "Resturant") {
+                updateSomeone = new UpdateItemCommand({
+                    TableName: 'Users',
+                    Key: {
+                        email: {
+                            "S": req.body.email
+                        }
+                    },
+                    UpdateExpression: "SET history = :h, status = :s, image = :i, restaurant = :r",
+                    ExpressionAttributeValues: {
+                        ":h": {
+                            "S": req.body.history
+                        },
+                        ":s": {
+                            "S": req.body.status
+                        },
+                        ":i": {
+                            "S": req.body.image
+                        },
+                        ":r": {
+                            "S": req.body.restaurant
+                        }
+                    },
+                    ReturnValues: "ALL_NEW"
+                });
+            }
+            else {
+                updateSomeone = new UpdateItemCommand({
+                    TableName: 'Users',
+                    Key: {
+                        email: {
+                            "S": req.body.email
+                        }
+                    },
+                    UpdateExpression: "SET history = :h, status = :s, image = :i",
+                    ExpressionAttributeValues: {
+                        ":h": {
+                            "S": req.body.history
+                        },
+                        ":s": {
+                            "S": req.body.status
+                        },
+                        ":i": {
+                            "S": req.body.image
+                        }
+                    },
+                    ReturnValues: "ALL_NEW"
+                });
+            }
+
+            await conDBC.send(updateSomeone)
                 .then(user => {
+                    console.log(user);
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(200).send(user);
                 })
                 .catch(error => {
+
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(400).send('No se pudo actualizar el usuario');
                 });
@@ -117,17 +170,33 @@ const UsersController = {
             });
     },
 
-    search: (req, res) => {
+    search: async function searchUser(req, res) {
         const id = req.params.id;
-        User.findById(id).populate('history')
-            .then(user => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(user);
-            })
-            .catch(error => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontro el usuario: ' + id);
-            });
+
+        const input = {
+            ExpressionAttributeValues: {
+                ":i": {
+                    "N": id
+                }
+            },
+            FilterExpression: "_id = :i",
+            TableName: "User"
+        };
+
+        const command = new ScanCommand(input);
+        const response = await conDBC.send(command);
+        console.log(response);
+
+
+        // User.findById(id).populate('history')
+        //     .then(user => {
+        //         res.setHeader('Access-Control-Allow-Origin', '*');
+        //         res.status(200).send(user);
+        //     })
+        //     .catch(error => {
+        //         res.setHeader('Access-Control-Allow-Origin', '*');
+        //         res.status(400).send('No se encontro el usuario: ' + id);
+        //     });
     },
 
     delete: (req, res) => {
@@ -143,18 +212,36 @@ const UsersController = {
             });
     },
 
-    searchCreate: (req, res) => { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
+    searchCreate: async function searchC(req, res) { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
         const Qemail = req.params.email;
 
-        User.find({ email: Qemail })
-            .then(user => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(user);
-            })
-            .catch(error => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontro el usuario: ' + id);
-            });
+        const input = {
+            ExpressionAttributeNames: {
+                "#E": "email"
+            },
+            ExpressionAttributeValues: {
+                ":e": {
+                    "S": Qemail
+                }
+            },
+            FilterExpression: "email = :e",
+            ProjectionExpression: "#E",
+            TableName: "Users"
+        };
+
+        const command = new ScanCommand(input);
+        const resUser = await conDBC.send(command);
+
+        if (resUser.Items != undefined) {
+            let user = resUser.Items;
+
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(200).send(user);
+        }
+        else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(400).send('No se encontro el usuario: ' + Qemail);
+        }
     },
 
     searchLogin: async function getUsuarF(req, res) { //Esta ruta se encarga de verificar si el email y contraseña son correctos
@@ -166,6 +253,9 @@ const UsersController = {
                 }
             },
             ExpressionAttributeValues: {
+                email: {
+                    "S": req.body.email
+                },
                 password: {
                     "S": req.body.password
                 }
@@ -174,28 +264,42 @@ const UsersController = {
 
         let resUser = await conDBC.send(getUser);
 
-        let user = {
-            id: resUser.Item.id.N,
-            email: resUser.Item.email.S,
-            password: resUser.Item.password.S,
-            name: resUser.Item.name.S,
-            type: resUser.Item.type.S,
-            history: resUser.Item.history.L,
-            status: resUser.Item.status.S,
-            image: resUser.Item.image.S
-        }
+        if (resUser.Item != undefined) {
+            let user;
 
+            if (resUser.Item.type.S == "Restaurant") {
+                user = {
+                    _id: resUser.Item._id.N,
+                    email: resUser.Item.email.S,
+                    password: resUser.Item.password.S,
+                    name: resUser.Item.name.S,
+                    type: resUser.Item.type.S,
+                    history: resUser.Item.history.L,
+                    status: resUser.Item.status.S,
+                    image: resUser.Item.image.S,
+                    restaurant: resUser.Item.restaurant.S,
+                }
+            }
+            else {
+                user = {
+                    _id: resUser.Item._id.N,
+                    email: resUser.Item.email.S,
+                    password: resUser.Item.password.S,
+                    name: resUser.Item.name.S,
+                    type: resUser.Item.type.S,
+                    history: resUser.Item.history.L,
+                    status: resUser.Item.status.S,
+                    image: resUser.Item.image.S
+                }
+            }
 
-        if (resUser != undefined) {
             // Si encontro al usuario, generamos el token
             const token = jwt.sign({
-                id: user.id,
+                id: user._id,
                 name: user.name,
                 email: user.email,
                 type: user.type
             }, key);
-
-            console.log(user);
 
             res.status(200).send({ user, token });
         }
@@ -204,6 +308,7 @@ const UsersController = {
         }
     },
 
+    // TODO: pendiente al ya tener todo chido en dynamo y hacer getters del history
     loadUser: (req, res) => {
         const token = req.params.token;
 

@@ -3,7 +3,7 @@ const { OAuth2Client } = require('google-auth-library');
 
 const User = require('./../models/user');
 
-const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 
 require('dotenv').config();
@@ -26,15 +26,32 @@ const UsersController = {
 
         let resIdCount = await conDBC.send(getIdCount);
 
-        let newUser = {
-            email: req.body.email,
-            password: req.body.password,
-            name: req.body.name,
-            type: req.body.type,
-            history: [],
-            status: "ok",
-            image: "../../../assets/images/logo.png"
-        };
+        let newUser;
+
+        if (req.body.type == "Restaurant") {
+            newUser = {
+                email: req.body.email,
+                password: req.body.password,
+                name: req.body.name,
+                type: req.body.type,
+                history: [],
+                status: "ok",
+                image: "../../../assets/images/logo.png",
+                restaurant: ""
+            };
+        } else {
+            newUser = {
+                email: req.body.email,
+                password: req.body.password,
+                name: req.body.name,
+                type: req.body.type,
+                history: [],
+                status: "ok",
+                image: "../../../assets/images/logo.png"
+            };
+        }
+
+
 
         let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
 
@@ -90,25 +107,67 @@ const UsersController = {
 
             let updateSomeone;
 
-            if (req.body.type == "Resturant") {
+            if (req.body.history != undefined) {
                 updateSomeone = new UpdateItemCommand({
                     TableName: 'Users',
                     Key: {
-                        email: {
-                            "S": req.body.email
+                        _id: {
+                            "N": id
                         }
                     },
-                    UpdateExpression: "SET history = :h, status = :s, image = :i, restaurant = :r",
+                    UpdateExpression: "SET history = :h",
                     ExpressionAttributeValues: {
                         ":h": {
-                            "S": req.body.history
-                        },
+                            "L": req.body.history
+                        }
+                    },
+                    ReturnValues: "ALL_NEW"
+                });
+            }
+            else if (req.body.status != undefined) {
+                updateSomeone = new UpdateItemCommand({
+                    TableName: 'Users',
+                    Key: {
+                        _id: {
+                            "N": id
+                        }
+                    },
+                    UpdateExpression: "SET status = :s",
+                    ExpressionAttributeValues: {
                         ":s": {
                             "S": req.body.status
-                        },
+                        }
+                    },
+                    ReturnValues: "ALL_NEW"
+                });
+            }
+            else if (req.body.image != undefined) {
+                updateSomeone = new UpdateItemCommand({
+                    TableName: 'Users',
+                    Key: {
+                        _id: {
+                            "N": id
+                        }
+                    },
+                    UpdateExpression: "SET image = :i",
+                    ExpressionAttributeValues: {
                         ":i": {
                             "S": req.body.image
-                        },
+                        }
+                    },
+                    ReturnValues: "ALL_NEW"
+                });
+            }
+            else if (req.body.restaurant != undefined) {
+                updateSomeone = new UpdateItemCommand({
+                    TableName: 'Users',
+                    Key: {
+                        _id: {
+                            "N": id
+                        }
+                    },
+                    UpdateExpression: "SET restaurant = :r",
+                    ExpressionAttributeValues: {
                         ":r": {
                             "S": req.body.restaurant
                         }
@@ -116,38 +175,41 @@ const UsersController = {
                     ReturnValues: "ALL_NEW"
                 });
             }
-            else {
-                updateSomeone = new UpdateItemCommand({
-                    TableName: 'Users',
-                    Key: {
-                        email: {
-                            "S": req.body.email
-                        }
-                    },
-                    UpdateExpression: "SET history = :h, status = :s, image = :i",
-                    ExpressionAttributeValues: {
-                        ":h": {
-                            "S": req.body.history
-                        },
-                        ":s": {
-                            "S": req.body.status
-                        },
-                        ":i": {
-                            "S": req.body.image
-                        }
-                    },
-                    ReturnValues: "ALL_NEW"
-                });
-            }
 
             await conDBC.send(updateSomeone)
-                .then(user => {
-                    console.log(user);
+                .then(resUser => {
+                    let user;
+
+                    if (resUser.Attributes.type.S == "Restaurant") {
+                        user = {
+                            _id: resUser.Attributes._id.N,
+                            email: resUser.Attributes.email.S,
+                            password: resUser.Attributes.password.S,
+                            name: resUser.Attributes.name.S,
+                            type: resUser.Attributes.type.S,
+                            history: resUser.Attributes.history.L,
+                            status: resUser.Attributes.status.S,
+                            image: resUser.Attributes.image.S,
+                            restaurant: resUser.Attributes.restaurant.S,
+                        }
+                    }
+                    else {
+                        user = {
+                            _id: resUser.Attributes._id.N,
+                            email: resUser.Attributes.email.S,
+                            password: resUser.Attributes.password.S,
+                            name: resUser.Attributes.name.S,
+                            type: resUser.Attributes.type.S,
+                            history: resUser.Attributes.history.L,
+                            status: resUser.Attributes.status.S,
+                            image: resUser.Attributes.image.S
+                        }
+                    }
+
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(200).send(user);
                 })
                 .catch(error => {
-
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(400).send('No se pudo actualizar el usuario');
                 });
@@ -156,13 +218,19 @@ const UsersController = {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.status(400).send('No se pudo actualizar el usuario');
         }
+
     },
 
-    list: (req, res) => {
-        User.find({})
+    list: async function listItems(req, res) {
+        let input = {
+            TableName: "Users"
+        };
+
+        let command = new ScanCommand(input);
+        await conDBC.send(command)
             .then(users => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(users);
+                res.status(200).send(users.Items);
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -173,93 +241,13 @@ const UsersController = {
     search: async function searchUser(req, res) {
         const id = req.params.id;
 
-        const input = {
-            ExpressionAttributeValues: {
-                ":i": {
-                    "N": id
-                }
-            },
-            FilterExpression: "_id = :i",
-            TableName: "User"
-        };
-
-        const command = new ScanCommand(input);
-        const response = await conDBC.send(command);
-        console.log(response);
-
-
-        // User.findById(id).populate('history')
-        //     .then(user => {
-        //         res.setHeader('Access-Control-Allow-Origin', '*');
-        //         res.status(200).send(user);
-        //     })
-        //     .catch(error => {
-        //         res.setHeader('Access-Control-Allow-Origin', '*');
-        //         res.status(400).send('No se encontro el usuario: ' + id);
-        //     });
-    },
-
-    delete: (req, res) => {
-        const id = req.params.id;
-        User.findByIdAndDelete(id)
-            .then(user => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(user);
-            })
-            .catch(error => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontro el usuario: ' + id);
-            });
-    },
-
-    searchCreate: async function searchC(req, res) { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
-        const Qemail = req.params.email;
-
-        const input = {
-            ExpressionAttributeNames: {
-                "#E": "email"
-            },
-            ExpressionAttributeValues: {
-                ":e": {
-                    "S": Qemail
-                }
-            },
-            FilterExpression: "email = :e",
-            ProjectionExpression: "#E",
-            TableName: "Users"
-        };
-
-        const command = new ScanCommand(input);
-        const resUser = await conDBC.send(command);
-
-        if (resUser.Items != undefined) {
-            let user = resUser.Items;
-
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(200).send(user);
-        }
-        else {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(400).send('No se encontro el usuario: ' + Qemail);
-        }
-    },
-
-    searchLogin: async function getUsuarF(req, res) { //Esta ruta se encarga de verificar si el email y contraseña son correctos
         let getUser = new GetItemCommand({
             TableName: "Users",
             Key: {
-                email: {
-                    "S": req.body.email
+                _id: {
+                    "N": id
                 }
             },
-            ExpressionAttributeValues: {
-                email: {
-                    "S": req.body.email
-                },
-                password: {
-                    "S": req.body.password
-                }
-            }
         });
 
         let resUser = await conDBC.send(getUser);
@@ -293,6 +281,112 @@ const UsersController = {
                 }
             }
 
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(200).send(user);
+        }
+        else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(400).send('No se encontro el usuario: ' + id);
+        }
+    },
+
+    delete: async function deleteUser(req, res) {
+        const id = req.params.id;
+
+        let input = {
+            Key: {
+                "_id": {
+                    "N": id
+                }
+            },
+            TableName: "Users"
+        };
+        let command = new DeleteItemCommand(input);
+        await conDBC.send(command)
+            .then(user => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(200).send(user);
+            })
+            .catch(error => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(400).send('No se encontro el usuario: ' + id);
+            });
+    },
+
+    searchCreate: async function searchC(req, res) { //Esta ruta se encarga de verificar si ya existe el email con el que se creara un nuevo usuario
+        const Qemail = req.params.email;
+
+        let input = {
+            ExpressionAttributeValues: {
+                ":e": {
+                    "S": Qemail
+                }
+            },
+            FilterExpression: "email = :e",
+            TableName: "Users"
+        };
+
+        let command = new ScanCommand(input);
+        let resUser = await conDBC.send(command);
+
+        if (resUser.Items != undefined) {
+            let user = resUser.Items;
+
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(200).send(user);
+        }
+        else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(400).send('No se encontro el usuario: ' + Qemail);
+        }
+    },
+
+    searchLogin: async function getUsuarF(req, res) { //Esta ruta se encarga de verificar si el email y contraseña son correctos
+        const input = {
+            ExpressionAttributeValues: {
+                ":e": {
+                    "S": req.body.email
+                },
+                ":p": {
+                    "S": req.body.password
+                },
+            },
+            FilterExpression: "email = :e and password = :p",
+            TableName: "Users"
+        };
+
+        let command = new ScanCommand(input);
+        let resUser = await conDBC.send(command);
+
+        if (resUser.Items[0] != undefined) {
+            let user;
+
+            if (resUser.Items[0].type.S == "Restaurant") {
+                user = {
+                    _id: resUser.Items[0]._id.N,
+                    email: resUser.Items[0].email.S,
+                    password: resUser.Items[0].password.S,
+                    name: resUser.Items[0].name.S,
+                    type: resUser.Items[0].type.S,
+                    history: resUser.Items[0].history.L,
+                    status: resUser.Items[0].status.S,
+                    image: resUser.Items[0].image.S,
+                    restaurant: resUser.Items[0].restaurant.S,
+                }
+            }
+            else {
+                user = {
+                    _id: resUser.Items[0]._id.N,
+                    email: resUser.Items[0].email.S,
+                    password: resUser.Items[0].password.S,
+                    name: resUser.Items[0].name.S,
+                    type: resUser.Items[0].type.S,
+                    history: resUser.Items[0].history.L,
+                    status: resUser.Items[0].status.S,
+                    image: resUser.Items[0].image.S
+                }
+            }
+
             // Si encontro al usuario, generamos el token
             const token = jwt.sign({
                 id: user._id,
@@ -309,13 +403,57 @@ const UsersController = {
     },
 
     // TODO: pendiente al ya tener todo chido en dynamo y hacer getters del history
-    loadUser: (req, res) => {
+    loadUser: async function loadUser(req, res) {
         const token = req.params.token;
 
         let temp = jwt.decode(token, key);
 
-        User.findById(temp.id).populate('history')
-            .then(user => {
+        // for de history, pero hasta tener productos
+
+
+        // User.findById(temp.id).populate('history')
+
+
+
+        let getUser = new GetItemCommand({
+            TableName: "Users",
+            Key: {
+                _id: {
+                    "N": temp.id
+                }
+            },
+        });
+
+        await conDBC.send(getUser)
+            .then(resUser => {
+                let user;
+
+                if (resUser.Item.type.S == "Restaurant") {
+                    user = {
+                        _id: resUser.Item._id.N,
+                        email: resUser.Item.email.S,
+                        password: resUser.Item.password.S,
+                        name: resUser.Item.name.S,
+                        type: resUser.Item.type.S,
+                        history: resUser.Item.history.L,
+                        status: resUser.Item.status.S,
+                        image: resUser.Item.image.S,
+                        restaurant: resUser.Item.restaurant.S,
+                    }
+                }
+                else {
+                    user = {
+                        _id: resUser.Item._id.N,
+                        email: resUser.Item.email.S,
+                        password: resUser.Item.password.S,
+                        name: resUser.Item.name.S,
+                        type: resUser.Item.type.S,
+                        history: resUser.Item.history.L,
+                        status: resUser.Item.status.S,
+                        image: resUser.Item.image.S
+                    }
+                }
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(user);
             })

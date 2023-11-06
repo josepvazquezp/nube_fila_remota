@@ -17,7 +17,7 @@ const s3Storage = multerS3({                // esto dónde se usa tenemos sospec
     key: (req, file, cb) => {
         const name = req.params.id;
         const ext = file.originalname.split('.').pop();
-        cb(null, `${name}.${ext}`);
+        cb(null, `product-${name}.${ext}`);
     }
 });
 
@@ -31,7 +31,7 @@ const upload = multer({ storage: s3Storage, fileFilter: fileFilter });
 router.post('/upload/:id', upload.single('file'), (req, res) => {
     var name = req.params.id;
     var ext = req.file.originalname.split('.').pop();
-    res.status(201).send({ image: `${name}.${ext}` });
+    res.status(201).send({ image: `product-${name}.${ext}` });
 });
 
 /**

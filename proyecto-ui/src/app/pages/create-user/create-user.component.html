@@ -2,12 +2,12 @@
     <h1>Crea tu cuenta</h1>
     <form *ngIf="type == 'Cliente'" [formGroup]="userForm">
         <h3>Eliga un tipo de cuenta:</h3>
-    
+
         <mat-selection-list #type [multiple]="false">
-            <mat-list-option selected (click) = "typeCliente()">
+            <mat-list-option selected (click)="typeCliente()">
                 Cliente
             </mat-list-option>
-            <mat-list-option (click) = "typeRestaurant()">
+            <mat-list-option (click)="typeRestaurant()">
                 Restaurante
             </mat-list-option>
         </mat-selection-list>
@@ -43,8 +43,7 @@
         </mat-form-field>
         <br>
         <br>
-        <h3>Eliga un tipo de cuenta:</h3>
-    
+
         &nbsp;
         <button mat-fab extended color="primary" (click)="checkForm(userForm)">
             <mat-icon>add_circle</mat-icon>Crear Cuenta
@@ -60,10 +59,10 @@
     <form *ngIf="type == 'Restaurante'" [formGroup]="restaurantForm">
         <h3>Eliga un tipo de cuenta:</h3>
         <mat-selection-list #type [multiple]="false">
-            <mat-list-option (click) = "typeCliente()">
+            <mat-list-option (click)="typeCliente()">
                 Cliente
             </mat-list-option>
-            <mat-list-option  selected (click) = "typeRestaurant()">
+            <mat-list-option selected (click)="typeRestaurant()">
                 Restaurante
             </mat-list-option>
         </mat-selection-list>
@@ -98,11 +97,12 @@
         </mat-form-field>
         <br>
         <br>
-        
+
 
         <mat-form-field>
             <mat-label>Nombre del Restaurante</mat-label>
-            <input matInput name="rName" type="text" placeholder="Escriba el nombre del restaurante" formControlName="restaurantName">
+            <input matInput name="rName" type="text" placeholder="Escriba el nombre del restaurante"
+                formControlName="restaurantName">
             <mat-error>Este campo es requerido</mat-error>
         </mat-form-field>
         <br>
@@ -110,7 +110,8 @@
 
         <mat-form-field>
             <mat-label>Descripción del restaurante</mat-label>
-            <input matInput name="descripcion" type="text" placeholder="Escriba el nombre del restaurante" formControlName="description">
+            <input matInput name="descripcion" type="text" placeholder="Escriba el nombre del restaurante"
+                formControlName="description">
             <mat-error>Este campo es requerido</mat-error>
         </mat-form-field>
         <br>
@@ -119,18 +120,18 @@
         <mat-form-field appearance="fill">
             <mat-label>Categoría</mat-label>
             <mat-select formControlName="category">
-              <mat-option value="Mexicana">Mexicana</mat-option>
-              <mat-option value="Italiana">Italiana</mat-option>
-              <mat-option value="Oriental">Oriental</mat-option>
-              <mat-option value="Mariscos">Mariscos</mat-option>
-              <mat-option value="Fit">Fit</mat-option>
-              <mat-option value="Rapida">Comida Rápida</mat-option>
+                <mat-option value="Mexicana">Mexicana</mat-option>
+                <mat-option value="Italiana">Italiana</mat-option>
+                <mat-option value="Oriental">Oriental</mat-option>
+                <mat-option value="Mariscos">Mariscos</mat-option>
+                <mat-option value="Fit">Fit</mat-option>
+                <mat-option value="Rapida">Comida Rápida</mat-option>
             </mat-select>
         </mat-form-field>
 
         <br>
         <br>
-          
+
         <mat-form-field>
             <mat-label>Ubicación</mat-label>
             <input matInput name="location" type="text" placeholder="Link de Google Maps" formControlName="location">
@@ -150,7 +151,7 @@
                 <mat-icon>arrow_back_ios_new</mat-icon>Volver
             </button>
         </a>
-        
+
     </form>
     <br>
 </div>

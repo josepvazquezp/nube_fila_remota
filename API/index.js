@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const routes = require('./routes');
 const extraRoutes = require('./src/routes/index');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -12,9 +12,9 @@ require('dotenv').config();
 
 const app = express();
 
-const mongoUrl = process.env.MONGO_URL;
+// const mongoUrl = process.env.MONGO_URL;
 
-console.log(mongoUrl);
+// console.log(mongoUrl);
 
 const port = process.env.PORT || 3000;
 
@@ -32,30 +32,52 @@ app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use('/', extraRoutes);
 routes(app);
 
-mongoose.connect(mongoUrl).then(() => {
-    console.log('Se conecto correctamente a la base de datos');
-    const server = app.listen(port, function () {
-        console.log('app is running in port ' + port);
-    });
-
-    const io = socketio(server, {
-        cors: {
-            origins: "*",
-            methods: ["GET", "POST", "PUT", "DELETE"]
-        }
-    });
-
-    io.on("connection", socket => {
-        socket.on("sendMessage", (data) => {
-            socket.broadcast.emit("newMessage", { message: data });
-        });
-
-        socket.on("changeStatus", (data) => {
-            socket.broadcast.emit("receiveStatus", { status: data })
-        })
-
-    });
-
-}).catch(err => {
-    console.log('No se pudo conectar a la base de datos', err);
+const server = app.listen(port, function () {
+    console.log('app is running in port ' + port);
 });
+
+const io = socketio(server, {
+    cors: {
+        origins: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    }
+});
+
+io.on("connection", socket => {
+    socket.on("sendMessage", (data) => {
+        socket.broadcast.emit("newMessage", { message: data });
+    });
+
+    socket.on("changeStatus", (data) => {
+        socket.broadcast.emit("receiveStatus", { status: data })
+    })
+
+});
+
+// mongoose.connect(mongoUrl).then(() => {
+//     console.log('Se conecto correctamente a la base de datos');
+//     const server = app.listen(port, function () {
+//         console.log('app is running in port ' + port);
+//     });
+
+//     const io = socketio(server, {
+//         cors: {
+//             origins: "*",
+//             methods: ["GET", "POST", "PUT", "DELETE"]
+//         }
+//     });
+
+//     io.on("connection", socket => {
+//         socket.on("sendMessage", (data) => {
+//             socket.broadcast.emit("newMessage", { message: data });
+//         });
+
+//         socket.on("changeStatus", (data) => {
+//             socket.broadcast.emit("receiveStatus", { status: data })
+//         })
+
+//     });
+
+// }).catch(err => {
+//     console.log('No se pudo conectar a la base de datos', err);
+// });

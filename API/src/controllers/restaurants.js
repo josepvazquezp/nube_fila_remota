@@ -274,19 +274,22 @@ const RestaurantsController = {
         const type = req.body.type;
 
         let input = {
+            ExpressionAttributeNames: {
+                "#T": "type"
+            },
             ExpressionAttributeValues: {
                 ":t": {
                     "S": type
                 }
             },
-            FilterExpression: "type = :t",
+            FilterExpression: "#T = :t",
             TableName: "Restaurants"
         };
 
         let command = new ScanCommand(input);
         await conDBC.send(command)
             .then(resRestaurants => {
-                console.log(resRestaurants.Items);
+
                 let restaurants = [];
 
                 for (let i = 0; i < resRestaurants.Items.length; i++) {
@@ -307,8 +310,6 @@ const RestaurantsController = {
                 res.status(200).send(restaurants);
             })
             .catch(error => {
-                console.log(type);
-                console.log(error);
                 res.status(400).send('No se encontro el restaurant con type: ' + type);
             });
 
@@ -317,12 +318,15 @@ const RestaurantsController = {
         const filter = req.params.filter;
 
         let input = {
+            ExpressionAttributeNames: {
+                "#N": "name",
+            },
             ExpressionAttributeValues: {
                 ":f": {
                     "S": filter
                 }
             },
-            FilterExpression: "name CONTAINS :f",
+            FilterExpression: "contains(#N, :f)",
             TableName: "Restaurants"
         };
 
@@ -349,7 +353,6 @@ const RestaurantsController = {
                 res.status(200).send(restaurants);
             })
             .catch(error => {
-                console.log(error);
                 res.status(400).send('No se encontro ningun restaurant con: ' + filter);
             });
     }

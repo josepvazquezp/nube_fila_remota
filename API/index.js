@@ -12,10 +12,6 @@ require('dotenv').config();
 
 const app = express();
 
-// const mongoUrl = process.env.MONGO_URL;
-
-// console.log(mongoUrl);
-
 const port = process.env.PORT || 3000;
 
 const swaggerDocs = swaggerJsDoc(swaggerConf);
@@ -53,31 +49,3 @@ io.on("connection", socket => {
     })
 
 });
-
-// mongoose.connect(mongoUrl).then(() => {
-//     console.log('Se conecto correctamente a la base de datos');
-//     const server = app.listen(port, function () {
-//         console.log('app is running in port ' + port);
-//     });
-
-//     const io = socketio(server, {
-//         cors: {
-//             origins: "*",
-//             methods: ["GET", "POST", "PUT", "DELETE"]
-//         }
-//     });
-
-//     io.on("connection", socket => {
-//         socket.on("sendMessage", (data) => {
-//             socket.broadcast.emit("newMessage", { message: data });
-//         });
-
-//         socket.on("changeStatus", (data) => {
-//             socket.broadcast.emit("receiveStatus", { status: data })
-//         })
-
-//     });
-
-// }).catch(err => {
-//     console.log('No se pudo conectar a la base de datos', err);
-// });

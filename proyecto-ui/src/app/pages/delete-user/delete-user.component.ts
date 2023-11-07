@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/shared/interfaces/user';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
@@ -22,7 +22,7 @@ export class DeleteUserComponent {
     type: "",
     history: [],
     status: "",
-    image:  "",
+    image: "",
     restaurant: ""
   };
   formDelete: FormGroup;
@@ -36,7 +36,7 @@ export class DeleteUserComponent {
     this.isLogged = sharedData.getLog();
     this.name = sharedData.getName();
     this.user = sharedData.getUser();
-    
+
     this.formDelete = formBuilder.group({
       pass: ['', Validators.required],
       check: [false, Validators.requiredTrue]
@@ -45,14 +45,14 @@ export class DeleteUserComponent {
 
   }
 
-  checkDelete(){
-    if(!this.formDelete.valid){
+  checkDelete() {
+    if (!this.formDelete.valid) {
       alert("Por favor, coloque su contraseña y acepte los términos.");
-    }else{
-      if(this.formDelete.value.pass == this.user.password){
+    } else {
+      if (this.formDelete.value.pass == this.user.password) {
         //El usuario se puede eliminar
         this.deleteUser();
-      }else{
+      } else {
         alert("La contraseña ingresada es Incorrecta.")
       }
 
@@ -60,25 +60,21 @@ export class DeleteUserComponent {
   }
 
 
-  deleteUser(){
+  deleteUser() {
 
     this.sharedData.setName("");
     this.sharedData.setLog(false);
 
+    if (this.user.restaurant != undefined) {
+      this.restaurantService.deleteRestaurant(this.user.restaurant).subscribe((response: any) => {
+      });
+    }
 
     this.userService.deleteUser(this.user._id).subscribe((response: any) => {
-      if(response.restaurant) {
-        this.restaurantService.deleteRestaurant(this.user.restaurant).subscribe((response: any) => {
-          this.authService.deleteToken();
-          window.location.href = '/';
-        });
-      }
-      else {
-        this.authService.deleteToken();
-        window.location.href = '/';
-      }
+      this.authService.deleteToken();
+      window.location.href = '/';
     });
-  }  
+  }
 
 
 }

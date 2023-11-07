@@ -1,6 +1,13 @@
 const Order = require('./../models/order');
 const User = require('./../models/user');
 
+
+const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
+const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const conDBC = require('./con_dynamo');
+
 const OrdersController = {
     create: (req, res) => {
         let newOrder = {

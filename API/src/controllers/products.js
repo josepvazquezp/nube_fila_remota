@@ -117,7 +117,6 @@ const ProductsController = {
                                 res.status(201).send({ product, restaurant });
                             })
                             .catch(error => {
-                                console.log(error);
                                 res.status(400).send('No se pudo actualizar el restaurant');
                             });
                     })
@@ -215,8 +214,6 @@ const ProductsController = {
             atributeValues += '}';
             atributeNames += '}';
 
-            console.log(JSON.parse(atributeValues));
-
             updateInput = new UpdateItemCommand({
                 TableName: 'Products',
                 Key: {
@@ -229,7 +226,6 @@ const ProductsController = {
                 ExpressionAttributeNames: JSON.parse(atributeNames),
                 ReturnValues: "ALL_NEW"
             });
-            console.log(updateInput.input);
 
             await conDBC.send(updateInput)
                 .then(resProduct => {
@@ -246,7 +242,6 @@ const ProductsController = {
                     res.status(200).send(product);
                 })
                 .catch(error => {
-                    console.log(error);
                     res.status(400).send('No se pudo actualizar el producto');
                 });
         }
@@ -319,7 +314,6 @@ const ProductsController = {
                         res.status(200).send(product);
                     })
                     .catch(error => {
-                        console.log(resProduct);
                         res.status(400).send('No se encontro al producto con ID: ' + id);
                     });
             })
@@ -328,46 +322,147 @@ const ProductsController = {
             });
     },
 
-    delete: (req, res) => {
+    delete: async function delP(req, res) {
         const id = req.params.id;
-        Product.findByIdAndDelete(id)
-            .then(product => {
-                Restaurant.findById(product.RestaurantId)
-                    .then(restaurant => {
-                        let products = restaurant.products;
-                        let index = products.findIndex(item => item == product.id);
 
-                        products.splice(index, 1);
+        let getProduct = new GetItemCommand({
+            TableName: "Products",
+            Key: {
+                _id: {
+                    "N": id
+                }
+            },
+        });
 
-                        let body = JSON.parse(JSON.stringify({ products: products }));
+        await conDBC.send(getProduct)
+            .then(async function resP(resProduct) {
+                let getRestaurant = new GetItemCommand({
+                    TableName: "Restaurants",
+                    Key: {
+                        _id: {
+                            "N": resProduct.Item.RestaurantId.N
+                        }
+                    },
+                });
 
-                        Restaurant.findByIdAndUpdate(product.RestaurantId, body, { new: true })
-                            .then(restaurant => {
-                                res.status(201).send({ product, restaurant });
+                await conDBC.send(getRestaurant)
+                    .then(async function resR(resRestaurant) {
+                        let products = resRestaurant.Item.products.L;
+                        let index = products.findIndex(item => item.N == id);
+
+                        let input = {
+                            Key: {
+                                "_id": {
+                                    "N": id
+                                }
+                            },
+                            TableName: "Products"
+                        };
+
+                        let command = new DeleteItemCommand(input);
+                        await conDBC.send(command)
+                            .then(async function resPDel(response) {
+                                let updateInput = new UpdateItemCommand({
+                                    TableName: 'Restaurants',
+                                    Key: {
+                                        _id: {
+                                            "N": resProduct.Item.RestaurantId.N
+                                        }
+                                    },
+                                    UpdateExpression: 'REMOVE products[' + index + ']',
+                                    ReturnValues: "ALL_NEW"
+                                });
+
+                                await conDBC.send(updateInput)
+                                    .then(resUpdateR => {
+                                        let temp;
+                                        let products = [];
+
+                                        for (let i = 0; i < resUpdateR.Attributes.products.L.length; i++) {
+                                            temp = resUpdateR.Attributes.products.L[i].N;
+
+                                            products.push(temp);
+                                        }
+
+                                        let restaurant = {
+                                            _id: resUpdateR.Attributes._id.N,
+                                            name: resUpdateR.Attributes.name.S,
+                                            products: products,
+                                            description: resUpdateR.Attributes.description.S,
+                                            type: resUpdateR.Attributes.type.S,
+                                            location: resUpdateR.Attributes.location.S,
+                                            image: resUpdateR.Attributes.image.S,
+                                            orders: resUpdateR.Attributes.orders.L
+                                        }
+
+                                        let product = {
+                                            _id: resProduct.Item._id.N,
+                                            Name: resProduct.Item.Name.S,
+                                            Description: resProduct.Item.Description.S,
+                                            Price: resProduct.Item.Price.N,
+                                            Available: resProduct.Item.Available.BOOL,
+                                            Image: resProduct.Item.Image.S,
+                                            RestaurantId: resProduct.Item.RestaurantId.N
+                                        };
+
+                                        res.status(201).send({ product, restaurant });
+                                    })
+                                    .catch(error => {
+                                        res.status(400).send('No se encontro al restaurante con ID: ' + resProduct.Item.RestaurantId.N);
+                                    });
                             })
                             .catch(error => {
-                                res.status(400).send('No se pudo actualizar el restaurant');
+                                res.status(400).send('No se encontro al producto con ID:' + id);
                             });
+
                     })
                     .catch(error => {
-                        res.status(400).send('No se encontro al restaurante con ID: ' + product.RestaurantId);
+                        res.status(400).send('No se encontro al producto con ID: ' + id);
                     });
             })
             .catch(error => {
-                res.status(400).send('No se encontro al producto con ID:' + id);
+                res.status(400).send('No se encontro al producto con ID: ' + id);
             });
+
+
     },
-    search_in: (req, res) => {
+    search_in: async function filterP(req, res) {
         const filter = req.params.filter;
 
-        Product.find({
-            Name: {
-                $regex: filter,
-                $options: 'i'
-            }
-        })
-            .then(restaurants => {
-                res.status(200).send(restaurants);
+        let input = {
+            ExpressionAttributeNames: {
+                "#N": "Name",
+            },
+            ExpressionAttributeValues: {
+                ":f": {
+                    "S": filter
+                }
+            },
+            FilterExpression: "contains(#N, :f)",
+            TableName: "Products"
+        };
+
+        let command = new ScanCommand(input);
+        await conDBC.send(command)
+            .then(resProducts => {
+                let products = [];
+                let temp;
+
+                for (let i = 0; i < resProducts.Items.length; i++) {
+                    temp = {
+                        _id: resProducts.Items[i]._id.N,
+                        Name: resProducts.Items[i].Name.S,
+                        Description: resProducts.Items[i].Description.S,
+                        Price: resProducts.Items[i].Price.N,
+                        Available: resProducts.Items[i].Available.BOOL,
+                        Image: resProducts.Items[i].Image.S,
+                        RestaurantId: resProducts.Items[i].RestaurantId.N
+                    }
+
+                    products.push(temp);
+                }
+
+                res.status(200).send(products);
             })
             .catch(error => {
                 res.status(400).send('No se encontro ningun restaurant con: ' + filter);

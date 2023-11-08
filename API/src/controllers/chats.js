@@ -8,7 +8,7 @@ const conDBC = require('./con_dynamo');
 
 
 const ChatsController = {
-    create: async function create_chat (req, res) {
+    create: async function create_chat(req, res) {
         let newChat = {
             customerId: req.body.customerId,
             restaurantId: req.body.restaurantId,
@@ -31,10 +31,10 @@ const ChatsController = {
         let insertValue = new PutItemCommand({
             TableName: 'Chats',
             Item: {
-                _id: {N: newId.toString() },
+                _id: { N: newId.toString() },
                 customer_id: { N: req.body.customerId },
                 restaurant_id: { N: req.body.restaurantId },
-                messages : {L: []},
+                messages: { L: [] },
             }
         },);
 
@@ -61,7 +61,7 @@ const ChatsController = {
         await conDBC.send(insertValue).then(chat => {
 
             console.log("Creado");
-        
+
             console.log(chat);
 
             // let temp = {
@@ -71,14 +71,14 @@ const ChatsController = {
             //     messages: chat.Item.messages.L,
             // }
 
-            
+
             // console.log(temp);
 
             res.status(201).send(chat);
         })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se pudo crear el chat ' + error );
+                res.status(400).send('No se pudo crear el chat ' + error);
             });
 
         // Chat(newChat).save()
@@ -91,12 +91,12 @@ const ChatsController = {
     },
     //==============================================================================
     //==============================================================================
-    update: async function update_chat (req, res)  {
+    update: async function update_chat(req, res) {
         const id = req.params.id;
 
         let ts = Date.now()
         let date = new Date(ts);
-        let stringDate = date.getHours()  + ":" + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+        let stringDate = date.getHours() + ":" + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 
 
         const newMessage = {
@@ -114,11 +114,15 @@ const ChatsController = {
 
             ExpressionAttributeValues: {
                 ":msgn": {
-                    L: [{ M: {
-                        sender: { S: newMessage.sender },
-                        message: { S: newMessage.message },
-                        date: { S: newMessage.date}
-            },}]},},
+                    L: [{
+                        M: {
+                            sender: { S: newMessage.sender },
+                            message: { S: newMessage.message },
+                            date: { S: newMessage.date }
+                        },
+                    }]
+                },
+            },
             Key: {
                 _id: {
                     "N": id
@@ -131,14 +135,14 @@ const ChatsController = {
         await conDBC.send(chat_updated).then(reschat => {
 
 
-
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.status(200).send(reschat);
         })
-        .catch(error => {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(400).send('No se pudo actualizar el chat');
-        });
+            .catch(error => {
+                console.log(error);
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(400).send('No se pudo actualizar el chat');
+            });
 
 
         // Chat.findByIdAndUpdate(id, {$push: {messages: newMessage}},  { new: true })
@@ -152,7 +156,7 @@ const ChatsController = {
     },
     //==============================================================================
     //==============================================================================
-    
+
     list: async function list_chats(req, res) {
 
         let input = {
@@ -180,7 +184,7 @@ const ChatsController = {
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('Algo salio mal ' + error );
+                res.status(400).send('Algo salio mal ' + error);
             });
 
 
@@ -195,7 +199,7 @@ const ChatsController = {
     //==============================================================================
     //==============================================================================
     //No se utiliza esto, pues si bien tiene ID en Mongo, en AWS no sirve de nada
-    search: async function search_chat (req, res){
+    search: async function search_chat(req, res) {
         const id = req.params.id;
 
 
@@ -203,13 +207,13 @@ const ChatsController = {
             TableName: "Chats",
             "ExpressionAttributeNames": {
                 "#IDD": "_id"
-              },
-              "ExpressionAttributeValues": {
+            },
+            "ExpressionAttributeValues": {
                 ":idd": {
-                  "N": id
+                    "N": id
                 }
-              },
-              "FilterExpression": "#IDD = :idd",
+            },
+            "FilterExpression": "#IDD = :idd",
         };
 
         let command = new ScanCommand(input);
@@ -235,7 +239,7 @@ const ChatsController = {
     //==============================================================================
     //==============================================================================
     //Lo mismo con delete, si no se tiene un ID fijo para cada chat, de poco sirve, pero no se invoca
-    delete: async function delete_chat (req, res){
+    delete: async function delete_chat(req, res) {
         const id = req.params.id;
 
         let input = {
@@ -258,7 +262,7 @@ const ChatsController = {
                 res.status(400).send('No se encontro el chat con ID:' + id);
             });
 
-        
+
 
 
 
@@ -274,37 +278,37 @@ const ChatsController = {
     //==============================================================================
     findAllMine: async function find_all_mine(req, res) {
         const MyID = req.body.MyID
-        const type  = (req.body.type == "Cliente") ? "customerId" : "restaurantId";
+        const type = (req.body.type == "Cliente") ? "customerId" : "restaurantId";
         //let body = JSON.parse('{"' + type + '": "' + MyID + '"}');
 
 
         let input;
 
-        if(req.body.type == "Cliente"){
+        if (req.body.type == "Cliente") {
             input = {
                 TableName: "Chats",
                 "ExpressionAttributeNames": {
                     "#CID": "customer_id"
-                  },
-                  "ExpressionAttributeValues": {
+                },
+                "ExpressionAttributeValues": {
                     ":cidq": {
-                      "N": MyID
+                        "N": MyID
                     }
-                  },
-                  "FilterExpression": "#CID = :cidq",
+                },
+                "FilterExpression": "#CID = :cidq",
             };
-        }else{
+        } else {
             input = {
                 TableName: "Chats",
                 "ExpressionAttributeNames": {
                     "#CID": "restaurant_id"
-                  },
-                  "ExpressionAttributeValues": {
+                },
+                "ExpressionAttributeValues": {
                     ":cidq": {
-                      "N": MyID
+                        "N": MyID
                     }
-                  },
-                  "FilterExpression": "#CID = :cidq",
+                },
+                "FilterExpression": "#CID = :cidq",
             };
         }
 
@@ -316,16 +320,16 @@ const ChatsController = {
 
                 let temp = [];
 
-                for( i = 0; i< chats.Count ; i ++){
+                for (i = 0; i < chats.Count; i++) {
 
                     temp.push({
-                        _id : chats.Items[i]._id.N,
-                        customerId : chats.Items[i].customer_id.N,
+                        _id: chats.Items[i]._id.N,
+                        customerId: chats.Items[i].customer_id.N,
                         restaurantId: chats.Items[i].restaurant_id.N,
                         messages: [],
                     });
 
-                    for(let j = 0; j < chats.Items[i].messages.L.length ; j++){
+                    for (let j = 0; j < chats.Items[i].messages.L.length; j++) {
                         let temp2 = {
                             sender: chats.Items[i].messages.L[j].M.sender.S,
                             date: chats.Items[i].messages.L[j].M.date.S,
@@ -356,11 +360,11 @@ const ChatsController = {
     },
     //==============================================================================
     //==============================================================================
-    findChat: async function  find_chat(req, res){
+    findChat: async function find_chat(req, res) {
         const MyID = req.body.MyID
         const ItID = req.body.ItID;
 
-        body = JSON.parse('{"customerId": "' + MyID + '", "restaurantId": "' + ItID +'"}')
+        body = JSON.parse('{"customerId": "' + MyID + '", "restaurantId": "' + ItID + '"}')
 
         let input = {
             TableName: "Chats",
@@ -368,16 +372,16 @@ const ChatsController = {
                 "#CID": "customer_id",
                 "#RID": "restaurant_id",
 
-              },
-              "ExpressionAttributeValues": {
+            },
+            "ExpressionAttributeValues": {
                 ":cidq": {
-                  "N": MyID
+                    "N": MyID
                 },
                 ":ridq": {
                     "N": ItID
-                  }
-              },
-              "FilterExpression": "#CID = :cidq, #RID = :ridq",
+                }
+            },
+            "FilterExpression": "#CID = :cidq and #RID = :ridq",
         };
 
         let command = new ScanCommand(input);
@@ -385,7 +389,7 @@ const ChatsController = {
             .then(chat => {
                 console.log("Chat encontrado")
                 console.log(chat);
-                
+
 
                 // temp = {
                 //     _id : chat.Items._id.N,
@@ -398,6 +402,7 @@ const ChatsController = {
                 res.status(200).send(chat.Items);
             })
             .catch(error => {
+                console.log(error);
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(400).send('No se encontro el chat: desde boton');
             });

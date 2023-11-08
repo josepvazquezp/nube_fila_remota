@@ -59,7 +59,8 @@ export class ChatSelectComponent {
               this.userService.getOneUser(response[i].customerId).subscribe((responseU: any) => {
                 this.chatsDisplay[i] = {id: response[i].customerId, name: responseU.name, email: responseU.email, image:responseU.image}
               });
-            } 
+            }
+
           }
 
         }

@@ -27,6 +27,17 @@ const ChatsController = {
         let resIdCount = await conDBC.send(getIdCount);
         let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
 
+
+        let insertValue = new PutItemCommand({
+            TableName: 'Chats',
+            Item: {
+                _id: {N: newId.toString() },
+                customer_id: { N: req.body.customerId },
+                restaurant_id: { N: req.body.restaurantId },
+                messages : {L: []},
+            }
+        },);
+
         let idUpdate = new UpdateItemCommand({
             TableName: 'Chats',
             Key: {
@@ -45,31 +56,29 @@ const ChatsController = {
 
         await conDBC.send(idUpdate);
 
-        let insertValue = new PutItemCommand({
-            TableName: 'Chats',
-            Item: {
-                _id: {
-                    N: newId.toString()
-                },
-                customer_id: { N: req.body.customerId },
-                restaurant_id: { N: req.body.restaurantId },
-                L: data.messages.map(message => ({
-                    M: {
-                      sender: { S: message.sender },
-                      message: { S: message.message },
-                      date: { S: message.date }
-                    }
-                  }))
-            }
-        });
 
 
         await conDBC.send(insertValue).then(chat => {
+
+            console.log("Creado");
+        
+            console.log(chat);
+
+            // let temp = {
+            //     _id : chat.Item._id.N,
+            //     customerId : chat.Item.customer_id.N,
+            //     restaurantId: chat.Item.restaurant_id.N,
+            //     messages: chat.Item.messages.L,
+            // }
+
+            
+            // console.log(temp);
+
             res.status(201).send(chat);
         })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se pudo crear el chat');
+                res.status(400).send('No se pudo crear el chat ' + error );
             });
 
         // Chat(newChat).save()
@@ -96,7 +105,8 @@ const ChatsController = {
             date: stringDate
         }
 
-        console.log("Creando Chat");
+
+
 
 
         chat_updated = new UpdateItemCommand({
@@ -118,7 +128,10 @@ const ChatsController = {
             ReturnValues: "ALL_NEW"
         });
 
-        await conDBC.send(card_updated).then(reschat => {
+        await conDBC.send(chat_updated).then(reschat => {
+
+
+
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.status(200).send(reschat);
         })
@@ -150,12 +163,24 @@ const ChatsController = {
         let command = new ScanCommand(input);
         await conDBC.send(command)
             .then(chats => {
+                let temp = [];
+
+                // for( i = 0; i< chats.Count - 1; i ++){
+                //     temp.push({
+                //         _id : chats.Items[i]._id.N,
+                //         customerId : chats.Items[i].customer_id.N,
+                //         restaurantId: chats.Items[i].restaurant_id.N,
+                //         messages: chats.Items[i].messages.L,
+                //     })
+
+                // }
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(chats.Items);
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('Algo salio mal');
+                res.status(400).send('Algo salio mal ' + error );
             });
 
 
@@ -286,13 +311,39 @@ const ChatsController = {
 
         let command = new ScanCommand(input);
         await conDBC.send(command)
-            .then(chat => {
+            .then(chats => {
+
+
+                let temp = [];
+
+                for( i = 0; i< chats.Count ; i ++){
+
+                    temp.push({
+                        _id : chats.Items[i]._id.N,
+                        customerId : chats.Items[i].customer_id.N,
+                        restaurantId: chats.Items[i].restaurant_id.N,
+                        messages: [],
+                    });
+
+                    for(let j = 0; j < chats.Items[i].messages.L.length ; j++){
+                        let temp2 = {
+                            sender: chats.Items[i].messages.L[j].M.sender.S,
+                            date: chats.Items[i].messages.L[j].M.date.S,
+                            message: chats.Items[i].messages.L[j].M.message.S,
+                        };
+                        temp[i].messages.push(temp2);
+                    }
+                }
+
+                console.log(temp);
+
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(chat);
+                res.status(200).send(temp);
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontraron chats ');
+                res.status(400).send('No se encontraron chats mios ' + error);
             });
 
         // Chat.find(body)
@@ -310,7 +361,6 @@ const ChatsController = {
         const ItID = req.body.ItID;
 
         body = JSON.parse('{"customerId": "' + MyID + '", "restaurantId": "' + ItID +'"}')
-        console.log(body);
 
         let input = {
             TableName: "Chats",
@@ -333,8 +383,16 @@ const ChatsController = {
         let command = new ScanCommand(input);
         await conDBC.send(command)
             .then(chat => {
-
+                console.log("Chat encontrado")
                 console.log(chat);
+                
+
+                // temp = {
+                //     _id : chat.Items._id.N,
+                //     customerId : chat.Items.customer_id.N,
+                //     restaurantId: chat.Items.restaurant_id.N,
+                //     messages: chat.Items.messages.L,
+                // }
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(chat.Items);

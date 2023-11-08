@@ -262,11 +262,13 @@ const CardController = {
 
 
                 for( i = 0; i< cards.Count; i ++){
-                    temp.push({_id : cards.Items[i]._id.N,
+                    temp.push({
+                        _id : cards.Items[i]._id.N,
                         ID_user : cards.Items[i].id_user.N,
                         Type: cards.Items[i].type.S,
                         Date: cards.Items[i].date.S,
-                        Number : cards.Items[i].number.S,})
+                        Number : cards.Items[i].number.S,
+                    })
                 }
 
 

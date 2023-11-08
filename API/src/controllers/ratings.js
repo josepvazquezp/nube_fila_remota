@@ -213,6 +213,24 @@ const RatingController = {
         let command = new ScanCommand(input);
         await conDBC.send(command)
             .then(ratings => {
+
+                let temp = [];
+
+                for(let i = 0; i < ratings.Count; i++){
+                    temp.push({
+                        _id : ratings.Items[i]._id.N,
+                        ID_Evaluator : ratings.Items[i].id_evaluator.N,
+                        ID_Evaluated: ratings.Items[i].id_evaluated.N,
+                        ID_Order: ratings.Items[i].id_order.N,
+                        Rating: ratings.Items[i].rating.N,
+                        Description: ratings.Items[i].description.S,
+                        
+                    });
+                }
+
+
+
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(ratings.Items);
             })

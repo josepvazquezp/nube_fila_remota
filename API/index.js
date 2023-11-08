@@ -1,5 +1,4 @@
 const express = require('express');
-// const mongoose = require('mongoose');
 const routes = require('./routes');
 const extraRoutes = require('./src/routes/index');
 const swaggerJsDoc = require('swagger-jsdoc');

@@ -132,7 +132,6 @@ const ProductsController = {
 
     update: async function updateP(req, res) {
         const id = req.params.id;
-        console.log(id);
 
         // req.body.Name    req.body.Description    req.body.Available  req.body.Price  req.body.Image
 

@@ -320,7 +320,6 @@ const UsersController = {
         let command = new DeleteItemCommand(input);
         await conDBC.send(command)
             .then(user => {
-                console.log(user);
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(user);
             })

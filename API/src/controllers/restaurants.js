@@ -213,12 +213,9 @@ const RestaurantsController = {
         });
 
         await conDBC.send(getRestaurant)
+            // DENTRO DE PROMESA POPULATE DE products y orders
 
-            // Restaurant.findById(id).populate('products').populate('orders')
-
-            //DENTRO DE PROMESA POPULATE DE products y orders
-
-            .then(resRestaurant => {
+            .then(async function reqRestaurant(resRestaurant) {
                 let restaurant = {
                     _id: resRestaurant.Item._id.N,
                     name: resRestaurant.Item.name.S,
@@ -230,6 +227,75 @@ const RestaurantsController = {
                     orders: resRestaurant.Item.orders.L
                 }
 
+                let getProduct;
+                let products = [];
+                let temp;
+                let i;
+
+                for (i = 0; i < resRestaurant.Item.products.L.length; i++) {
+                    getProduct = new GetItemCommand({
+                        TableName: "Products",
+                        Key: {
+                            _id: {
+                                "N": resRestaurant.Item.products.L[i].N
+                            }
+                        },
+                    });
+
+                    await conDBC.send(getProduct)
+                        .then(async function resP(resProduct) {
+                            temp = {
+                                _id: resProduct.Item._id.N,
+                                Name: resProduct.Item.Name.S,
+                                Description: resProduct.Item.Description.S,
+                                Price: resProduct.Item.Price.N,
+                                Available: resProduct.Item.Available.BOOL,
+                                Image: resProduct.Item.Image.S,
+                                RestaurantId: resProduct.Item.RestaurantId.N
+                            };
+
+                            products.push(temp);
+                        })
+                        .catch(error => {
+                            res.status(400).send('No se encontro al producto con ID: ' + resRestaurant.Item.products.L[i].N);
+                        });
+                }
+
+                let getOrder;
+                let orders = [];
+
+                for (i = 0; i < resRestaurant.Item.orders.L.length; i++) {
+                    getOrder = new GetItemCommand({
+                        TableName: "Orders",
+                        Key: {
+                            _id: {
+                                "N": resRestaurant.Item.orders.L[i].N
+                            }
+                        },
+                    });
+
+                    await conDBC.send(getOrder)
+                        .then(async function resO(resOrder) {
+                            temp = {
+                                _id: resOrder.Item._id.N,
+                                customerId: resOrder.Item.customer_id.N,
+                                restaurantId: resOrder.Item.restaurant_id.N,
+                                total: resOrder.Item.total.N,
+                                status: resOrder.Item.status.S,
+                                products: resOrder.Item.products.L,
+                                quantity: resOrder.Item.quantity.N
+                            };
+
+                            orders.push(temp);
+                        })
+                        .catch(error => {
+                            res.status(400).send('No se encontro al producto con ID: ' + resRestaurant.Item.orders.L[i].N);
+                        });
+                }
+
+                restaurant.products = products;
+                restaurant.orders = orders;
+
                 res.status(200).send(restaurant);
             })
             .catch(error => {
@@ -239,16 +305,6 @@ const RestaurantsController = {
 
     delete: async function deleteRestaurant(req, res) {
         const id = req.params.id;
-        // Restaurant.findByIdAndDelete(id)
-        //     .then(restaurant => {
-        //         Product.deleteMany({
-        //             RestaurantId: { $gte: id }
-        //         }).then(products => {
-        //             res.status(200).send({ restaurant, products });
-        //         })
-        //     })
-
-        // BORRAR TAMBIÉN LOS PRODUCTOS DE ESE RESTAURANTE
 
         let getRestaurant = new GetItemCommand({
             TableName: "Restaurants",
@@ -287,39 +343,29 @@ const RestaurantsController = {
 
                     command = new DeleteItemCommand(input);
 
-                    if (i == resRestaurant.Item.products.L.length - 1) {
-                        await conDBC.send(command)
-                            .then(async function delR(restaurant) {
-                                let input = {
-                                    Key: {
-                                        "_id": {
-                                            "N": id
-                                        }
-                                    },
-                                    TableName: "Restaurants"
-                                };
 
-                                let command = new DeleteItemCommand(input);
-
-                                await conDBC.send(command)
-                                    .then(restaurant => {
-                                        res.status(200).send(restaurant);
-                                    })
-                                    .catch(error => {
-                                        res.status(400).send('No se encontro el restaurant: ' + id);
-                                    });
-
-                            })
-                            .catch(error => {
-                                res.status(400).send('No se encontro el producto: ' + resRestaurant.Item.products.L[i].N);
-                            });
-
-                    }
-                    else {
-                        await conDBC.send(command);
-                    }
+                    await conDBC.send(command);
 
                 }
+
+                input = {
+                    Key: {
+                        "_id": {
+                            "N": id
+                        }
+                    },
+                    TableName: "Restaurants"
+                };
+
+                command = new DeleteItemCommand(input);
+
+                await conDBC.send(command)
+                    .then(response => {
+                        res.status(200).send(restaurant);
+                    })
+                    .catch(error => {
+                        res.status(400).send('No se encontro el restaurant: ' + id);
+                    });
 
             })
             .catch(error => {

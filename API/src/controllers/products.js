@@ -1,6 +1,9 @@
 const Product = require('./../models/product');
 const Restaurant = require('./../models/restaurant');
 
+const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const conDBC = require('./con_dynamo');
+
 const ProductsController = {
     create: async function createProduct(req, res) {
         let getIdCount = new GetItemCommand({
@@ -34,10 +37,10 @@ const ProductsController = {
                 },
                 Name: { S: req.body.Name },
                 Description: { S: req.body.Description },
-                Price: { N: req.body.Price },
-                Avaible: { BOOL: true },
+                Price: { N: req.body.Price.toString() },
+                Available: { BOOL: true },
                 Image: { S: "default" },
-                RestaurantId: { N: req.body.RestaurantId }
+                RestaurantId: { N: req.body.RestaurantId.toString() }
             }
         });
 
@@ -79,13 +82,17 @@ const ProductsController = {
                             TableName: 'Restaurants',
                             Key: {
                                 _id: {
-                                    "N": req.body.RestaurantId
+                                    "N": req.body.RestaurantId.toString()
                                 }
                             },
-                            UpdateExpression: "SET products = :p",
+                            UpdateExpression: "SET products = list_append(products, :p)",
                             ExpressionAttributeValues: {
                                 ":p": {
-                                    "L": products
+                                    "L": [
+                                        {
+                                            "N": newId.toString()
+                                        }
+                                    ]
                                 }
                             },
                             ReturnValues: "ALL_NEW"
@@ -105,9 +112,12 @@ const ProductsController = {
                                     orders: resRestaurant.Attributes.orders.L
                                 }
 
-                                res.status(201).send({ newProduct, restaurant });
+                                let product = newProduct;
+
+                                res.status(201).send({ product, restaurant });
                             })
                             .catch(error => {
+                                console.log(error);
                                 res.status(400).send('No se pudo actualizar el restaurant');
                             });
                     })
@@ -123,34 +133,35 @@ const ProductsController = {
 
     update: async function updateP(req, res) {
         const id = req.params.id;
+        console.log(id);
 
         // req.body.Name    req.body.Description    req.body.Available  req.body.Price  req.body.Image
 
         if (req.body != null) {
             let start = false;
-            let updateExpression = "SET ";
-            let atributeValues = "{";
-            let atributeNames = "{";
+            let updateExpression = 'SET ';
+            let atributeValues = '{';
+            let atributeNames = '{';
 
 
             if (req.body.Name != undefined) {
-                updateExpression += "#N = :n";
-                atributeNames += "'#N':'Name'";
-                atributeValues += "':n':{'S':" + req.body.Name + "}";
+                updateExpression += '#N = :n';
+                atributeNames += '"#N":"Name"';
+                atributeValues += '":n":{"S":"' + req.body.Name + '"}';
 
                 start = true;
             }
 
             if (req.body.Description != undefined) {
                 if (start) {
-                    updateExpression += "and #D = :d";
-                    atributeNames += ", '#D':'Description'";
-                    atributeValues += ", ':d':{'S':" + req.body.Description + "}";
+                    updateExpression += ' , #D = :d';
+                    atributeNames += ', "#D":"Description"';
+                    atributeValues += ', ":d":{"S":"' + req.body.Description + '"}';
                 }
                 else {
-                    updateExpression += "#D = :d";
-                    atributeNames += "'#D':'Description'";
-                    atributeValues += "':d':{'S':" + req.body.Description + "}";
+                    updateExpression += '#D = :d';
+                    atributeNames += '"#D":"Description"';
+                    atributeValues += '":d":{"S":"' + req.body.Description + '"}';
 
                     start = true;
                 }
@@ -158,14 +169,14 @@ const ProductsController = {
 
             if (req.body.Available != undefined) {
                 if (start) {
-                    updateExpression += "and #A = :a";
-                    atributeNames += ", '#A':'Available'";
-                    atributeValues += ", ':a':{'BOOL':" + req.body.Available + "}";
+                    updateExpression += ' , #A = :a';
+                    atributeNames += ', "#A":"Available"';
+                    atributeValues += ', ":a":{"BOOL":"' + req.body.Available + '"}';
                 }
                 else {
-                    updateExpression += "#A = :a";
-                    atributeNames += "'#A':'Available'";
-                    atributeValues += "':a':{'BOOL':" + req.body.Available + "}";
+                    updateExpression += '#A = :a';
+                    atributeNames += '"#A":"Available"';
+                    atributeValues += '":a":{"BOOL":"' + req.body.Available + '"}';
 
                     start = true;
                 }
@@ -173,14 +184,14 @@ const ProductsController = {
 
             if (req.body.Price != undefined) {
                 if (start) {
-                    updateExpression += "and #P = :p";
-                    atributeNames += ", '#P':'Price'";
-                    atributeValues += ", ':p':{'N':" + req.body.Price + "}";
+                    updateExpression += ' , #P = :p';
+                    atributeNames += ', "#P":"Price"';
+                    atributeValues += ', ":p":{"N":"' + req.body.Price + '"}';
                 }
                 else {
-                    updateExpression += "#P = :p";
-                    atributeNames += "'#P':'Price'";
-                    atributeValues += "':p':{'N':" + req.body.Price + "}";
+                    updateExpression += '#P = :p';
+                    atributeNames += '"#P":"Price"';
+                    atributeValues += '":p":{"N":"' + req.body.Price + '"}';
 
                     start = true;
                 }
@@ -188,21 +199,23 @@ const ProductsController = {
 
             if (req.body.Image != undefined) {
                 if (start) {
-                    updateExpression += "and #I = :i";
-                    atributeNames += ", '#I':'Image'";
-                    atributeValues += ", ':i':{'S':" + req.body.Image + "}";
+                    updateExpression += ' , #I = :i';
+                    atributeNames += ', "#I":"Image"';
+                    atributeValues += ', ":i":{"S":"' + req.body.Image + '"}';
                 }
                 else {
-                    updateExpression += "#I = :i";
-                    atributeNames += "'#I':'Image'";
-                    atributeValues += "':i':{'S':" + req.body.Image + "}";
+                    updateExpression += '#I = :i';
+                    atributeNames += '"#I":"Image"';
+                    atributeValues += '":i":{"S":"' + req.body.Image + '"}';
 
                     start = true;
                 }
             }
 
-            atributeValues += "}";
-            atributeNames += "}";
+            atributeValues += '}';
+            atributeNames += '}';
+
+            console.log(JSON.parse(atributeValues));
 
             updateInput = new UpdateItemCommand({
                 TableName: 'Products',
@@ -216,6 +229,7 @@ const ProductsController = {
                 ExpressionAttributeNames: JSON.parse(atributeNames),
                 ReturnValues: "ALL_NEW"
             });
+            console.log(updateInput.input);
 
             await conDBC.send(updateInput)
                 .then(resProduct => {
@@ -232,6 +246,7 @@ const ProductsController = {
                     res.status(200).send(product);
                 })
                 .catch(error => {
+                    console.log(error);
                     res.status(400).send('No se pudo actualizar el producto');
                 });
         }
@@ -255,11 +270,58 @@ const ProductsController = {
             });
     },
 
-    search: (req, res) => {
+    search: async function searchProduct(req, res) {
         const id = req.params.id;
-        Product.findById(id).populate('RestaurantId')
-            .then(product => {
-                res.status(200).send(product);
+
+        let getProduct = new GetItemCommand({
+            TableName: "Products",
+            Key: {
+                _id: {
+                    "N": id
+                }
+            },
+        });
+
+        await conDBC.send(getProduct)
+            .then(async function resP(resProduct) {
+                let getRestaurant = new GetItemCommand({
+                    TableName: "Restaurants",
+                    Key: {
+                        _id: {
+                            "N": resProduct.Item.RestaurantId.N
+                        }
+                    },
+                });
+
+                await conDBC.send(getRestaurant)
+                    .then(async function resR(resRestaurant) {
+                        let restaurant = {
+                            _id: resRestaurant.Item._id.N,
+                            name: resRestaurant.Item.name.S,
+                            products: resRestaurant.Item.products.L,
+                            description: resRestaurant.Item.description.S,
+                            type: resRestaurant.Item.type.S,
+                            location: resRestaurant.Item.location.S,
+                            image: resRestaurant.Item.image.S,
+                            orders: resRestaurant.Item.orders.L
+                        };
+
+                        let product = {
+                            _id: resProduct.Item._id.N,
+                            Name: resProduct.Item.Name.S,
+                            Description: resProduct.Item.Description.S,
+                            Price: resProduct.Item.Price.N,
+                            Available: resProduct.Item.Available.BOOL,
+                            Image: resProduct.Item.Image.S,
+                            RestaurantId: restaurant
+                        };
+
+                        res.status(200).send(product);
+                    })
+                    .catch(error => {
+                        console.log(resProduct);
+                        res.status(400).send('No se encontro al producto con ID: ' + id);
+                    });
             })
             .catch(error => {
                 res.status(400).send('No se encontro al producto con ID: ' + id);

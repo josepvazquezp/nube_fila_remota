@@ -1,6 +1,3 @@
-const Restaurant = require('./../models/restaurant');
-const Product = require('./../models/product');
-
 const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 

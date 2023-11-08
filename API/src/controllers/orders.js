@@ -21,8 +21,8 @@ const OrdersController = {
             quantity: req.body.quantity
         };
 
-        // console.log("Orden");
-        // console.log(newOrder.products[0]);
+        console.log("Orden");
+        console.log(newOrder);
 
         
         //Se reciben bien desde Swagger
@@ -57,16 +57,7 @@ const OrdersController = {
 
                                 M : 
                                     {
-                                    product:{M: {
-                                        _id: {N: req.body.product._id},
-                                        name: {S: req.body.product.Name},
-                                        description: {S: req.body.product.Description},
-                                        price: {N: req.body.product.Price},
-                                        available: {BOOL: req.body.product.Available},
-                                        imagen: {S: req.body.product.Image},
-                                        restaurant_id: {S: req.body.product.RestaurantId},
-                                            }
-                                        },
+                                    product: {N: req.body.product},
                                     quantity: {N : req.body.quantity}
                                 },
                         
@@ -199,16 +190,7 @@ const OrdersController = {
             
                                             M : 
                                                 {
-                                                product:{M: {
-                                                    _id: {N: req.body.product._id},
-                                                    name: {S: req.body.product.Name},
-                                                    description: {S: req.body.product.Description},
-                                                    price: {N: req.body.product.Price},
-                                                    available: {BOOL: req.body.product.Available},
-                                                    imagen: {S: req.body.product.Image},
-                                                    restaurant_id: {S: req.body.product.RestaurantId},
-                                                        }
-                                                    },
+                                                product: {N: req.body.product},
                                                 quantity: {N : req.body.quantity}
                                             },
                                     
@@ -309,17 +291,78 @@ const OrdersController = {
         //                     res.status(400).send('No se pudo crear la orden');
         //                 });
     },
-
-    update: (req, res) => {
+    //=====================================================================================
+    update: async function update_order (req, res) {
         const id = req.params.id;
 
-        Order.findByIdAndUpdate(id, req.body, {new:true})
-                        .then(order => {
-                            res.status(200).send(order);
-                        })
-                        .catch(error => {
-                            res.status(400).send('No se pudo actualizar la orden');
-                        });
+
+        console.log("==========================================");
+        console.log(req.body);
+        console.log("==========================================");
+
+
+        order_updated = new UpdateItemCommand({
+            TableName: 'Orders',
+            ExpressionAttributeNames:{
+                "#ST": "status",
+                "#TOTT": "total"
+            },
+
+            ExpressionAttributeValues: {
+                ":quan": {
+                   "N" : req.body.quantity
+            },
+            ":tot": {
+                "N" : req.body.total
+            },
+            ":stats": {
+                "S" : req.body.status
+            },
+            ":prods": {
+                "L" : req.body.products.map((prod) => ({
+                    "M": {
+                        "product": {N: prod.product},
+                        "quantity": {N: prod.quantity}
+
+                    }
+
+
+                }))
+         },
+        
+        },
+            Key: {
+                _id: {
+                    "N": id
+                }
+            },
+            UpdateExpression: "SET quantity = :quan, #ST = :stats, #TOTT = :tot, products = :prods",
+            ReturnValues: "ALL_NEW"
+        });
+
+        console.log(order_updated.input.ExpressionAttributeValues);
+        console.log(order_updated.input.ExpressionAttributeValues[":prods"]);
+        console.log(order_updated.input.ExpressionAttributeValues[":prods"].L[0]);
+        console.log("==========================================");
+        console.log("==========================================");
+
+        await conDBC.send(order_updated).then(reschat => {
+            console.log("Orden Actualizada");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(200).send(reschat);
+        })
+        .catch(error => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(400).send('No se pudo actualizar la orden Error: ' + error);
+        });
+
+        // Order.findByIdAndUpdate(id, req.body, {new:true})
+        //                 .then(order => {
+        //                     res.status(200).send(order);
+        //                 })
+        //                 .catch(error => {
+        //                     res.staFtus(400).send('No se pudo actualizar la orden');
+        //                 });
     },
     
     list: async function list_orders(req, res) {
@@ -350,15 +393,68 @@ const OrdersController = {
         //         });
     },
     
-    search: (req, res) => {
+    search: async function search_order (req, res){
         const id = req.params.id;
-        Order.findById(id).populate('products.product')
-                .then(order => {
-                    res.status(200).send(order);
-                })
-                .catch(error => {
-                    res.status(400).send('No se encontro la orden: ' + id);
-                });
+
+        console.log("Buscando Ordenes...");
+
+        let input = {
+            TableName: "Orders",
+            "ExpressionAttributeNames": {
+                "#IDD": "_id"
+              },
+              "ExpressionAttributeValues": {
+                ":idd": {
+                  "N": id
+                }
+              },
+              "FilterExpression": "#IDD = :idd",
+        };
+
+        let command = new ScanCommand(input);
+        await conDBC.send(command)
+            .then(order => {
+                console.log("Se encontró la orden");
+                console.log(order.Items);
+
+                let temp = {
+                    _id: order.Items[0]._id.N,
+                    total: order.Items[0].total.N,
+                    quantity: order.Items[0].quantity.N,
+                    status: order.Items[0].status.S,
+                    customerId: order.Items[0].customer_id.N,
+                    restaurantId: order.Items[0].restaurant_id.N,
+                    products: []
+                }
+                for(let i = 0; i < order.Items[0].products.L.length; i++){
+                    temp.products.push({
+                        product: order.Items[0].products.L[i].M.product.N,
+                        quantity: order.Items[0].products.L[i].M.quantity.N,
+
+                    })
+                }
+
+
+                console.log(temp);
+
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(200).send(temp);
+            })
+            .catch(error => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(400).send('No se encontro la tarjeta con ID: ' + id + " por el error: " + error);
+            });
+
+
+
+
+        // Order.findById(id).populate('products.product')
+        //         .then(order => {
+        //             res.status(200).send(order);
+        //         })
+        //         .catch(error => {
+        //             res.status(400).send('No se encontro la orden: ' + id);
+        //         });
     },
 
     delete: async function delete_order (req, res) {

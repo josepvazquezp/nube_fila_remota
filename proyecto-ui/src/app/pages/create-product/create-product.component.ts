@@ -19,12 +19,12 @@ export class CreateProductComponent {
   idRestaurant: String = "";
 
   constructor(
-    private sharedDataService: SharedDataService, 
-    private productService: ProductService, 
-    private formBuilder: FormBuilder, 
+    private sharedDataService: SharedDataService,
+    private productService: ProductService,
+    private formBuilder: FormBuilder,
     private router: Router) {
     this.idRestaurant = this.sharedDataService.getUserRestaurant();
-    
+
     this.productForm = formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -44,15 +44,15 @@ export class CreateProductComponent {
       RestaurantId: this.idRestaurant
     }
 
-    if(this.productForm.value != '' || this.selectedFile != null) {
+    if (this.productForm.value != '' || this.selectedFile != null) {
       this.productService.createProduct(body).subscribe((response: any) => {
         let id: any = response.product._id;
-  
+
         const formData = new FormData();
         formData.append("file", this.selectedFile);
         this.productService.changeImage(formData, id).subscribe((response: any) => {
-          let body = {Image: enviroment.host +  "/image/" + response.image};
-          
+          let body = { Image: enviroment.bucket + response.image };
+
           this.productService.updateProduct(id, body).subscribe((response: any) => {
             this.router.navigate(['/restaurant_products']);
           });

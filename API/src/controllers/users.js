@@ -1,14 +1,9 @@
 const jwt = require('jsonwebtoken');
-const { OAuth2Client } = require('google-auth-library');
-
-const User = require('./../models/user');
 
 const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 const conDBC = require('./con_dynamo');
 
 require('dotenv').config();
-
-const googleClient = new OAuth2Client(process.env.GOOGLE_ID);
 
 const key = process.env.KEY;
 
@@ -26,10 +21,14 @@ const UsersController = {
 
         let resIdCount = await conDBC.send(getIdCount);
 
-        let newUser;
+        let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
 
-        if (req.body.type == "Restaurant") {
+        let newUser;
+        let insertInput;
+
+        if (req.body.type == "Restaurante") {
             newUser = {
+                _id: newId,
                 email: req.body.email,
                 password: req.body.password,
                 name: req.body.name,
@@ -39,8 +38,26 @@ const UsersController = {
                 image: "../../../assets/images/logo.png",
                 restaurant: ""
             };
+
+            insertInput = {
+                TableName: 'Users',
+                Item: {
+                    _id: {
+                        N: newId.toString()
+                    },
+                    email: { S: req.body.email },
+                    password: { S: req.body.password },
+                    name: { S: req.body.name },
+                    type: { S: req.body.type },
+                    history: { L: [] },
+                    status: { S: "ok" },
+                    image: { S: "../../../assets/images/logo.png" },
+                    restaurant: { N: "0" }
+                }
+            }
         } else {
             newUser = {
+                _id: newId,
                 email: req.body.email,
                 password: req.body.password,
                 name: req.body.name,
@@ -49,27 +66,25 @@ const UsersController = {
                 status: "ok",
                 image: "../../../assets/images/logo.png"
             };
+
+            insertInput = {
+                TableName: 'Users',
+                Item: {
+                    _id: {
+                        N: newId.toString()
+                    },
+                    email: { S: req.body.email },
+                    password: { S: req.body.password },
+                    name: { S: req.body.name },
+                    type: { S: req.body.type },
+                    history: { L: [] },
+                    status: { S: "ok" },
+                    image: { S: "../../../assets/images/logo.png" }
+                }
+            }
         }
 
-
-
-        let newId = parseInt(resIdCount.Item.IdCount.N) + 1;
-
-        let insertValue = new PutItemCommand({
-            TableName: 'Users',
-            Item: {
-                _id: {
-                    N: newId.toString()
-                },
-                email: { S: req.body.email },
-                password: { S: req.body.password },
-                name: { S: req.body.name },
-                type: { S: req.body.type },
-                history: { L: [] },
-                status: { S: "ok" },
-                image: { S: "../../../assets/images/logo.png" }
-            }
-        });
+        let insertValue = new PutItemCommand(insertInput);
 
         let idUpdate = new UpdateItemCommand({
             TableName: 'Users',
@@ -169,7 +184,7 @@ const UsersController = {
                     UpdateExpression: "SET restaurant = :r",
                     ExpressionAttributeValues: {
                         ":r": {
-                            "S": req.body.restaurant
+                            "N": req.body.restaurant.toString()
                         }
                     },
                     ReturnValues: "ALL_NEW"
@@ -180,7 +195,7 @@ const UsersController = {
                 .then(resUser => {
                     let user;
 
-                    if (resUser.Attributes.type.S == "Restaurant") {
+                    if (resUser.Attributes.type.S == "Restaurante") {
                         user = {
                             _id: resUser.Attributes._id.N,
                             email: resUser.Attributes.email.S,
@@ -190,7 +205,7 @@ const UsersController = {
                             history: resUser.Attributes.history.L,
                             status: resUser.Attributes.status.S,
                             image: resUser.Attributes.image.S,
-                            restaurant: resUser.Attributes.restaurant.S,
+                            restaurant: resUser.Attributes.restaurant.N,
                         }
                     }
                     else {
@@ -210,6 +225,7 @@ const UsersController = {
                     res.status(200).send(user);
                 })
                 .catch(error => {
+                    console.log(error);
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(400).send('No se pudo actualizar el usuario');
                 });
@@ -255,7 +271,7 @@ const UsersController = {
         if (resUser.Item != undefined) {
             let user;
 
-            if (resUser.Item.type.S == "Restaurant") {
+            if (resUser.Item.type.S == "Restaurante") {
                 user = {
                     _id: resUser.Item._id.N,
                     email: resUser.Item.email.S,
@@ -265,7 +281,7 @@ const UsersController = {
                     history: resUser.Item.history.L,
                     status: resUser.Item.status.S,
                     image: resUser.Item.image.S,
-                    restaurant: resUser.Item.restaurant.S,
+                    restaurant: resUser.Item.restaurant.N,
                 }
             }
             else {
@@ -304,6 +320,7 @@ const UsersController = {
         let command = new DeleteItemCommand(input);
         await conDBC.send(command)
             .then(user => {
+                console.log(user);
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(user);
             })
@@ -342,7 +359,7 @@ const UsersController = {
     },
 
     searchLogin: async function getUsuarF(req, res) { //Esta ruta se encarga de verificar si el email y contraseña son correctos
-        const input = {
+        let input = {
             ExpressionAttributeValues: {
                 ":e": {
                     "S": req.body.email
@@ -361,7 +378,7 @@ const UsersController = {
         if (resUser.Items[0] != undefined) {
             let user;
 
-            if (resUser.Items[0].type.S == "Restaurant") {
+            if (resUser.Items[0].type.S == "Restaurante") {
                 user = {
                     _id: resUser.Items[0]._id.N,
                     email: resUser.Items[0].email.S,
@@ -371,7 +388,7 @@ const UsersController = {
                     history: resUser.Items[0].history.L,
                     status: resUser.Items[0].status.S,
                     image: resUser.Items[0].image.S,
-                    restaurant: resUser.Items[0].restaurant.S,
+                    restaurant: resUser.Items[0].restaurant.N,
                 }
             }
             else {
@@ -428,7 +445,7 @@ const UsersController = {
             .then(resUser => {
                 let user;
 
-                if (resUser.Item.type.S == "Restaurant") {
+                if (resUser.Item.type.S == "Restaurante") {
                     user = {
                         _id: resUser.Item._id.N,
                         email: resUser.Item.email.S,
@@ -438,7 +455,7 @@ const UsersController = {
                         history: resUser.Item.history.L,
                         status: resUser.Item.status.S,
                         image: resUser.Item.image.S,
-                        restaurant: resUser.Item.restaurant.S,
+                        restaurant: resUser.Item.restaurant.N,
                     }
                 }
                 else {

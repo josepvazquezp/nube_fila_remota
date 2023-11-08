@@ -441,7 +441,7 @@ const UsersController = {
         });
 
         await conDBC.send(getUser)
-            .then(resUser => {
+            .then(async function reqU(resUser) {
                 let user;
 
                 if (resUser.Item.type.S == "Restaurante") {
@@ -469,6 +469,41 @@ const UsersController = {
                         image: resUser.Item.image.S
                     }
                 }
+
+                let getOrder;
+                let orders = [];
+                let temp;
+
+                for (let i = 0; i < resUser.Item.history.L.length; i++) {
+                    getOrder = new GetItemCommand({
+                        TableName: "Orders",
+                        Key: {
+                            _id: {
+                                "N": resUser.Item.history.L[i].N
+                            }
+                        },
+                    });
+
+                    await conDBC.send(getOrder)
+                        .then(async function resO(resOrder) {
+                            temp = {
+                                _id: resOrder.Item._id.N,
+                                customerId: resOrder.Item.customer_id.N,
+                                restaurantId: resOrder.Item.restaurant_id.N,
+                                total: resOrder.Item.total.N,
+                                status: resOrder.Item.status.S,
+                                products: resOrder.Item.products.L,
+                                quantity: resOrder.Item.quantity.N
+                            };
+
+                            orders.push(temp);
+                        })
+                        .catch(error => {
+                            res.status(400).send('No se encontro al producto con ID: ' + resUser.Item.history.L[i].N);
+                        });
+                }
+
+                user.history = orders;
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(200).send(user);

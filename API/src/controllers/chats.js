@@ -57,6 +57,7 @@ const ChatsController = {
         await conDBC.send(idUpdate);
 
 
+        console.log(insertValue.input)
 
         await conDBC.send(insertValue).then(chat => {
 
@@ -99,6 +100,11 @@ const ChatsController = {
         let stringDate = date.getHours() + ":" + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 
 
+        console.log("ID");
+        console.log(id);
+        console.log("BODY");
+        console.log(req.body)
+
         const newMessage = {
             sender: req.body.sender,
             message: req.body.message,
@@ -133,15 +139,35 @@ const ChatsController = {
         });
 
         await conDBC.send(chat_updated).then(reschat => {
+            console.log("Chat actualizado");
+            console.log(reschat.Attributes);
 
+            let temp = {
+                _id : reschat.Attributes._id.N,
+                customerId : reschat.Attributes.customer_id.N,
+                restaurantId: reschat.Attributes.restaurant_id.N,
+                messages: [],
+            }
+
+
+            for (let j = 0; j < reschat.Attributes.messages.L.length; j++) {
+                let temp2 = {
+                    sender: reschat.Attributes.messages.L[j].M.sender.S,
+                    date: reschat.Attributes.messages.L[j].M.date.S,
+                    message: reschat.Attributes.messages.L[j].M.message.S,
+                };
+                temp.messages.push(temp2);
+            }
+            
+            console.log("===========================");
 
             res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(200).send(reschat);
+            res.status(200).send(temp);
         })
             .catch(error => {
                 console.log(error);
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se pudo actualizar el chat');
+                res.status(400).send('No se pudo actualizar el chat Error: ' + error);
             });
 
 
@@ -339,7 +365,7 @@ const ChatsController = {
                     }
                 }
 
-                console.log(temp);
+                // console.log(temp);
 
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -365,6 +391,7 @@ const ChatsController = {
         const ItID = req.body.ItID;
 
         body = JSON.parse('{"customerId": "' + MyID + '", "restaurantId": "' + ItID + '"}')
+        console.log(body)
 
         let input = {
             TableName: "Chats",
@@ -388,18 +415,35 @@ const ChatsController = {
         await conDBC.send(command)
             .then(chat => {
                 console.log("Chat encontrado")
-                console.log(chat);
+                console.log(chat)
 
+                let temp;
 
-                // temp = {
-                //     _id : chat.Items._id.N,
-                //     customerId : chat.Items.customer_id.N,
-                //     restaurantId: chat.Items.restaurant_id.N,
-                //     messages: chat.Items.messages.L,
-                // }
+                if(chat.Count > 0){
+                    temp = {
+                        _id : chat.Items[0]._id.N,
+                        customerId : chat.Items[0].customer_id.N,
+                        restaurantId: chat.Items[0].restaurant_id.N,
+                        messages: [],
+                    }
+    
+    
+                    for (let j = 0; j < chat.Items[0].messages.L.length; j++) {
+                        let temp2 = {
+                            sender: chat.Items[0].messages.L[j].M.sender.S,
+                            date: chat.Items[0].messages.L[j].M.date.S,
+                            message: chat.Items[0].messages.L[j].M.message.S,
+                        };
+                        temp.messages.push(temp2);
+                    }
+                }else{
+                    temp = []
+                }
+
+                
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(chat.Items);
+                res.status(200).send(temp);
             })
             .catch(error => {
                 console.log(error);

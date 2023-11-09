@@ -7,7 +7,7 @@ const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteIt
 const conDBC = require('./con_dynamo');
 
 const RatingController = {
-    create: async function create_rating(req, res){
+    create: async function create_rating(req, res) {
         let newRating = {
             ID_Evaluator: req.body.ID_Evaluator,
             ID_Evaluated: req.body.ID_Evaluated,
@@ -35,10 +35,10 @@ const RatingController = {
                 _id: {
                     N: newId.toString()
                 },
-                id_evaluator: { N: req.body.ID_Evaluator },
-                id_evaluated: { N: req.body.ID_Evaluated },
-                id_order: { N: req.body.ID_Order },
-                rating: { N: req.body.Rating },
+                id_evaluator: { N: req.body.ID_Evaluator.toString() },
+                id_evaluated: { N: req.body.ID_Evaluated.toString() },
+                id_order: { N: req.body.ID_Order.toString() },
+                rating: { N: req.body.Rating.toString() },
                 description: { S: req.body.Description },
             }
         });
@@ -61,10 +61,13 @@ const RatingController = {
 
         await conDBC.send(idUpdate);
 
+        console.log(insertValue.input);
+
         await conDBC.send(insertValue).then(rating => {
             res.status(201).send(rating.Items);
         })
             .catch(error => {
+                console.log(error);
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(400).send('No se pudo asignar la calificación');
             });
@@ -74,23 +77,23 @@ const RatingController = {
     //TODO: Este no se usa tons despues veo
     update: (req, res) => {
         const id = req.params.id;
-        
-        if(req.body != null && req.body.ID_Evaluator == undefined && req.body.ID_Evaluated == undefined) {
-                Rating.findByIdAndUpdate(id, req.body, {new:true})
-                                .then(rating => {
-                                    res.status(200).send(rating);
-                                })
-                                .catch(error => {
-                                    res.status(400).send('No se pudieron actualizar los datos de la calificación');
-                                });
-            }
+
+        if (req.body != null && req.body.ID_Evaluator == undefined && req.body.ID_Evaluated == undefined) {
+            Rating.findByIdAndUpdate(id, req.body, { new: true })
+                .then(rating => {
+                    res.status(200).send(rating);
+                })
+                .catch(error => {
+                    res.status(400).send('No se pudieron actualizar los datos de la calificación');
+                });
+        }
         else {
             res.status(400).send('No se pudieron actualizar los datos de la calificación');
         }
     },
     //==============================================================================
     //==============================================================================
-    list: async function list_reviews (req, res){
+    list: async function list_reviews(req, res) {
         let input = {
             TableName: "Ratings"
         };
@@ -119,7 +122,7 @@ const RatingController = {
     },
     //==============================================================================
     //==============================================================================
-    search: async function  search_rating(req, res) {
+    search: async function search_rating(req, res) {
 
 
         const id = req.params.id;
@@ -128,13 +131,13 @@ const RatingController = {
             TableName: "Ratings",
             "ExpressionAttributeNames": {
                 "#IDD": "_id"
-              },
-              "ExpressionAttributeValues": {
+            },
+            "ExpressionAttributeValues": {
                 ":idd": {
-                  "N": id
+                    "N": id
                 }
-              },
-              "FilterExpression": "#IDD = :idd",
+            },
+            "FilterExpression": "#IDD = :idd",
         };
 
         let command = new ScanCommand(input);
@@ -160,7 +163,7 @@ const RatingController = {
     },
     //==============================================================================
     //==============================================================================
-    delete: async function delete_rating (req, res){
+    delete: async function delete_rating(req, res) {
         const id = req.params.id;
 
         let input = {
@@ -201,13 +204,13 @@ const RatingController = {
             TableName: "Ratings",
             "ExpressionAttributeNames": {
                 "#IDD": "id_evaluated"
-              },
-              "ExpressionAttributeValues": {
+            },
+            "ExpressionAttributeValues": {
                 ":idd": {
-                  "N": id
+                    "N": id
                 }
-              },
-              "FilterExpression": "#IDD = :idd",
+            },
+            "FilterExpression": "#IDD = :idd",
         };
 
         let command = new ScanCommand(input);
@@ -216,15 +219,15 @@ const RatingController = {
 
                 let temp = [];
 
-                for(let i = 0; i < ratings.Count; i++){
+                for (let i = 0; i < ratings.Count; i++) {
                     temp.push({
-                        _id : ratings.Items[i]._id.N,
-                        ID_Evaluator : ratings.Items[i].id_evaluator.N,
+                        _id: ratings.Items[i]._id.N,
+                        ID_Evaluator: ratings.Items[i].id_evaluator.N,
                         ID_Evaluated: ratings.Items[i].id_evaluated.N,
                         ID_Order: ratings.Items[i].id_order.N,
                         Rating: ratings.Items[i].rating.N,
                         Description: ratings.Items[i].description.S,
-                        
+
                     });
                 }
 
@@ -232,7 +235,7 @@ const RatingController = {
 
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send(ratings.Items);
+                res.status(200).send(temp);
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');

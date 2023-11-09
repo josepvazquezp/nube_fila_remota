@@ -31,65 +31,67 @@ export class DisplayRestaurantComponent {
     type: "",
     history: [],
     status: "",
-    image:  "",
+    image: "",
     restaurant: ""
   };
 
   idRestaurant: String = "";
   idCustomer: String = "";
   idOrder: String = "";
-  chatButtonDisplay:boolean = true;
+  chatButtonDisplay: boolean = true;
   ratingsAverage: number = 0.0;
   ratingNumber: number = 0;
   ratingDisplay: string = "";
 
-  ratingArr = [1,2,3,4,5];
+  ratingArr = [1, 2, 3, 4, 5];
 
-  constructor(private chatS: ChatService ,private router:Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService,
+  constructor(private chatS: ChatService, private router: Router, private sharedDataService: SharedDataService, private restaurantService: RestaurantService,
     private orderService: OrderService, private ratingService: ReviewService) {
-      this.idRestaurant = this.sharedDataService.getRestaurant();
-      this.idCustomer = this.sharedDataService.getCustomer();
-      this.idOrder = this.sharedDataService.getOrder();
-      this.user = sharedDataService.getUser();
+    this.idRestaurant = this.sharedDataService.getRestaurant();
+    this.idCustomer = this.sharedDataService.getCustomer();
+    this.idOrder = this.sharedDataService.getOrder();
+    this.user = sharedDataService.getUser();
 
-      this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
-        this.name = response.name;
-        this.description = response.description;
-        this.type = response.type;
+    this.restaurantService.getRestaurant(this.idRestaurant).subscribe((response: any) => {
+      this.name = response.name;
+      this.description = response.description;
+      this.type = response.type;
 
-        this.sharedDataService.setTypeRestaurant(this.type);
+      this.sharedDataService.setTypeRestaurant(this.type);
 
-        this.location = response.location;
-        this.image = response.image;
+      this.location = response.location;
+      this.image = response.image;
 
-        this.products = response.products;
+      this.products = response.products;
     });
 
-      if(this.user.type != "Cliente" && this.user.restaurant == this.idRestaurant){
-        this.chatButtonDisplay = false;
-      }
+    if (this.user.type != "Cliente" && this.user.restaurant == this.idRestaurant) {
+      this.chatButtonDisplay = false;
+    }
 
-      this.ratingService.getRatingR(this.idRestaurant).subscribe((response: any) => {
-        for(let  i = 0; i < response.length; i++){
-          this.ratingsAverage += response[i].Rating;
-        }
-        this.ratingsAverage = this.ratingsAverage / response.length;
-        this.ratingsAverage = Math.ceil(this.ratingsAverage);
-        this.ratingNumber = response.length;
-        this.ratingDisplay = this.ratingsAverage.toFixed(0);
-      });
+    this.ratingService.getRatingR(this.idRestaurant).subscribe((response: any) => {
+      for (let i = 0; i < response.length; i++) {
+        this.ratingsAverage += +response[i].Rating;
+      }
+      this.ratingsAverage = this.ratingsAverage / response.length;
+      this.ratingsAverage = Math.ceil(this.ratingsAverage);
+      console.log("Average");
+      console.log(this.ratingsAverage);
+      this.ratingNumber = response.length;
+      this.ratingDisplay = this.ratingsAverage.toFixed(0);
+    });
 
   }
 
-  addOrder(id: String) {    
-    if(this.idCustomer != "") {
+  addOrder(id: String) {
+    if (this.idCustomer != "") {
       let index = this.products.findIndex(item => item._id == id);
       let product = this.products[index];
 
-      if(this.idOrder == '') {
+      if (this.idOrder == '') {
         let body = {
-          customerId: this.idCustomer, 
-          restaurantId: this.idRestaurant, 
+          customerId: this.idCustomer,
+          restaurantId: this.idRestaurant,
           total: product.Price,
           product: product._id,
           quantity: 1
@@ -102,25 +104,25 @@ export class DisplayRestaurantComponent {
       }
       else {
         this.orderService.getOrder(this.idOrder).subscribe((response: any) => {
-          if(response.restaurantId == this.idRestaurant) {
+          if (response.restaurantId == this.idRestaurant) {
             let products = response.products;
             let index = undefined;
-            
-            for(let i = 0 ; i < products.length ; i++) {
-              if(products[i].product._id == id) {
+
+            for (let i = 0; i < products.length; i++) {
+              if (products[i].product._id == id) {
                 index = i;
                 break;
               }
             }
 
-            if(index == undefined) {
-              products.push({product: id, quantity: 1});
+            if (index == undefined) {
+              products.push({ product: id, quantity: 1 });
             }
             else {
               products[index].quantity++;
             }
 
-            let body = {products: products, quantity: ++response.quantity, total: response.total + product.Price};
+            let body = { products: products, quantity: ++response.quantity, total: response.total + product.Price };
 
             this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
               this.router.navigate(['/display_order']);
@@ -135,36 +137,36 @@ export class DisplayRestaurantComponent {
     else {
       alert("Es necesario iniciar sesión");
     }
-    
+
   }
 
 
 
-  prepareChat(){
-    if(this.user != undefined){
+  prepareChat() {
+    if (this.user != undefined) {
       this.sharedDataService.setOrigin("display_restaurant");
 
 
-      let body = JSON.parse('{"MyID": "' + this.user._id +'", "ItID": "' + this.idRestaurant + '"}');
+      let body = JSON.parse('{"MyID": "' + this.user._id + '", "ItID": "' + this.idRestaurant + '"}');
       this.chatS.getChat(body).subscribe((response: any) => {
-        if(response.length == 0){ //No hay chat aun
-          
-          let bodytrue = JSON.parse('{"customerId": "' + this.user._id +'", "restaurantId": "' + this.idRestaurant + '"}');
-  
+        if (response.length == 0) { //No hay chat aun
+
+          let bodytrue = JSON.parse('{"customerId": "' + this.user._id + '", "restaurantId": "' + this.idRestaurant + '"}');
+
           this.chatS.createChat(bodytrue).subscribe((response: any) => {
             this.router.navigate(['/chat']);
-              });
-  
-        }else{ //ya hay chat
+          });
+
+        } else { //ya hay chat
           this.router.navigate(['/chat']);
         }
       });
-    }else{
+    } else {
       this.router.navigate(['/login']);
     }
   }
 
-  displayStars(index: number){
+  displayStars(index: number) {
     if (this.ratingsAverage >= index + 1) {
       return 'star';
     } else {
@@ -173,4 +175,4 @@ export class DisplayRestaurantComponent {
   }
 
 
-  }
+}

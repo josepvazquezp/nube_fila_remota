@@ -5,7 +5,7 @@ import { Product } from 'src/app/shared/interfaces/product';
 
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { RestaurantService } from 'src/app/shared/services/restaurant.service';
-import { ProductService } from 'src/app/shared/services/product.service'; 
+import { ProductService } from 'src/app/shared/services/product.service';
 import { OrderService } from 'src/app/shared/services/order.service';
 
 import { enviroment } from 'src/enviroments/enviroment';
@@ -27,7 +27,8 @@ export class RetaurantOrdersComponent {
     products: Array<{
       product: Product,
       quantity: number
-    }>}> = new Map();
+    }>
+  }> = new Map();
 
   rName: String = "";
 
@@ -42,17 +43,17 @@ export class RetaurantOrdersComponent {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
-    private router:Router, 
-    private sharedDataService: SharedDataService, 
-    private restaurantService: RestaurantService, 
-    private productService: ProductService, 
+    private router: Router,
+    private sharedDataService: SharedDataService,
+    private restaurantService: RestaurantService,
+    private productService: ProductService,
     private orderService: OrderService,
     private snackBar: MatSnackBar) {
     this.idUserRestaurant = this.sharedDataService.getUserRestaurant();
     this.getData();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.socket = io(enviroment.host);
   }
 
@@ -63,18 +64,18 @@ export class RetaurantOrdersComponent {
     });
 
     setTimeout(() => {
-      for(let i = 0 ; i < this.keys.length ; i++) {
+      for (let i = 0; i < this.keys.length; i++) {
         let temp = this.hashmap.get(this.keys[i])?.status;
 
         let index = this.status.findIndex(item => item == temp);
 
-        if(index > 0) {
+        if (index > 0) {
           document.getElementById(this.keys[i] + '_aceptada')?.click();
 
-          if(index > 1) {
+          if (index > 1) {
             document.getElementById(this.keys[i] + '_lista')?.click();
 
-            if(index > 2) {
+            if (index > 2) {
               document.getElementById(this.keys[i] + '_finalizada')?.click();
             }
           }
@@ -87,22 +88,22 @@ export class RetaurantOrdersComponent {
     this.restaurantService.getRestaurant(this.idUserRestaurant).subscribe((response: any) => {
       this.rName = response.name;
 
-      for(let i = 0 ; i < response.orders.length ; i++) {
+      for (let i = 0; i < response.orders.length; i++) {
 
         let temp: Array<{
-          product:Product, 
+          product: Product,
           quantity: number
         }> = [];
 
-        for(let j = 0 ; j < response.orders[i].products.length ; j++) {
-          this.productService.getProduct(response.orders[i].products[j].product).subscribe((product: any) => {
-            
+        for (let j = 0; j < response.orders[i].products.length; j++) {
+          this.productService.getProduct(response.orders[i].products[j].product.N).subscribe((product: any) => {
+
             temp.push({
               product: product,
-              quantity: response.orders[i].products[j].quantity
+              quantity: response.orders[i].products[j].quantity.N
             });
 
-            if(j == response.orders[i].products.length - 1) {
+            if (j == response.orders[i].products.length - 1) {
               let o = {
                 status: response.orders[i].status,
                 quantity: response.orders[i].quantity,
@@ -120,7 +121,7 @@ export class RetaurantOrdersComponent {
   }
 
   aceptOrder(id: String) {
-    let body = {status: "aceptada"};
+    let body = { status: "aceptada" };
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
@@ -129,7 +130,7 @@ export class RetaurantOrdersComponent {
   }
 
   refuseOrder(id: String) {
-    let body = {status: "rechazada"};
+    let body = { status: "rechazada" };
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
@@ -139,7 +140,7 @@ export class RetaurantOrdersComponent {
   }
 
   readyOrder(id: String) {
-    let body = {status: "lista"};
+    let body = { status: "lista" };
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
@@ -149,13 +150,13 @@ export class RetaurantOrdersComponent {
   }
 
   finishOrder(id: String) {
-    let body = {status: "finalizada"};
+    let body = { status: "finalizada" };
 
     this.orderService.updateOrder(id, body).subscribe((response: any) => {
       this.getData();
       this.socket.emit("changeStatus", body.status);
       this.router.navigate(['/restaurant_orders']);
     });
-  } 
-  
+  }
+
 }

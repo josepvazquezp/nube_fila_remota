@@ -155,15 +155,21 @@ const RestaurantsController = {
                         "N": id
                     }
                 },
-                UpdateExpression: "SET orders = :o",
+                UpdateExpression: "SET orders = list_append(orders, :o)",
                 ExpressionAttributeValues: {
                     ":o": {
-                        "L": req.body.orders
+                        "L": [
+                            {
+                                "N": req.body.orders[req.body.orders.length - 1].toString()
+                            }
+                        ]
                     }
                 },
                 ReturnValues: "ALL_NEW"
             });
         }
+
+        console.log(updateInput.input.ExpressionAttributeValues[":o"]);
 
         await conDBC.send(updateInput)
             .then(resRestaurant => {
@@ -181,6 +187,7 @@ const RestaurantsController = {
                 res.status(200).send(restaurant);
             })
             .catch(error => {
+                console.log(error);
                 res.status(400).send('No se pudo actualizar el restaurant');
             });
     },
@@ -276,13 +283,19 @@ const RestaurantsController = {
 
                     await conDBC.send(getOrder)
                         .then(async function resO(resOrder) {
+                            let products = [];
+
+                            for (let k = 0; k < resOrder.Item.products.L.length; k++) {
+                                products.push(resOrder.Item.products.L[k].M);
+                            }
+
                             temp = {
                                 _id: resOrder.Item._id.N,
                                 customerId: resOrder.Item.customer_id.N,
                                 restaurantId: resOrder.Item.restaurant_id.N,
                                 total: resOrder.Item.total.N,
                                 status: resOrder.Item.status.S,
-                                products: resOrder.Item.products.L,
+                                products: products,
                                 quantity: resOrder.Item.quantity.N
                             };
 

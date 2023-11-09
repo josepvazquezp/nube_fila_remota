@@ -85,7 +85,11 @@ export class ChatdisplayComponent {
     }
     
     this.chatService.getChat(body).subscribe((response: any) => {
-        this.thisChat = response;
+        this.thisChat[0] = response;
+        console.log("Chat Obtenido");
+        console.log(this.thisChat[0]);
+        console.log(this.thisChat[0].messages);
+
         this.loadChat()
         });
   }

@@ -11,20 +11,20 @@ const { PutItemCommand, GetItemCommand, UpdateItemCommand, ScanCommand, DeleteIt
 const conDBC = require('./con_dynamo');
 
 const OrdersController = {
-    create: async function create_order (req, res) {
+    create: async function create_order(req, res) {
         let newOrder = {
             customerId: req.body.customerId,
             restaurantId: req.body.restaurantId,
             total: req.body.total,
             status: "creada",
-            products: [{product: req.body.product, quantity: req.body.quantity}],
+            products: [{ product: req.body.product, quantity: req.body.quantity }],
             quantity: req.body.quantity
         };
 
         console.log("Orden");
         console.log(newOrder);
 
-        
+
         //Se reciben bien desde Swagger
 
 
@@ -46,24 +46,24 @@ const OrdersController = {
                 _id: {
                     N: newId.toString()
                 },
-                customer_id: { N: req.body.customerId },
-                restaurant_id: {N: req.body.restaurantId},
-                total: {N: req.body.total},
-                status: {S: "creada"},
-                quantity: {N: req.body.quantity},
+                customer_id: { N: req.body.customerId.toString() },
+                restaurant_id: { N: req.body.restaurantId.toString() },
+                total: { N: req.body.total.toString() },
+                status: { S: "creada" },
+                quantity: { N: req.body.quantity.toString() },
                 products: {
-                        L: [
-                            {
+                    L: [
+                        {
 
-                                M : 
-                                    {
-                                    product: {N: req.body.product},
-                                    quantity: {N : req.body.quantity}
-                                },
-                        
-                    },
-                ],
-            }
+                            M:
+                            {
+                                product: { N: req.body.product.toString() },
+                                quantity: { N: req.body.quantity.toString() }
+                            },
+
+                        },
+                    ],
+                }
             }
         });
 
@@ -94,7 +94,7 @@ const OrdersController = {
         // console.log(insertValue.input.Item.products.L[0].productin.M.quantity.N);
 
 
-        
+
 
         await conDBC.send(idUpdate);
 
@@ -104,118 +104,127 @@ const OrdersController = {
         //No se le hace push, se le baja su history, se cambia y se manda
         //Primero: Get
         //Segundo: Put
-        
 
-        await conDBC.send(insertValue).then( async function resOrder(order) {
-                console.log("Orden Creada");
+        console.log(insertValue.Item);
+        await conDBC.send(insertValue).then(async function resOrder(order) {
+            console.log("Orden Creada");
 
-                //Get del User
-                let getUser = new GetItemCommand({
-                    TableName: "Users",
-                    Key: {
-                        _id: {
-                            "N": insertValue.input.Item.customer_id.N
-                        }
-                    },
-                });
-        
-                let resUser = await conDBC.send(getUser);
-
-                console.log("Usuario");
-                console.log(resUser);
-
-                let user;
-                
-        
-                if (resUser.Item != undefined) {
-                    
-        
-                    if (resUser.Item.type.S == "Restaurant") {
-                        user = {
-                            _id: resUser.Item._id.N,
-                            email: resUser.Item.email.S,
-                            password: resUser.Item.password.S,
-                            name: resUser.Item.name.S,
-                            type: resUser.Item.type.S,
-                            history: resUser.Item.history.L,
-                            status: resUser.Item.status.S,
-                            image: resUser.Item.image.S,
-                            restaurant: resUser.Item.restaurant.S,
-                        }
+            //Get del User
+            let getUser = new GetItemCommand({
+                TableName: "Users",
+                Key: {
+                    _id: {
+                        "N": insertValue.input.Item.customer_id.N
                     }
-                    else {
-                        user = {
-                            _id: resUser.Item._id.N,
-                            email: resUser.Item.email.S,
-                            password: resUser.Item.password.S,
-                            name: resUser.Item.name.S,
-                            type: resUser.Item.type.S,
-                            history: resUser.Item.history.L,
-                            status: resUser.Item.status.S,
-                            image: resUser.Item.image.S
-                        }
+                },
+            });
+
+            let resUser = await conDBC.send(getUser);
+
+            console.log("Usuario");
+            console.log(resUser);
+
+            let user;
+
+
+            if (resUser.Item != undefined) {
+
+
+                if (resUser.Item.type.S == "Restaurant") {
+                    user = {
+                        _id: resUser.Item._id.N,
+                        email: resUser.Item.email.S,
+                        password: resUser.Item.password.S,
+                        name: resUser.Item.name.S,
+                        type: resUser.Item.type.S,
+                        history: resUser.Item.history.L,
+                        status: resUser.Item.status.S,
+                        image: resUser.Item.image.S,
+                        restaurant: resUser.Item.restaurant.S,
+                    }
+                }
+                else {
+                    user = {
+                        _id: resUser.Item._id.N,
+                        email: resUser.Item.email.S,
+                        password: resUser.Item.password.S,
+                        name: resUser.Item.name.S,
+                        type: resUser.Item.type.S,
+                        history: resUser.Item.history.L,
+                        status: resUser.Item.status.S,
+                        image: resUser.Item.image.S
                     }
                 }
 
-                //Obtener el historial
-                console.log(user);
-                console.log("Historial antes de Push");
-                console.log(user.history);
-                console.log("");
-
-                user.history.push(newOrder);
-
-                console.log("Historial despues de Push");
-                console.log(user.history);
-                console.log("");
 
 
-                //Update para meter la nueva orden
-                update_user_history = new UpdateItemCommand({
-                    TableName: 'Users',
-        
-                    ExpressionAttributeValues: {
-                        ":msgn": {
-                            L :[{M:{_id: {
-                                N: newId.toString()
-                            },
-                            customer_id: { N: req.body.customerId },
-                            restaurant_id: {N: req.body.restaurantId},
-                            total: {N: req.body.total},
-                            status: {S: "creada"},
-                            quantity: {N: req.body.quantity},
-                            products: {
+            }
+
+            //Obtener el historial
+            console.log(user);
+            console.log("Historial antes de Push");
+            console.log(user.history);
+            console.log("");
+
+            user.history.push(newOrder);
+
+            console.log("Historial despues de Push");
+            console.log(user.history);
+            console.log("");
+
+
+            //Update para meter la nueva orden
+            update_user_history = new UpdateItemCommand({
+                TableName: 'Users',
+
+                ExpressionAttributeValues: {
+                    ":msgn": {
+                        L: [{
+                            M: {
+                                _id: {
+                                    N: newId.toString()
+                                },
+                                customer_id: { N: req.body.customerId.toString() },
+                                restaurant_id: { N: req.body.restaurantId.toString() },
+                                total: { N: req.body.total.toString() },
+                                status: { S: "creada" },
+                                quantity: { N: req.body.quantity.toString() },
+                                products: {
                                     L: [
                                         {
-            
-                                            M : 
-                                                {
-                                                product: {N: req.body.product},
-                                                quantity: {N : req.body.quantity}
+
+                                            M:
+                                            {
+                                                product: { N: req.body.product.toString() },
+                                                quantity: { N: req.body.quantity.toString() }
                                             },
-                                    
-                                },
-                            ],
-                        }}}]
-            }
-            ,},
-                    Key: {
-                        _id: {
-                            "N":  user._id
-                        }
-                    },
-                    UpdateExpression: "SET history = list_append(history, :msgn)",
-                    ReturnValues: "ALL_NEW"
-                });
 
-                
-                
-                console.log("=====================================")
+                                        },
+                                    ],
+                                }
+                            }
+                        }]
+                    }
+                    ,
+                },
+                Key: {
+                    _id: {
+                        "N": user._id.toString()
+                    }
+                },
+                UpdateExpression: "SET history = list_append(history, :msgn)",
+                ReturnValues: "ALL_NEW"
+            });
 
 
-                await conDBC.send(update_user_history)
-                .then(resUser => {
+
+            console.log("=====================================")
+
+
+            await conDBC.send(update_user_history)
+                .then(async function requestUser(resUser) {
                     console.log("Se actualizó el historial del cliente");
+                    console.log(resUser.Attributes);
 
                     let user;
 
@@ -245,21 +254,25 @@ const OrdersController = {
                         }
                     }
 
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.status(200).send(user);
+                    newOrder._id = newId;
+
+                    let order = newOrder;
+
+                    res.status(200).send({ order, user });
                 })
                 .catch(error => {
+                    console.log(error);
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.status(400).send('No se pudo actualizar el usuario Error: ' + error);
                 });
-                res.status(201).send(order.Items);
-            }
+            res.status(201).send(order.Items);
+        }
         )
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.status(400).send('No se pudo crear la orden Error: ' + error);
             },
-        );
+            );
 
         // Order(newOrder).save()
         //                 .then(order => {
@@ -270,7 +283,7 @@ const OrdersController = {
         //                         orders.push(order.id);
 
         //                         let body = JSON.parse(JSON.stringify({history: orders}));
-                                
+
         //                             //=================================================================
         //                         User.findByIdAndUpdate(req.body.customerId, body, {new:true})
         //                             .then(user => {
@@ -292,7 +305,7 @@ const OrdersController = {
         //                 });
     },
     //=====================================================================================
-    update: async function update_order (req, res) {
+    update: async function update_order(req, res) {
         const id = req.params.id;
 
 
@@ -300,49 +313,65 @@ const OrdersController = {
         console.log(req.body);
         console.log("==========================================");
 
+        let order_updated;
 
-        order_updated = new UpdateItemCommand({
-            TableName: 'Orders',
-            ExpressionAttributeNames:{
-                "#ST": "status",
-                "#TOTT": "total"
-            },
-
-            ExpressionAttributeValues: {
-                ":quan": {
-                   "N" : req.body.quantity
-            },
-            ":tot": {
-                "N" : req.body.total
-            },
-            ":stats": {
-                "S" : req.body.status
-            },
-            ":prods": {
-                "L" : req.body.products.map((prod) => ({
-                    "M": {
-                        "product": {N: prod.product},
-                        "quantity": {N: prod.quantity}
-
+        if (req.body.status != undefined) {
+            order_updated = new UpdateItemCommand({
+                TableName: 'Orders',
+                Key: {
+                    _id: {
+                        "N": id
                     }
+                },
+                UpdateExpression: "SET #S = :s",
+                ExpressionAttributeNames: {
+                    "#S": "status"
+                },
+                ExpressionAttributeValues: {
+                    ":s": {
+                        "S": req.body.status
+                    }
+                },
+                ReturnValues: "ALL_NEW"
+            });
+        }
+        else {
+            order_updated = new UpdateItemCommand({
+                TableName: 'Orders',
+                ExpressionAttributeNames: {
+                    "#TOTT": "total"
+                },
+
+                ExpressionAttributeValues: {
+                    ":quan": {
+                        "N": req.body.quantity.toString()
+                    },
+                    ":tot": {
+                        "N": req.body.total.toString()
+                    },
+                    ":prods": {
+                        "L": req.body.products.map((prod) => ({
+                            "M": {
+                                "product": { N: prod.product._id.toString() },
+                                "quantity": { N: prod.quantity.toString() }
+
+                            }
 
 
-                }))
-         },
-        
-        },
-            Key: {
-                _id: {
-                    "N": id
-                }
-            },
-            UpdateExpression: "SET quantity = :quan, #ST = :stats, #TOTT = :tot, products = :prods",
-            ReturnValues: "ALL_NEW"
-        });
+                        }))
+                    }
+                },
+                Key: {
+                    _id: {
+                        "N": id
+                    }
+                },
+                UpdateExpression: "SET quantity = :quan, #TOTT = :tot, products = :prods",
+                ReturnValues: "ALL_NEW"
+            });
+        }
 
         console.log(order_updated.input.ExpressionAttributeValues);
-        console.log(order_updated.input.ExpressionAttributeValues[":prods"]);
-        console.log(order_updated.input.ExpressionAttributeValues[":prods"].L[0]);
         console.log("==========================================");
         console.log("==========================================");
 
@@ -351,10 +380,10 @@ const OrdersController = {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.status(200).send(reschat);
         })
-        .catch(error => {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(400).send('No se pudo actualizar la orden Error: ' + error);
-        });
+            .catch(error => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.status(400).send('No se pudo actualizar la orden Error: ' + error);
+            });
 
         // Order.findByIdAndUpdate(id, req.body, {new:true})
         //                 .then(order => {
@@ -364,7 +393,7 @@ const OrdersController = {
         //                     res.staFtus(400).send('No se pudo actualizar la orden');
         //                 });
     },
-    
+
     list: async function list_orders(req, res) {
 
         let input = {
@@ -392,8 +421,8 @@ const OrdersController = {
         //             res.status(400).send('Algo salio mal');
         //         });
     },
-    
-    search: async function search_order (req, res){
+
+    search: async function search_order(req, res) {
         const id = req.params.id;
 
         console.log("Buscando Ordenes...");
@@ -402,18 +431,18 @@ const OrdersController = {
             TableName: "Orders",
             "ExpressionAttributeNames": {
                 "#IDD": "_id"
-              },
-              "ExpressionAttributeValues": {
+            },
+            "ExpressionAttributeValues": {
                 ":idd": {
-                  "N": id
+                    "N": id
                 }
-              },
-              "FilterExpression": "#IDD = :idd",
+            },
+            "FilterExpression": "#IDD = :idd",
         };
 
         let command = new ScanCommand(input);
         await conDBC.send(command)
-            .then(order => {
+            .then(async function reqOrder(order) {
                 console.log("Se encontró la orden");
                 console.log(order.Items);
 
@@ -426,12 +455,44 @@ const OrdersController = {
                     restaurantId: order.Items[0].restaurant_id.N,
                     products: []
                 }
-                for(let i = 0; i < order.Items[0].products.L.length; i++){
-                    temp.products.push({
-                        product: order.Items[0].products.L[i].M.product.N,
-                        quantity: order.Items[0].products.L[i].M.quantity.N,
 
-                    })
+                let getProduct
+
+                for (let i = 0; i < order.Items[0].products.L.length; i++) {
+                    getProduct = new GetItemCommand({
+                        TableName: "Products",
+                        Key: {
+                            _id: {
+                                "N": order.Items[0].products.L[i].M.product.N
+                            }
+                        },
+                    });
+
+                    await conDBC.send(getProduct)
+                        .then(async function resP(resProduct) {
+                            let product = {
+                                _id: resProduct.Item._id.N,
+                                Name: resProduct.Item.Name.S,
+                                Description: resProduct.Item.Description.S,
+                                Price: resProduct.Item.Price.N,
+                                Available: resProduct.Item.Available.BOOL,
+                                Image: resProduct.Item.Image.S,
+                                RestaurantId: resProduct.Item.RestaurantId.N
+                            };
+
+                            temp.products.push({
+                                product: product,
+                                quantity: order.Items[0].products.L[i].M.quantity.N,
+                            });
+
+                            console.log("***********************************************************")
+                            console.log(order.Items[0].products.L[i].M.quantity.N);
+                            console.log("***********************************************************")
+
+                        })
+                        .catch(error => {
+                            res.status(400).send('No se encontro al producto con ID: ' + order.Items[0].products.L[i].M.product.N);
+                        });
                 }
 
 
@@ -442,7 +503,7 @@ const OrdersController = {
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontro la tarjeta con ID: ' + id + " por el error: " + error);
+                res.status(400).send('No se encontro la orden con ID: ' + id + " por el error: " + error);
             });
 
 
@@ -457,7 +518,7 @@ const OrdersController = {
         //         });
     },
 
-    delete: async function delete_order (req, res) {
+    delete: async function delete_order(req, res) {
         const id = req.params.id;
 
 
@@ -473,7 +534,7 @@ const OrdersController = {
         let command = new DeleteItemCommand(input);
         await conDBC.send(command)
             .then(card => {
-                
+
                 console.log(card)
 
                 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -481,7 +542,7 @@ const OrdersController = {
             })
             .catch(error => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(400).send('No se encontro la tarjeta con ID:' + id);
+                res.status(400).send('No se encontro la orden con ID:' + id);
             });
 
 

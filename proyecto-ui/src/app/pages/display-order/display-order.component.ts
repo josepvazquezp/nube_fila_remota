@@ -16,7 +16,7 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
   styleUrls: ['./display-order.component.scss']
 })
 export class DisplayOrderComponent {
-  products: Array <{
+  products: Array<{
     product: Product,
     restaurant: Restaurant,
     quantity: number,
@@ -62,7 +62,6 @@ export class DisplayOrderComponent {
     this.keys = [];
 
     this.orderService.getOrder(this.idOrder).subscribe((response: any) => {
-
       this.backup = response.products;
       this.quantity = response.quantity;
       this.products = response.products;
@@ -71,10 +70,10 @@ export class DisplayOrderComponent {
       this.restaurantService.getRestaurant(response.products[0].product.RestaurantId).subscribe((restaurant: any) => {
         this.restaurant = restaurant;
 
-        for(let i = 0 ; i < response.products.length ; i++) {
-        
+        for (let i = 0; i < response.products.length; i++) {
+
           this.keys.push(response.products[i].product._id);
-          
+
           this.hashmap.set(response.products[i].product._id, {
             productName: response.products[i].product.Name,
             productImage: response.products[i].product.Image,
@@ -83,22 +82,23 @@ export class DisplayOrderComponent {
             subtotal: response.products[i].product.Price * response.products[i].quantity
           });
         }
-  
+
       });
     });
   }
 
   addProduct(id: String) {
     let index = this.keys.findIndex(item => item == id);
-    this.backup[index].quantity = this.products[index].quantity + 1;
+    this.backup[index].quantity = +this.products[index].quantity + 1;
+    let temp: number = +this.products[index].product.Price + +this.total
 
     let body = {
-      products: this.backup, 
-      quantity: ++this.quantity, 
-      total: this.products[index].product.Price + this.total
+      products: this.backup,
+      quantity: ++this.quantity,
+      total: temp
     };
 
-    this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {      
+    this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
       this.getData();
 
       this.router.navigate(['/display_order']);
@@ -107,21 +107,21 @@ export class DisplayOrderComponent {
 
   decreaseProduct(id: String) {
     let index = this.products.findIndex(item => item.product._id == id);
-    let temp = this.products[index].quantity - 1;
-    if(temp == 0) {
+    let temp = +this.products[index].quantity - 1;
+    if (temp == 0) {
       this.removeProduct(id);
     }
     else {
-      this.backup[index].quantity = this.products[index].quantity - 1;
+      this.backup[index].quantity = +this.products[index].quantity - 1;
 
       let body = {
-        products: this.backup, 
-        quantity: --this.quantity, 
+        products: this.backup,
+        quantity: --this.quantity,
         total: this.total - this.products[index].product.Price
       };
 
       this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
-        
+
         this.getData();
 
         this.router.navigate(['/display_order']);
@@ -136,15 +136,15 @@ export class DisplayOrderComponent {
     this.backup.splice(index, 1);
 
     let body = {
-      products: this.backup, 
+      products: this.backup,
       quantity: this.quantity - qp,
       total: this.total - price * qp
     };
 
     this.orderService.updateOrder(this.idOrder, body).subscribe((response: any) => {
-   
+
       this.getData();
-      
+
       this.router.navigate(['/display_order']);
     });
   }
@@ -153,7 +153,7 @@ export class DisplayOrderComponent {
   //   this.restaurant.orders.push(this.idOrder);
 
   //   let body = {orders: this.restaurant.orders}
-    
+
   //   this.restaurantService.updateRestaurant(this.restaurant._id, body).subscribe((response: any) => {
   //     this.router.navigate(['/order_in_progress']);
   //   });

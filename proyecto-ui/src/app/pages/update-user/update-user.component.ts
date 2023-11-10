@@ -89,10 +89,11 @@ export class UpdateUserComponent {
           formData.append("file", this.selectedFile);
           this.userService.changeImage(formData, id).subscribe((response: any) => {
             let img = response.image;
-            let body = JSON.parse(JSON.stringify({ image: enviroment.host + "/image/" + img }));
+            let body = JSON.parse(JSON.stringify({ image: enviroment.bucket + response.image }));
+            let pathImage = enviroment.bucket + response.image;
 
             this.userService.putUser(body, id).subscribe(response => {
-              body = { description: this.updateForm.value.description, image: enviroment.host + "/image/" + img };
+              body = { description: this.updateForm.value.description, image: pathImage };
 
               this.restaurantService.updateRestaurant(this.idRestaurant, body).subscribe((response: any) => {
                 window.location.href = '/';
